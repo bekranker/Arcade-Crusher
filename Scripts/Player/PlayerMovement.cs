@@ -13,9 +13,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField, Range(0, 100)] private float _speed;
     [SerializeField] private AnimationCurve _acceleration;
+    [SerializeField] private AnimationCurve _decceleration;
     Player_Actions _playerActions;
     public Vector2 MovementInput;
-    float elapsedTime = 0;
+    float _elapsedTime = 0;
 
 
 
@@ -55,22 +56,30 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void Run()
     {
-        //return if there is no input
-        //input giderse decceleration ile duracak.
-        if (MovementInput.x == 0)
-        {
-            elapsedTime = 0;
-            return;
-        }
-        elapsedTime += Time.deltaTime;
-        //think that like this; how much time elapsed that we can reach our target speed. and our target speed is _Speed * Time.deltaTime * MovementInput.x
-        float tempAcceleration = _acceleration.Evaluate(elapsedTime) * _speed * MovementInput.x;
-        _rb.linearVelocityX = tempAcceleration;
-        transform.localScale = new Vector3(MovementInput.x, transform.localScale.y, transform.localScale.z);
+        //Wheel Turn
         _wheels?.ForEach((wheel) =>
         {
             wheel.Rotate(Vector3.back * Mathf.Abs(_rb.linearVelocityX));
         });
+        //return if there is no input
+        //input giderse decceleration ile duracak.
+        if (MovementInput.x == 0)
+        {
+            _elapsedTime = 0;
+            if (_rb.linearVelocityX != 0)
+            {
+                //dicrease the horizontal velocity until reach zero with direction coming from velocityX as clamped.
+                _rb.linearVelocityX -= _decceleration.Evaluate(Time.deltaTime) * _speed * Mathf.Clamp(_rb.linearVelocityX, -1, 1);
+            }
+            return;
+        }
+        _elapsedTime += Time.deltaTime;
+        //think that like this; how much time elapsed that we can reach our target speed. and our target speed is _Speed * Time.deltaTime * MovementInput.x
+        float tempAcceleration = _acceleration.Evaluate(_elapsedTime) * _speed * MovementInput.x;
+        _rb.linearVelocityX = tempAcceleration;
+        //Turning
+        transform.localScale = new Vector3(MovementInput.x, transform.localScale.y, transform.localScale.z);
+
     }
 
 }

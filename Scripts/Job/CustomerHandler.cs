@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class CustomerHandler : MonoBehaviour
 {
     [Tooltip("Food Types")]
-    [SerializeField] private List<OrderObject> _orderObjects = new();
+    [SerializeField] private List<FoodType> _FoodTypes = new();
     [Tooltip("This is where customer seat")]
     [SerializeField] private List<Transform> _seatPoints;
     private Dictionary<Transform, bool> _emptySeats = new();
@@ -12,20 +12,20 @@ public abstract class CustomerHandler : MonoBehaviour
     /// <summary>
     /// returning Orders Length
     /// </summary>
-    private int _ordersLength => _orderObjects.Count;
+    private int _ordersLength => _FoodTypes.Count;
 
 
     /// <summary>
     /// returning random order list
     /// </summary>
     /// <returns>Order List</returns>
-    public virtual List<OrderObject> GetOrderData()
+    public virtual List<FoodType> GetOrderData()
     {
-        int tempOrderObjectCount = Random.Range(0, _ordersLength);
-        List<OrderObject> tempOrders = new();
-        for (int i = 0; i < tempOrderObjectCount; i++)
+        int tempFoodTypeCount = Random.Range(0, _ordersLength);
+        List<FoodType> tempOrders = new();
+        for (int i = 0; i < tempFoodTypeCount; i++)
         {
-            tempOrders.Add(_orderObjects[Random.Range(0, _ordersLength)]);
+            tempOrders.Add(_FoodTypes[Random.Range(0, _ordersLength)]);
         }
         return tempOrders;
     }
@@ -33,7 +33,7 @@ public abstract class CustomerHandler : MonoBehaviour
     /// Checing is there have any empty seat to seat.
     /// </summary>
     /// <returns></returns>
-    public bool AllSeatBusy()
+    public virtual bool AllSeatBusy()
     {
         bool result = true;
         foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
@@ -45,7 +45,7 @@ public abstract class CustomerHandler : MonoBehaviour
         }
         return result;
     }
-    public List<Transform> GetEmptySeats()
+    public virtual List<Transform> GetEmptySeats()
     {
         List<Transform> tempEmptySeats = new();
         foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
@@ -57,7 +57,7 @@ public abstract class CustomerHandler : MonoBehaviour
         }
         return tempEmptySeats;
     }
-    public Transform TakeRandomSeat()
+    public virtual Transform TakeRandomSeat()
     {
         if (AllSeatBusy())
         {
