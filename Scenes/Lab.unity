@@ -392,8 +392,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 0}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &62206725
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,8 +1096,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 11400000, guid: e6d1da4786b414c9db4177f1628e1ef2, type: 2}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &327728225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,8 +1338,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 11400000, guid: 38ebcf034af21434d941c3077e479698, type: 2}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &473514409
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,8 +1376,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 11400000, guid: 38ebcf034af21434d941c3077e479698, type: 2}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!61 &473514411
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2786,8 +2806,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 11400000, guid: e51dbe39c8a064a42ae233e7c1f27727, type: 2}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &851589542
 GameObject:
   m_ObjectHideFlags: 0
@@ -3110,8 +3135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 0}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &868766007
 GameObject:
   m_ObjectHideFlags: 0
@@ -4608,8 +4638,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3eb3c349976b40dc944dc67d73a44a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _orderResources: []
+  HasPlate: 0
+  _hand: []
   _foodType: {fileID: 11400000, guid: 3603bc692d43340f49fdd910ebe32a14, type: 2}
   _shakeSpeed: 0.3
+  _workManager: {fileID: 0}
 --- !u!1 &1298627669
 GameObject:
   m_ObjectHideFlags: 0
@@ -6131,6 +6166,7 @@ SceneRoots:
   - {fileID: 1258256177}
   - {fileID: 2112438499}
   - {fileID: 738694925}
+  - {fileID: 1975690540}
   - {fileID: 569328511}
   - {fileID: 1535628730}
   - {fileID: 102657311}
@@ -6148,5 +6184,4 @@ SceneRoots:
   - {fileID: 348197379}
   - {fileID: 1281492527}
   - {fileID: 775979867}
-  - {fileID: 1975690540}
   - {fileID: 1358082193}
