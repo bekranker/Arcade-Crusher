@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58272b69186648b0938d2dcbc86a8b3, type: 3}
   m_Name: Hotdog
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
-  Price: 0
+  Prefab: {fileID: 573978396289311086, guid: bf46810855c07471b9b6acf359a27a9b, type: 3}
+  Price: 5

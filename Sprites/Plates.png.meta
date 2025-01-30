@@ -122,7 +122,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 118Z_2012.w011.n001.434A.p30.434_0
+      name: Icon
       rect:
         serializedVersion: 2
         x: 253
@@ -144,7 +144,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 118Z_2012.w011.n001.434A.p30.434_2
+      name: Object
       rect:
         serializedVersion: 2
         x: 299
@@ -179,10 +179,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      118Z_2012.w011.n001.434A.p30.434_0: 1075550376297843658
       118Z_2012.w011.n001.434A.p30.434_1: -6368168755418607546
-      118Z_2012.w011.n001.434A.p30.434_2: -1821131959486461784
       118Z_2012.w011.n001.434A.p30.434_3: -1214607784941550824
+      Icon: 1075550376297843658
+      Object: -1821131959486461784
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

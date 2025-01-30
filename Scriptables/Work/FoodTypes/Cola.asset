@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58272b69186648b0938d2dcbc86a8b3, type: 3}
   m_Name: Cola
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
-  Price: 0
+  Prefab: {fileID: 3238869067193069200, guid: fdd6ad3ebb2864800ae6a6a462ecc449, type: 3}
+  Price: 5

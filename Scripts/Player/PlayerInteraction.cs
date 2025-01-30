@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,12 +28,36 @@ public class PlayerInteraction : MonoBehaviour
     }
     private void Interact(InputAction.CallbackContext context)
     {
-        Collider2D tempInteractionObject = Physics2D.OverlapBox(transform.position, _interactionAreaSize, 0, _interactables);
-        if (tempInteractionObject != null)
+        // Etkileşim alanındaki tüm nesneleri bul
+        Collider2D[] tempInteractionObjects = Physics2D.OverlapBoxAll(transform.position, _interactionAreaSize, 0, _interactables);
+
+        if (tempInteractionObjects.Length > 0)
         {
-            if (tempInteractionObject.TryGetComponent(out IObjectInteractable item))
+            IObjectInteractable closestInteractable = null;
+            float closestDistance = float.MaxValue;
+
+            // Tüm nesneler arasında dolaş
+            foreach (Collider2D collider in tempInteractionObjects)
             {
-                item.ExecuteInteraction();
+                // IObjectInteractable arayüzünü uygulayan nesneleri kontrol et
+                if (collider.TryGetComponent(out IObjectInteractable interactable))
+                {
+                    // Nesnenin mesafesini hesapla
+                    float distance = Vector2.Distance(transform.position, collider.transform.position);
+
+                    // En yakın nesneyi güncelle
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestInteractable = interactable;
+                    }
+                }
+            }
+
+            // En yakın nesneyle etkileşime geç
+            if (closestInteractable != null)
+            {
+                closestInteractable.ExecuteInteraction();
             }
         }
     }

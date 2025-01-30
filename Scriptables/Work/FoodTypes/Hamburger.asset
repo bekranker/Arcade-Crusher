@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58272b69186648b0938d2dcbc86a8b3, type: 3}
   m_Name: Hamburger
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
-  Price: 0
+  Prefab: {fileID: 6175717542441469285, guid: 916a12481b2ad43b798706227b8c77d7, type: 3}
+  Price: 5

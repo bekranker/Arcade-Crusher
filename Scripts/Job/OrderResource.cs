@@ -1,19 +1,17 @@
 using UnityEngine;
 using DG.Tweening;
-public class OrderResource : WorkManager, IObjectInteractable
+public class OrderResource : MonoBehaviour, IObjectInteractable
 {
+    [SerializeField] private WorkManager _workManager;
     [SerializeField] private FoodType _foodType;
     [SerializeField, Range(0, 10)] private float _shakeSpeed;
-    [SerializeField] private WorkManager _workManager;
     public void ExecuteInteraction()
     {
+        _workManager.TakeResource(_foodType.Prefab);
+        DOTween.Kill(transform);
+        transform.localScale = Vector2.one;
         transform.DOPunchScale(Vector3.one * _shakeSpeed, .3f);
-        _hand.Add(_foodType);
-        Debug.Log("sa");
-
     }
 
     public FoodType GetFood() => _foodType;
-
-
 }

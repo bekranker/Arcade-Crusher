@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58272b69186648b0938d2dcbc86a8b3, type: 3}
   m_Name: Water
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
-  Price: 0
+  Prefab: {fileID: 5171881775669950482, guid: 87f2855a6ade8446daa3863edf70a305, type: 3}
+  Price: 5
