@@ -1,19 +1,18 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
-public class Customer : CustomerHandler
+public class Customer : MonoBehaviour
 {
+    private CustomerHandler _costumerHandler;
 
-    public override bool AllSeatBusy()
+    public void Init(CustomerHandler costomerHandler)
     {
-        return base.AllSeatBusy();
+        _costumerHandler = costomerHandler;
     }
-    public override List<Transform> GetEmptySeats()
+    public void Move(Vector3 targetPoint)
     {
-        return base.GetEmptySeats();
-    }
-    public override Transform TakeRandomSeat()
-    {
-        return base.TakeRandomSeat();
+        //Animation.SetBool(Walking);
+
     }
 }

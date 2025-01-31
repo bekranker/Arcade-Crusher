@@ -16,13 +16,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AnimationCurve _decceleration;
     Player_Actions _playerActions;
     public Vector2 MovementInput;
+    [Header("----Sprint Props")]
+    [SerializeField, Range(0, 100)] private float _sprintSpeed; //Dash power
+    [SerializeField, Range(0, 5)] private float _sprintCoolDown; // cool down for dash again
+    [SerializeField, Range(0, 5)] private float _sprintDuration; //how many times pass while dashing
+    private bool _isSprinting; //dont execute run function if it is dahsing.
+    private bool _canSprint;
     float _elapsedTime = 0;
-
+    float _direction;
 
 
     private void Awake()
     {
         _playerActions = new();
+        _canSprint = true;
     }
 
     private void OnEnable()
@@ -31,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
         _playerActions.Player.Enable();
         _playerActions.Player.Move.performed += Move;
         _playerActions.Player.Move.canceled += Move;
+        _playerActions.Player.Sprint.performed += Sprint;
     }
     void Update()
     {
@@ -41,7 +49,32 @@ public class PlayerMovement : MonoBehaviour
         // Input Action'larını devre dışı bırak ve dinlemeyi bırak
         _playerActions.Player.Move.performed -= Move;
         _playerActions.Player.Move.canceled -= Move;
+        _playerActions.Player.Sprint.performed -= Sprint;
         _playerActions.Player.Disable();
+    }
+    void Sprint(InputAction.CallbackContext context)
+    {
+        if (MovementInput.x == 0) return;
+        if (!_canSprint) return;
+        if (_isSprinting) return;
+        print("Sprinting");
+
+
+        _rb.linearVelocityX = _direction * _sprintSpeed;
+        Invoke(nameof(StopDash), _sprintDuration);
+        Invoke(nameof(ResetDash), _sprintCoolDown);
+        _isSprinting = true;
+        _canSprint = false;
+
+    }
+    private void StopDash()
+    {
+        _isSprinting = false;
+        _rb.linearVelocityX = 0;
+    }
+    private void ResetDash()
+    {
+        _canSprint = true;
     }
     /// <summary>
     /// we are reading directions from player input
@@ -50,12 +83,14 @@ public class PlayerMovement : MonoBehaviour
     void Move(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();
+        _direction = Mathf.Sign(MovementInput.x);
     }
     /// <summary>
     /// Physically movement with acceleration and deacceleration
     /// </summary>
     void Run()
     {
+        if (_isSprinting) return;
         //Wheel Turn
         _wheels?.ForEach((wheel) =>
         {
@@ -75,10 +110,10 @@ public class PlayerMovement : MonoBehaviour
         }
         _elapsedTime += Time.deltaTime;
         //think that like this; how much time elapsed that we can reach our target speed. and our target speed is _Speed * Time.deltaTime * MovementInput.x
-        float tempAcceleration = _acceleration.Evaluate(_elapsedTime) * _speed * MovementInput.x;
+        float tempAcceleration = _acceleration.Evaluate(_elapsedTime) * _speed * _direction;
         _rb.linearVelocityX = tempAcceleration;
         //Turning
-        transform.localScale = new Vector3(MovementInput.x, transform.localScale.y, transform.localScale.z);
+        transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
 
     }
 
