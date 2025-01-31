@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-public class Customer : MonoBehaviour
+public class Customer : MonoBehaviour, IBaseData
 {
     [Header("---Movement")]
     [Tooltip("NPC movement Speed")]
@@ -20,7 +20,7 @@ public class Customer : MonoBehaviour
     private Dictionary<FoodType, int> _myOrders;
     private CustomerType _customerType;
     private string _name;
-
+    private IStateMachine<Customer> _myStateMachine;
 
     /// <summary>
     /// this funtion will be called when created.
@@ -33,6 +33,7 @@ public class Customer : MonoBehaviour
         _customerType = typeOfCustomer;
         _name = _customerType.CustomerName;
         _NPCName.text = _name;
+        _myStateMachine = new StateMachine<Customer>();
     }
     /// <summary>
     /// NPC movement function. The NPC will be moving towards seat position
