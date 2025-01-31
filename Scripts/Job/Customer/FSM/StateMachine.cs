@@ -1,18 +1,21 @@
-using System.Collections.Generic;
-
-
-/*bu sınıf FSM'i kontrol eden sınıf;
-* eğer koşul doğru olursa (herhangi bir state'de iken) o state buradan yeni state'e geçmek için ChangeState'i çağırıp yeni state'in execute edilmesini sağlayabilir;
-*/
+/// <summary>
+/// This class controls the Finite State Machine (FSM).
+/// If a condition is met (while in any state), the current state can call ChangeState to transition to a new state and execute it.
+/// </summary>
 public class StateMachine<T> : IStateMachine<T> where T : IBaseData
 {
-    //Stateler burada birikiyor.
+    // Represents the current state of the state machine.
     private IState<T> _state;
-    //herhangi bir state var mı yok mu ona bakıyor varsa true yoksa false döndürür.
+
+    // Checks if there is any state currently active. Returns true if a state exists, otherwise false.
     private bool _hasAnyState => _state != null;
 
-    //State eklediğimiz kısım. İlk başta anlık state varsa (stack'e Peek ile anlık execute'lanan state olup olmadığına bakıyoruz) Exit ediyoruz. 
-    //Daha sonra eklerken state'i initialize ederiz daha sonra yeni state'i Enter edip OnUpdate'e geçmesi için Stack'e pushluyoruz.
+    /// <summary>
+    /// Changes the current state to the specified state.
+    /// If there is an active state, it calls OnExit to clean up the current state.
+    /// Then, it initializes the new state, calls OnEnter to set it up, and transitions to the new state.
+    /// </summary>
+    /// <param name="state">The new state to transition to.</param>
     public void ChangeState(IState<T> state)
     {
         if (_hasAnyState)
@@ -21,7 +24,12 @@ public class StateMachine<T> : IStateMachine<T> where T : IBaseData
         _state = state;
         _state.OnEnter();
     }
-    //Stack'de bulunan en üstteki state'i her frame çağırıyoruz. Stack'den çıkarmamak için Peek() fonksiyonu ile stack item'a bakıyoruz.
+
+    /// <summary>
+    /// Updates the current state every frame.
+    /// If no state is active, it does nothing.
+    /// Otherwise, it calls OnUpdate on the current state to execute its logic.
+    /// </summary>
     public void UpdateStates()
     {
         if (!_hasAnyState)

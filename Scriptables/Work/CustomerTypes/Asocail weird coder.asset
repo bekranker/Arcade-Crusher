@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b95d9732489684ab68662a583409fa33, type: 3}
-  m_Name: Bekir
+  m_Name: Asocail weird coder
   m_EditorClassIdentifier: 
-  IdleClip: {fileID: 0}
-  MoveClip: {fileID: 0}
+  IdleClip: {fileID: 7400000, guid: a099db87d7fb14d39a8ef2668fc5a7b1, type: 2}
+  MoveClip: {fileID: 7400000, guid: 928e7403d2f0843a0ab9535447f86171, type: 2}
+  EatingClip: {fileID: 7400000, guid: 001ec3d83f577458d80ab3f6fa342ffa, type: 2}
   PlaceHolder: {fileID: -5567631772659586248, guid: c1caefdbc51c64a5baed4720917604de, type: 3}
-  CustomerName: Bekir
+  CustomerName: Asocail weird coder

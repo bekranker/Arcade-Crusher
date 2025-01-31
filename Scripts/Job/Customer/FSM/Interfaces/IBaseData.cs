@@ -1,7 +1,7 @@
-using UnityEngine;
-
-// Bu interface'i miras alan her interface ya da sınıf FSM'de kullanılabilir. 
-// Bu interface'i boş bırakıp sadece sınıflama amaçlı da kullanabiliriz.
+/// <summary>
+/// Any interface or class that inherits from this interface can be used in a Finite State Machine (FSM).
+/// This interface can also be left empty and used purely for classification purposes.
+/// </summary>
 public interface IBaseData
 {
 }

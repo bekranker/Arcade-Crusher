@@ -3,37 +3,19 @@ using UnityEngine;
 
 public class SeatHandler : MonoBehaviour
 {
-    [Tooltip("Food Types")]
-    [SerializeField] private List<FoodType> _FoodTypes = new();
+
     [Tooltip("This is where customer seat")]
     [SerializeField] private List<Transform> _seatPoints;
     private Dictionary<Transform, bool> _emptySeats = new();
 
-    /// <summary>
-    /// returning Orders Length
-    /// </summary>
-    private int _ordersLength => _FoodTypes.Count;
-
-
-    /// <summary>
-    /// returning random order list
-    /// </summary>
-    /// <returns>Order List</returns>
-    public Dictionary<FoodType, int> GetOrderData()
+    void Start()
     {
-        int tempFoodTypeCount = Random.Range(0, _ordersLength);
-        Dictionary<FoodType, int> tempOrders = new();
-        for (int i = 0; i < tempFoodTypeCount; i++)
+        for (int i = 0; i < _seatPoints.Count; i++)
         {
-            if (tempOrders.ContainsKey(_FoodTypes[i]))
-            {
-                tempOrders[_FoodTypes[i]]++;
-            }
-            else
-                tempOrders.Add(_FoodTypes[Random.Range(0, _ordersLength)], 1);
+            _emptySeats.Add(_seatPoints[i], true);
         }
-        return tempOrders;
     }
+
     /// <summary>
     /// Checing is there have any empty seat to seat.
     /// </summary>
@@ -72,5 +54,8 @@ public class SeatHandler : MonoBehaviour
         List<Transform> tempEmptySeats = GetEmptySeats();
         return tempEmptySeats[Random.Range(0, tempEmptySeats.Count)];
     }
+    public void TakeASeat(Customer customer)
+    {
 
+    }
 }

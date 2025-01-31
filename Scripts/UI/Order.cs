@@ -10,15 +10,13 @@ public class Order : MonoBehaviour
 
 
     [Header("---Dotween Props")]
-    [SerializeField, Range(0, 10)] private float _pucnhScale;
-    [SerializeField, Range(0, 10)] private float _punchDuration;
-    private Vector3 _startScale;
+    [SerializeField, Range(0, 10)] private float _scaleDuration;
     private FoodType _foodType;
     private int _orderCount;
 
     void Start()
     {
-        _startScale = transform.localScale;
+        transform.localScale = Vector3.zero;
     }
     public void Init(FoodType foodType, int orderCount)
     {
@@ -30,17 +28,15 @@ public class Order : MonoBehaviour
     private void ChangeImage()
     {
         DOTween.Kill(transform);
-        transform.localScale = _startScale;
 
-        transform.DOPunchScale(_pucnhScale * _startScale, _punchDuration);
+        transform.DOScale(Vector2.one, _scaleDuration);
         _orderImage.sprite = _foodType.Prefab.GetComponent<SpriteRenderer>().sprite;
     }
     private void ChangeText()
     {
         DOTween.Kill(transform);
-        transform.localScale = _startScale;
 
-        transform.DOPunchScale(_pucnhScale * Vector3.one, _punchDuration);
+        transform.DOScale(Vector2.one, _scaleDuration);
         _orderCountTMP.text = "X" + _orderCount;
     }
 }
