@@ -107,6 +107,15 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Debug"",
+                    ""type"": ""Button"",
+                    ""id"": ""57325838-f572-4442-9ce9-ff2c35d0bdf8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -492,6 +501,17 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a5cb7fb8-3a59-41bb-940e-c6d8761f9da9"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Debug"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1088,6 +1108,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         m_Player_Previous = m_Player.FindAction("Previous", throwIfNotFound: true);
         m_Player_Next = m_Player.FindAction("Next", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1176,6 +1197,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Previous;
     private readonly InputAction m_Player_Next;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_Debug;
     public struct PlayerActions
     {
         private @Player_Actions m_Wrapper;
@@ -1189,6 +1211,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         public InputAction @Previous => m_Wrapper.m_Player_Previous;
         public InputAction @Next => m_Wrapper.m_Player_Next;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @Debug => m_Wrapper.m_Player_Debug;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1225,6 +1248,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Debug.started += instance.OnDebug;
+            @Debug.performed += instance.OnDebug;
+            @Debug.canceled += instance.OnDebug;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1256,6 +1282,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Debug.started -= instance.OnDebug;
+            @Debug.performed -= instance.OnDebug;
+            @Debug.canceled -= instance.OnDebug;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1447,6 +1476,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         void OnPrevious(InputAction.CallbackContext context);
         void OnNext(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnDebug(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

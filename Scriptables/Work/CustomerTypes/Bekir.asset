@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95d9732489684ab68662a583409fa33, type: 3}
   m_Name: Bekir
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
   IdleClip: {fileID: 0}
   MoveClip: {fileID: 0}
+  PlaceHolder: {fileID: -5567631772659586248, guid: c1caefdbc51c64a5baed4720917604de, type: 3}
+  CustomerName: Bekir

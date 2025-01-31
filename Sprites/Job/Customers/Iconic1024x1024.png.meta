@@ -117,7 +117,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Iconic1024x1024_0
+      name: Red
       rect:
         serializedVersion: 2
         x: 72
@@ -138,6 +138,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Green
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 923
+        width: 66
+        height: 66
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 26, y: 26, z: 26, w: 27}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8a6092f280e64f3fa4d2d243af00c0b
+      internalID: -2056810151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -152,7 +174,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Iconic1024x1024_0: -2064373187
+      Green: -2056810151
+      Red: -2064373187
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CustomerHandler : MonoBehaviour
+public class SeatHandler : MonoBehaviour
 {
     [Tooltip("Food Types")]
     [SerializeField] private List<FoodType> _FoodTypes = new();
@@ -19,13 +19,18 @@ public abstract class CustomerHandler : MonoBehaviour
     /// returning random order list
     /// </summary>
     /// <returns>Order List</returns>
-    public virtual List<FoodType> GetOrderData()
+    public Dictionary<FoodType, int> GetOrderData()
     {
         int tempFoodTypeCount = Random.Range(0, _ordersLength);
-        List<FoodType> tempOrders = new();
+        Dictionary<FoodType, int> tempOrders = new();
         for (int i = 0; i < tempFoodTypeCount; i++)
         {
-            tempOrders.Add(_FoodTypes[Random.Range(0, _ordersLength)]);
+            if (tempOrders.ContainsKey(_FoodTypes[i]))
+            {
+                tempOrders[_FoodTypes[i]]++;
+            }
+            else
+                tempOrders.Add(_FoodTypes[Random.Range(0, _ordersLength)], 1);
         }
         return tempOrders;
     }
@@ -33,7 +38,7 @@ public abstract class CustomerHandler : MonoBehaviour
     /// Checing is there have any empty seat to seat.
     /// </summary>
     /// <returns></returns>
-    public virtual bool AllSeatBusy()
+    public bool AllSeatBusy()
     {
         bool result = true;
         foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
@@ -45,7 +50,7 @@ public abstract class CustomerHandler : MonoBehaviour
         }
         return result;
     }
-    public virtual List<Transform> GetEmptySeats()
+    public List<Transform> GetEmptySeats()
     {
         List<Transform> tempEmptySeats = new();
         foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
@@ -57,7 +62,7 @@ public abstract class CustomerHandler : MonoBehaviour
         }
         return tempEmptySeats;
     }
-    public virtual Transform TakeRandomSeat()
+    public Transform TakeRandomSeat()
     {
         if (AllSeatBusy())
         {

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b95d9732489684ab68662a583409fa33, type: 3}
   m_Name: Ali
   m_EditorClassIdentifier: 
-  Sprite: {fileID: 0}
   IdleClip: {fileID: 0}
   MoveClip: {fileID: 0}
+  PlaceHolder: {fileID: 2713789162045788316, guid: 50dfb4062b51845e09561a358f05c27a, type: 3}
+  CustomerName: Ali Hoca
