@@ -4,44 +4,64 @@ using UnityEngine;
 public class SeatHandler : MonoBehaviour
 {
 
+    [Header("---Components")]
+    [SerializeField] private CustomerHandler _customerHandler;
+    [Header("---Seat Props")]
     [Tooltip("This is where customer seat")]
+
     [SerializeField] private List<Transform> _seatPoints;
-    private Dictionary<Transform, bool> _emptySeats = new();
+    public Dictionary<Transform, bool> EmptySeats = new();
+
+
 
     void Start()
     {
         for (int i = 0; i < _seatPoints.Count; i++)
         {
-            _emptySeats.Add(_seatPoints[i], true);
+            EmptySeats.Add(_seatPoints[i], true);
         }
     }
-
     /// <summary>
     /// Checing is there have any empty seat to seat.
     /// </summary>
     /// <returns></returns>
     public bool AllSeatBusy()
     {
-        bool result = true;
-        foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
+        foreach (KeyValuePair<Transform, bool> seat in EmptySeats)
         {
-            if (!seat.Value)
+            if (seat.Value)
             {
-                result = seat.Value;
+                return false;
             }
         }
-        return result;
+        return true;
+    }
+    public int EmptySeatCount()
+    {
+        int count = 0;
+        foreach (KeyValuePair<Transform, bool> seat in EmptySeats)
+        {
+            if (seat.Value)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
     public List<Transform> GetEmptySeats()
     {
         List<Transform> tempEmptySeats = new();
-        foreach (KeyValuePair<Transform, bool> seat in _emptySeats)
+
+        // First, collect the keys of the empty seats
+        foreach (KeyValuePair<Transform, bool> seat in EmptySeats)
         {
             if (seat.Value)
             {
                 tempEmptySeats.Add(seat.Key);
             }
         }
+
         return tempEmptySeats;
     }
     public Transform TakeRandomSeat()
@@ -52,10 +72,24 @@ public class SeatHandler : MonoBehaviour
             return null;
         }
         List<Transform> tempEmptySeats = GetEmptySeats();
-        return tempEmptySeats[Random.Range(0, tempEmptySeats.Count)];
+        int randomSeat = Random.Range(0, tempEmptySeats.Count);
+        EmptySeats[tempEmptySeats[randomSeat]] = false;
+        return tempEmptySeats[randomSeat];
     }
-    public void TakeASeat(Customer customer)
+    public void TakeASeat()
     {
+        if (EmptySeatCount() <= 0) return;
+        Customer tempCustomer = _customerHandler.GetFromLine();
+        Transform targetSeat = TakeRandomSeat();
+        tempCustomer.MyEatState.Seat = targetSeat;
+        tempCustomer.MoveState.TargetPosition = targetSeat.position;
+        tempCustomer.MoveState.AfterMove = () => tempCustomer.MyStateMachine.ChangeState(tempCustomer.MyEatState);
+        tempCustomer.MyStateMachine.ChangeState(tempCustomer.MoveState);
+    }
+    public void SetSeatEmpty(Transform seat)
+    {
+        if (!EmptySeats.ContainsKey(seat)) return;
 
+        EmptySeats[seat] = true;
     }
 }

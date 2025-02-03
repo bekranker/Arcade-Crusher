@@ -2,10 +2,10 @@
 /// This class controls the Finite State Machine (FSM).
 /// If a condition is met (while in any state), the current state can call ChangeState to transition to a new state and execute it.
 /// </summary>
-public class StateMachine<T> : IStateMachine<T> where T : IBaseData
+public class StateMachine : IStateMachine, IBaseData
 {
     // Represents the current state of the state machine.
-    private IState<T> _state;
+    private IState _state;
 
     // Checks if there is any state currently active. Returns true if a state exists, otherwise false.
     private bool _hasAnyState => _state != null;
@@ -16,13 +16,13 @@ public class StateMachine<T> : IStateMachine<T> where T : IBaseData
     /// Then, it initializes the new state, calls OnEnter to set it up, and transitions to the new state.
     /// </summary>
     /// <param name="state">The new state to transition to.</param>
-    public void ChangeState(IState<T> state)
+    public void ChangeState(IState state)
     {
         if (_hasAnyState)
-            _state.OnExit();
-
+            _state?.OnExit();
+        _state = null;
         _state = state;
-        _state.OnEnter();
+        _state?.OnEnter();
     }
 
     /// <summary>
@@ -35,6 +35,6 @@ public class StateMachine<T> : IStateMachine<T> where T : IBaseData
         if (!_hasAnyState)
             return;
 
-        _state.OnUpdate();
+        _state?.OnUpdate();
     }
 }

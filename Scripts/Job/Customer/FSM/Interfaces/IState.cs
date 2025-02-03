@@ -1,8 +1,7 @@
 // herhangi bir State oluşturmak istiyorsak bu interface miras alınmalıdır. 
 // Oluşturulan State IBaseData'yı da miras almalıdır. T data generictir ve herhangi bir data aktarımı yapılabilir.
-public interface IState<T> where T : IBaseData
+public interface IState : IBaseData
 {
-    void Init(T data);
     void OnEnter();
     void OnExit();
     void OnUpdate();

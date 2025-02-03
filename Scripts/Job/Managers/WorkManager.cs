@@ -7,19 +7,21 @@ public class WorkManager : MonoBehaviour
     [SerializeField] private GameObject _player;
     [SerializeField] public GameObject Tray;
     public static event Action HandAction;
-    public List<GameObject> Hand;
+    public List<FoodType> Hand;
+    public List<GameObject> HandGameObjects;
 
 
     /// <summary>
     /// Taking something
     /// </summary>
     /// <param name="foodType"></param>
-    public void TakeResource(GameObject prefab)
+    public void TakeResource(FoodType foodType)
     {
         if (!Tray.activeSelf) return;
         Debug.Log("Aldim");
-        GameObject tempCreatedFood = Instantiate(prefab);
-        Hand.Add(tempCreatedFood);
+        GameObject tempCreatedFood = Instantiate(foodType.Prefab);
+        Hand.Add(foodType);
+        HandGameObjects.Add(tempCreatedFood);
         tempCreatedFood.transform.SetParent(Tray.transform);
         //UI change or plate reposition for the objects
         HandAction?.Invoke();
@@ -33,11 +35,12 @@ public class WorkManager : MonoBehaviour
     /// </summary>
     public void ThrowToTrash()
     {
-        for (int i = 0; i < Hand.Count; i++)
+        for (int i = 0; i < HandGameObjects.Count; i++)
         {
-            Destroy(Hand[i]);
+            Destroy(HandGameObjects[i]);
         }
         Hand.Clear();
+        HandGameObjects.Clear();
         Tray.SetActive(false);
     }
 }

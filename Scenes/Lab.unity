@@ -2370,7 +2370,7 @@ Transform:
   m_GameObject: {fileID: 459861685}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 3.64, y: 1.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2388,6 +2388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 639c36dd3214046fb988fcc1dc6a01d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _customerHandler: {fileID: 665650399}
   _seatPoints:
   - {fileID: 268592368}
   - {fileID: 396848360}
@@ -3583,6 +3584,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0832005a1654747069219ca1c18abe73, type: 2}
   _customer: {fileID: 3124690451397890453, guid: 312575a9653f840f191a535a0b913851, type: 3}
   _seatHandler: {fileID: 459861687}
+  _workManager: {fileID: 1358082194}
   _spawnPoint: {fileID: 1548720624}
   _linestartPoint: {fileID: 1564766591}
   _distance: 1.32
@@ -5526,6 +5528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 937271649}
+  - component: {fileID: 937271650}
   m_Layer: 5
   m_Name: Money
   m_TagString: Untagged
@@ -5555,6 +5558,20 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 569}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &937271650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937271648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aff8b6ee2d5041268851ebb1ada45f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moneyTMP: {fileID: 76295662}
+  _earningEffectSize: 1.18
 --- !u!1 &1028334290
 GameObject:
   m_ObjectHideFlags: 0
@@ -6286,8 +6303,8 @@ GameObject:
   - component: {fileID: 1258256175}
   - component: {fileID: 1258256178}
   - component: {fileID: 1258256180}
-  - component: {fileID: 1258256179}
   - component: {fileID: 1258256181}
+  - component: {fileID: 1258256179}
   - component: {fileID: 1258256182}
   m_Layer: 0
   m_Name: Player
@@ -7042,6 +7059,7 @@ MonoBehaviour:
   _player: {fileID: 1258256174}
   Tray: {fileID: 1564303518}
   Hand: []
+  HandGameObjects: []
 --- !u!1 &1375445634
 GameObject:
   m_ObjectHideFlags: 0

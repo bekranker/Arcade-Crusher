@@ -3,7 +3,7 @@
 /// If a class implementing this interface is present in any object, that object will have a Finite State Machine (FSM).
 /// </summary>
 /// <typeparam name="T">The type of data associated with the state machine, constrained to IBaseData.</typeparam>
-public interface IStateMachine<T> where T : IBaseData
+public interface IStateMachine : IBaseData
 {
     /// <summary>
     /// Updates the topmost child state (i.e., the active state) every frame to execute its logic.
@@ -14,5 +14,5 @@ public interface IStateMachine<T> where T : IBaseData
     /// Adds a new state to the state machine and transitions to it.
     /// </summary>
     /// <param name="state">The state to transition to.</param>
-    void ChangeState(IState<T> state);
+    void ChangeState(IState state);
 }

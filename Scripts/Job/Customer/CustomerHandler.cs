@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,7 @@ public class CustomerHandler : MonoBehaviour
     [Tooltip("Customer Prefab to Instiante")]
     [SerializeField] private Customer _customer;
     [SerializeField] private SeatHandler _seatHandler;
+    [SerializeField] private WorkManager _workManager;
 
     [Header("---Spawner Props")]
     [Tooltip("NPC Spawnpoint")]
@@ -25,12 +27,10 @@ public class CustomerHandler : MonoBehaviour
     public Queue<Customer> _queueForEnter = new();
 
     // returning Orders Length
-    private int _ordersLength => _FoodTypes.Count;
     private Player_Actions _playerActions;
     void Awake()
     {
         _playerActions = new();
-
     }
     void OnEnable()
     {
@@ -48,44 +48,52 @@ public class CustomerHandler : MonoBehaviour
     /// </summary>
     public void CreateCustomer(InputAction.CallbackContext context)
     {
-        AddToLine(EmptySeatsCount());
+        AddToLine(2);
     }
 
     /// <summary>
     /// Checking the empty seat count
     /// </summary>
     /// <returns></returns>
-    private int EmptySeatsCount() => _seatHandler.GetEmptySeats().Count;
+
 
     /// <summary>
     /// Creating new customers to add the Queue<Customer>
     /// </summary>
     /// <param name="count">Count of the Customers will be create</param>
-    private void AddToLine(int count)
+    private async void AddToLine(int count)
     {
         for (int i = 0; i < count; i++)
         {
             Customer currentCustomer = Instantiate(_customer, _spawnPoint.position, Quaternion.identity);
-            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)]);
-            currentCustomer.MyStateMachine.ChangeState(currentCustomer.MyGetInLineState);
+
+            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)], _workManager, _seatHandler);
+
+            currentCustomer.MoveState.TargetPosition = LinePoint();
+            currentCustomer.MoveState.AfterMove = () =>
+            {
+                _seatHandler.TakeASeat();
+            };
+            currentCustomer.MyStateMachine.ChangeState(currentCustomer.MoveState);
+
             _queueForEnter.Enqueue(currentCustomer);
+
+            await UniTask.Delay(500);
         }
     }
-    public void Move(Customer customer)
-    {
-        customer.Move(new Vector3(_linestartPoint.transform.position.x + (_queueForEnter.Count * _distance), _linestartPoint.transform.position.y, 0));
-    }
+
+    public Vector3 LinePoint() => new Vector3(_linestartPoint.transform.position.x + (_queueForEnter.Count * _distance), _linestartPoint.transform.position.y, 0);
     /// <summary>
     /// returning random order list
     /// </summary>
     /// <returns>Order List</returns>
     public Dictionary<FoodType, int> GetOrderData()
     {
-        int tempFoodTypeCount = Random.Range(0, _ordersLength);
+        int tempFoodTypeCount = Random.Range(0, _FoodTypes.Count);
         Dictionary<FoodType, int> tempOrders = new();
         for (int i = 0; i < tempFoodTypeCount; i++)
         {
-            int randomFood = Random.Range(0, _ordersLength);
+            int randomFood = Random.Range(0, _FoodTypes.Count);
             if (tempOrders.ContainsKey(_FoodTypes[randomFood]))
             {
                 if (tempOrders[_FoodTypes[randomFood]] <= _maxSameFoodCount)
@@ -102,9 +110,9 @@ public class CustomerHandler : MonoBehaviour
     /// <summary>
     /// Getting from queue to sit
     /// </summary>
-    private void GetFromLine()
+    public Customer GetFromLine()
     {
         Customer nextCustomerToSeat = _queueForEnter.Dequeue();
-
+        return nextCustomerToSeat;
     }
 }
