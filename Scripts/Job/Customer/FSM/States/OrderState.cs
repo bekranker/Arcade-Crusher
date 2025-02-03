@@ -1,6 +1,4 @@
-
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +17,6 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
 
     private Dictionary<FoodType, int> _myOrders;
     public Transform Seat { get; set; }
-    private WorkManager _workManager;
 
 
     private bool _startCounting;
@@ -39,7 +36,6 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
         {
             Order tempOrderUIPrefab = Instantiate(_orderUIPrefab, _orderBox.transform);
             tempOrderUIPrefab.Init(orderItem.Key, orderItem.Value);
-            print("ORder is preperad");
         }
         Invoke(nameof(StartCountDown), 0.5f);
     }
@@ -61,6 +57,9 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
 
     public void OnExit()
     {
+        _customer.SeatHandler.SetSeatEmpty(Seat);
+        _orderBox.SetActive(false);
+        _remainingTimeImage.gameObject.SetActive(false);
     }
 
     public void OnUpdate()
@@ -69,8 +68,7 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
         {
             if (_counter <= 0)
             {
-                _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
-                _customer.MyStateMachine.ChangeState(_customer.MoveState);
+                CustomerLose();
                 StopCountDown();
             }
             else
@@ -82,14 +80,17 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
     }
     private void CustomerLose()
     {
-
+        _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
+        _customer.StateMachine.ChangeState(_customer.MoveState);
+        _customer.MoneyHandler.DecreaseMoney(_myOrders.Count * 10);
     }
     private void CustomerWin()
     {
+        _customer.StateMachine.ChangeState(_customer.EatState);
     }
     private bool CheckMatchOrder()
     {
-        foreach (FoodType handItem in _workManager.Hand)
+        foreach (FoodType handItem in _customer.WorkManager.Hand)
         {
             if (!_myOrders.ContainsKey(handItem)) return false;
         }
@@ -97,13 +98,16 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
     }
     public void ExecuteInteraction()
     {
+        print("Interact with customer");
         //Change State to Eat
         if (CheckMatchOrder() && _counter > 0)
         {
+            print("yummy yummy here");
             CustomerWin();
         }
         else
         {
+            print("this is the biggest dog shit ever I seen in my life");
             CustomerLose();
         }
     }

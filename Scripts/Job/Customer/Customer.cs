@@ -16,15 +16,17 @@ public class Customer : MonoBehaviour, IBaseData
     public CustomerHandler MyCustomerHandler { get; set; }
     public CustomerType MyCustomerType { get; set; }
     private string _name;
-    public IStateMachine MyStateMachine;
-    public IdleState MyIdleState;
+    public IStateMachine StateMachine;
+    public IdleState IdleState;
     public MoveState MoveState;
-    public OrderState MyEatState;
-    private WorkManager _workManager;
+    public OrderState OrderState;
+    public EatState EatState;
+    public WorkManager WorkManager { get; set; }
     public SeatHandler SeatHandler { get; set; }
+    public MoneyHandler MoneyHandler { get; set; }
     void Update()
     {
-        MyStateMachine?.UpdateStates();
+        StateMachine?.UpdateStates();
     }
 
 
@@ -32,17 +34,17 @@ public class Customer : MonoBehaviour, IBaseData
     /// this funtion will be called when created.
     /// </summary>
     /// <param name="seatHandler"></param>
-    public void Init(CustomerHandler customerHandler, CustomerType typeOfCustomer, WorkManager workManager, SeatHandler seatHandler)
+    public void Init(CustomerHandler customerHandler, CustomerType typeOfCustomer, WorkManager workManager, SeatHandler seatHandler, MoneyHandler moneyHandler)
     {
         _spriteRenderer.sprite = typeOfCustomer.PlaceHolder;
         MyCustomerHandler = customerHandler;
         MyCustomerType = typeOfCustomer;
         _name = MyCustomerType.CustomerName;
         _NPCName.text = _name;
-        _workManager = workManager;
+        WorkManager = workManager;
         SeatHandler = seatHandler;
-
-        MyStateMachine = new StateMachine();
+        MoneyHandler = moneyHandler;
+        StateMachine = new StateMachine();
     }
     public void ChangeState(string stateName) => _stateName.text = stateName + " state";
 }

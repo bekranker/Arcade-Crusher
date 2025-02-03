@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 1819948046115667547}
   - component: {fileID: -3821389871435315897}
   - component: {fileID: 8907479476095592038}
-  - component: {fileID: 3124690451397890453}
   - component: {fileID: 3658618684521142169}
   - component: {fileID: 5077170227854260262}
   - component: {fileID: 2596131530727174769}
+  - component: {fileID: 1721428746826983817}
+  - component: {fileID: 3124690451397890453}
   m_Layer: 7
   m_Name: Customer
   m_TagString: Untagged
@@ -176,26 +177,6 @@ SortingGroup:
   m_SortingLayer: 1
   m_SortingOrder: 2
   m_SortAtRoot: 0
---- !u!114 &3124690451397890453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739694551548594212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c63c2900bb90341928f056fec4dd42a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 2
-  MyAnimator: {fileID: -3821389871435315897}
-  _NPCName: {fileID: 1050647047172164289}
-  _stateName: {fileID: 2876425110591368760}
-  _spriteRenderer: {fileID: 7160675542994876816}
-  MyIdleState: {fileID: 2596131530727174769}
-  MoveState: {fileID: 3658618684521142169}
-  MyEatState: {fileID: 5077170227854260262}
 --- !u!114 &3658618684521142169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,6 +224,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: -3821389871435315897}
   _customer: {fileID: 3124690451397890453}
+--- !u!114 &1721428746826983817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739694551548594212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 943961accdba44416895717a37e19d59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: -3821389871435315897}
+  _customer: {fileID: 3124690451397890453}
+  _eatingDelay: 3.24
+--- !u!114 &3124690451397890453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 739694551548594212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c63c2900bb90341928f056fec4dd42a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 2
+  MyAnimator: {fileID: -3821389871435315897}
+  _NPCName: {fileID: 1050647047172164289}
+  _stateName: {fileID: 2876425110591368760}
+  _spriteRenderer: {fileID: 7160675542994876816}
+  IdleState: {fileID: 2596131530727174769}
+  MoveState: {fileID: 3658618684521142169}
+  OrderState: {fileID: 5077170227854260262}
+  EatState: {fileID: 1721428746826983817}
 --- !u!1 &2273152724710036404
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -639,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.22423027, g: 1, b: 0.051886797, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

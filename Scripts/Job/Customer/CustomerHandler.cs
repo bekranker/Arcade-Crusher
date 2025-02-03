@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Random = UnityEngine.Random;
 public class CustomerHandler : MonoBehaviour
 {
     [Tooltip("Food Types")]
@@ -16,6 +16,8 @@ public class CustomerHandler : MonoBehaviour
     [SerializeField] private Customer _customer;
     [SerializeField] private SeatHandler _seatHandler;
     [SerializeField] private WorkManager _workManager;
+    [SerializeField] private MoneyHandler _moneyHandler;
+
 
     [Header("---Spawner Props")]
     [Tooltip("NPC Spawnpoint")]
@@ -48,7 +50,7 @@ public class CustomerHandler : MonoBehaviour
     /// </summary>
     public void CreateCustomer(InputAction.CallbackContext context)
     {
-        AddToLine(2);
+        AddToLine(1);
     }
 
     /// <summary>
@@ -67,14 +69,14 @@ public class CustomerHandler : MonoBehaviour
         {
             Customer currentCustomer = Instantiate(_customer, _spawnPoint.position, Quaternion.identity);
 
-            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)], _workManager, _seatHandler);
+            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)], _workManager, _seatHandler, _moneyHandler);
 
             currentCustomer.MoveState.TargetPosition = LinePoint();
             currentCustomer.MoveState.AfterMove = () =>
             {
                 _seatHandler.TakeASeat();
             };
-            currentCustomer.MyStateMachine.ChangeState(currentCustomer.MoveState);
+            currentCustomer.StateMachine.ChangeState(currentCustomer.MoveState);
 
             _queueForEnter.Enqueue(currentCustomer);
 
@@ -89,8 +91,10 @@ public class CustomerHandler : MonoBehaviour
     /// <returns>Order List</returns>
     public Dictionary<FoodType, int> GetOrderData()
     {
-        int tempFoodTypeCount = Random.Range(0, _FoodTypes.Count);
+        int tempFoodTypeCount = Random.Range(1, _FoodTypes.Count);
+        print("food type Count:" + tempFoodTypeCount);
         Dictionary<FoodType, int> tempOrders = new();
+
         for (int i = 0; i < tempFoodTypeCount; i++)
         {
             int randomFood = Random.Range(0, _FoodTypes.Count);

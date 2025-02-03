@@ -1,6 +1,4 @@
 using System;
-using Cysharp.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 public class MoveState : MonoBehaviour, IState
 {
@@ -28,15 +26,12 @@ public class MoveState : MonoBehaviour, IState
         // Her frame'de hedef pozisyona doğru hareket et.
         if (transform.position != TargetPosition)
         {
-            print("moving");
             transform.position = Vector3.MoveTowards(transform.position, TargetPosition, _speed * Time.deltaTime);
         }
         else
         {
-            print("arrived");
             if (!_invokeOnce)
             {
-                print("after action");
                 // Hedefe ulaşıldığında AfterMove çağrılır.
                 AfterMove?.Invoke();
             }

@@ -10,6 +10,7 @@ public class SeatHandler : MonoBehaviour
     [Tooltip("This is where customer seat")]
 
     [SerializeField] private List<Transform> _seatPoints;
+    [SerializeField] private WorkManager _workManager;
     public Dictionary<Transform, bool> EmptySeats = new();
 
 
@@ -81,15 +82,15 @@ public class SeatHandler : MonoBehaviour
         if (EmptySeatCount() <= 0) return;
         Customer tempCustomer = _customerHandler.GetFromLine();
         Transform targetSeat = TakeRandomSeat();
-        tempCustomer.MyEatState.Seat = targetSeat;
+        tempCustomer.OrderState.Seat = targetSeat;
         tempCustomer.MoveState.TargetPosition = targetSeat.position;
-        tempCustomer.MoveState.AfterMove = () => tempCustomer.MyStateMachine.ChangeState(tempCustomer.MyEatState);
-        tempCustomer.MyStateMachine.ChangeState(tempCustomer.MoveState);
+        tempCustomer.MoveState.AfterMove = () => tempCustomer.StateMachine.ChangeState(tempCustomer.OrderState);
+        tempCustomer.StateMachine.ChangeState(tempCustomer.MoveState);
     }
     public void SetSeatEmpty(Transform seat)
     {
         if (!EmptySeats.ContainsKey(seat)) return;
-
+        _workManager.ThrowToTrash();
         EmptySeats[seat] = true;
     }
 }

@@ -17,7 +17,7 @@ public class MoneyHandler : MonoBehaviour
     }
     public void DecreaseMoney(float count)
     {
-        _vault += count;
+        _vault -= count;
         _moneyTMP.text = _vault.ToString() + "$";
         TextEffect();
     }
