@@ -494,6 +494,17 @@
                 {
                     "name": "",
                     "id": "a5cb7fb8-3a59-41bb-940e-c6d8761f9da9",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Debug",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c06357e-4874-4358-a4f4-958eb3080167",
                     "path": "<Mouse>/middleButton",
                     "interactions": "",
                     "processors": "",

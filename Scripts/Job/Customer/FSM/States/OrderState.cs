@@ -57,7 +57,6 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
 
     public void OnExit()
     {
-        _customer.SeatHandler.SetSeatEmpty(Seat);
         _orderBox.SetActive(false);
         _remainingTimeImage.gameObject.SetActive(false);
     }
@@ -82,6 +81,7 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
     {
         _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
         _customer.StateMachine.ChangeState(_customer.MoveState);
+        _customer.SeatHandler.SetSeatEmpty(Seat);
         _customer.MoneyHandler.DecreaseMoney(_myOrders.Count * 10);
     }
     private void CustomerWin()
@@ -108,7 +108,10 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
         else
         {
             print("this is the biggest dog shit ever I seen in my life");
-            CustomerLose();
+            _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
+            _customer.StateMachine.ChangeState(_customer.MoveState);
+            _customer.MoneyHandler.DecreaseMoney(_myOrders.Count * 10);
+            _customer.SeatHandler.WrongOrder(Seat);
         }
     }
 }
