@@ -125,6 +125,24 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MouseMove"",
+                    ""type"": ""Value"",
+                    ""id"": ""6b686e75-0ddd-4d83-ba9c-53e5a4935842"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""Button"",
+                    ""id"": ""7ed28592-cf7c-4fc6-8c03-5c3fb1e5ebb1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -543,6 +561,28 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""DebugMoveToSeat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cd778e83-8560-4fb3-ac1b-7132946c2521"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMove"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e647f726-4aa0-4a53-af7a-8f426ce4b0a3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1141,6 +1181,8 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Debug = m_Player.FindAction("Debug", throwIfNotFound: true);
         m_Player_DebugMoveToSeat = m_Player.FindAction("DebugMoveToSeat", throwIfNotFound: true);
+        m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
+        m_Player_Point = m_Player.FindAction("Point", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1231,6 +1273,8 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Debug;
     private readonly InputAction m_Player_DebugMoveToSeat;
+    private readonly InputAction m_Player_MouseMove;
+    private readonly InputAction m_Player_Point;
     public struct PlayerActions
     {
         private @Player_Actions m_Wrapper;
@@ -1246,6 +1290,8 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @Debug => m_Wrapper.m_Player_Debug;
         public InputAction @DebugMoveToSeat => m_Wrapper.m_Player_DebugMoveToSeat;
+        public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
+        public InputAction @Point => m_Wrapper.m_Player_Point;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1288,6 +1334,12 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @DebugMoveToSeat.started += instance.OnDebugMoveToSeat;
             @DebugMoveToSeat.performed += instance.OnDebugMoveToSeat;
             @DebugMoveToSeat.canceled += instance.OnDebugMoveToSeat;
+            @MouseMove.started += instance.OnMouseMove;
+            @MouseMove.performed += instance.OnMouseMove;
+            @MouseMove.canceled += instance.OnMouseMove;
+            @Point.started += instance.OnPoint;
+            @Point.performed += instance.OnPoint;
+            @Point.canceled += instance.OnPoint;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1325,6 +1377,12 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @DebugMoveToSeat.started -= instance.OnDebugMoveToSeat;
             @DebugMoveToSeat.performed -= instance.OnDebugMoveToSeat;
             @DebugMoveToSeat.canceled -= instance.OnDebugMoveToSeat;
+            @MouseMove.started -= instance.OnMouseMove;
+            @MouseMove.performed -= instance.OnMouseMove;
+            @MouseMove.canceled -= instance.OnMouseMove;
+            @Point.started -= instance.OnPoint;
+            @Point.performed -= instance.OnPoint;
+            @Point.canceled -= instance.OnPoint;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1518,6 +1576,8 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnDebug(InputAction.CallbackContext context);
         void OnDebugMoveToSeat(InputAction.CallbackContext context);
+        void OnMouseMove(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

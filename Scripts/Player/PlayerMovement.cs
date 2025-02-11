@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-
+using Cysharp.Threading.Tasks;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("----Skateboard Components")]
@@ -39,10 +38,13 @@ public class PlayerMovement : MonoBehaviour
         _playerActions.Player.Move.performed += Move;
         _playerActions.Player.Move.canceled += Move;
         _playerActions.Player.Sprint.performed += Sprint;
+        _playerActions.Player.Point.performed += PointRun;
+
     }
     void Update()
     {
         Run();
+
     }
     private void OnDisable()
     {
@@ -50,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
         _playerActions.Player.Move.performed -= Move;
         _playerActions.Player.Move.canceled -= Move;
         _playerActions.Player.Sprint.performed -= Sprint;
+        _playerActions.Player.Point.performed -= PointRun;
         _playerActions.Player.Disable();
     }
     void Sprint(InputAction.CallbackContext context)
@@ -85,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
         MovementInput = context.ReadValue<Vector2>();
         _direction = Mathf.Sign(MovementInput.x);
     }
+
     /// <summary>
     /// Physically movement with acceleration and deacceleration
     /// </summary>
@@ -114,7 +118,15 @@ public class PlayerMovement : MonoBehaviour
         _rb.linearVelocityX = tempAcceleration;
         //Turning
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
-
     }
-
+    async void PointRun(InputAction.CallbackContext context)
+    {
+        Vector2 pointToGo = Mouse.current.position.ReadValue();
+        while (transform.position.x != pointToGo.x)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, pointToGo, _speed * Time.deltaTime);
+            await UniTask.Yield();
+        }
+        transform.position = pointToGo;
+    }
 }

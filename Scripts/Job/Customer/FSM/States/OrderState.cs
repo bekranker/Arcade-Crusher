@@ -87,6 +87,7 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
     private void CustomerWin()
     {
         _customer.StateMachine.ChangeState(_customer.EatState);
+        _customer.WorkManager.ThrowToTrash();
     }
     private bool CheckMatchOrder()
     {
