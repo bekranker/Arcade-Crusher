@@ -12,6 +12,4 @@ public class Money : MonoBehaviour, IObjectInteractable
         _moneyHandler = moneyHandler;
         _tip = tip;
     }
-
-
 }

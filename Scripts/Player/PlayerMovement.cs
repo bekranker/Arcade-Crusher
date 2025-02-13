@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cysharp.Threading.Tasks;
+using UnityEngine.Events;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("----Skateboard Components")]
@@ -13,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Range(0, 100)] private float _speed;
     [SerializeField] private AnimationCurve _acceleration;
     [SerializeField] private AnimationCurve _decceleration;
+    [Header("----Interaction Maskes")]
+    [SerializeField] private LayerMask _layerMask;
     Player_Actions _playerActions;
     public Vector2 MovementInput;
     [Header("----Sprint Props")]
@@ -23,8 +26,9 @@ public class PlayerMovement : MonoBehaviour
     private bool _canSprint;
     float _elapsedTime = 0;
     float _direction;
-
-
+    public Action AfterMoveEvent;
+    bool _canMove;
+    private Vector3 _pointToGo;
     private void Awake()
     {
         _playerActions = new();
@@ -44,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         Run();
-
+        GoPoint();
     }
     private void OnDisable()
     {
@@ -119,14 +123,43 @@ public class PlayerMovement : MonoBehaviour
         //Turning
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
     }
-    async void PointRun(InputAction.CallbackContext context)
+    void PointRun(InputAction.CallbackContext context)
     {
-        Vector2 pointToGo = Mouse.current.position.ReadValue();
-        while (transform.position.x != pointToGo.x)
+        _pointToGo = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        AfterMoveInit(_pointToGo);
+        _direction = Mathf.Sign(_pointToGo.x - transform.position.x);
+        transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
+        _canMove = true;
+    }
+    void GoPoint()
+    {
+        if (!_canMove) return;
+        _wheels?.ForEach((wheel) =>
+            {
+                wheel.Rotate(Vector3.back * _speed);
+            });
+        if (transform.position.x != _pointToGo.x)
         {
-            transform.position = Vector3.MoveTowards(transform.position, pointToGo, _speed * Time.deltaTime);
-            await UniTask.Yield();
+            _canMove = true;
+            transform.position = Vector2.MoveTowards(transform.position, new Vector2(_pointToGo.x, transform.position.y), _speed * Time.deltaTime);
         }
-        transform.position = pointToGo;
+        else
+        {
+            transform.position = new Vector2(_pointToGo.x, transform.position.y);
+            AfterMoveEvent?.Invoke();
+            AfterMoveEvent = null;
+            _canMove = false;
+        }
+    }
+    private void AfterMoveInit(Vector3 origin)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector3.forward, 100, _layerMask);
+        if (hit.collider != null)
+        {
+            if (hit.collider.TryGetComponent(out IObjectInteractable interactableComponeny))
+            {
+                AfterMoveEvent = interactableComponeny.ExecuteInteraction;
+            }
+        }
     }
 }

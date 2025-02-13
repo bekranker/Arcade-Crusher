@@ -208,7 +208,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.68, y: 0.627, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 394419585193633887}
   - {fileID: 8610930439762765985}
@@ -421,14 +421,14 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.07538009
     - serializedVersion: 3
-      time: 0.12562245
+      time: 0.11
       value: 0.9414638
-      inSlope: 1.1964195
-      outSlope: 1.1964195
+      inSlope: 0.8086202
+      outSlope: 0.8086202
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.23478834
-      outWeight: 0.33333334
+      outWeight: 0.07998213
     - serializedVersion: 3
       time: 0.48443604
       value: 0.99056625
@@ -454,7 +454,7 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.03
+      time: 0.02
       value: 1
       inSlope: -0.08755546
       outSlope: -0.08755546
@@ -465,6 +465,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  _layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   MovementInput: {x: 0, y: 0}
   _sprintSpeed: 20
   _sprintCoolDown: 0.5

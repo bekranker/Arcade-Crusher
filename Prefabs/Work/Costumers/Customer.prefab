@@ -206,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _orderBox: {fileID: 4393224702632201317}
   _remainingTimeImage: {fileID: 2325675532096797547}
-  _orderTimeCounter: 10
+  _orderTimeCounter: 25.29
   _orderUIPrefab: {fileID: 2093362594520030388, guid: 8f29a80f9564f4136bbc20e308cd05ea, type: 3}
   _animator: {fileID: -3821389871435315897}
   _customer: {fileID: 3124690451397890453}
