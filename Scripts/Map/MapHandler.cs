@@ -3,23 +3,28 @@ using UnityEngine.SceneManagement;
 
 public class MapHandler : MonoBehaviour
 {
+    [SerializeField] private ChargeHandler _chargeHandler;
     public void ArcadeSaloon()
     {
-        PlayerPrefs.SetString("LastSeenAt", "ArcadeSaloon");
-        SceneManager.LoadScene("ArcadeSaloon");
+        MoveAction("Saloon");
     }
     public void Work()
     {
-        PlayerPrefs.SetString("LastSeenAt", "Work");
-        SceneManager.LoadScene("Work");
+        MoveAction("Work");
     }
     public void Home()
     {
-        PlayerPrefs.SetString("LastSeenAt", "Home");
-        SceneManager.LoadScene("Home");
+        MoveAction("Home");
     }
-    public void LoadingScreen()
-    {
 
+    private void MoveAction(string key)
+    {
+        if (!_chargeHandler.EnoughCharge())
+        {
+            Debug.Log("Enerji bitmiş");
+            return;
+        }
+        PlayerPrefs.SetString("LastSeenAt", key);
+        SceneManager.LoadScene(key);
     }
 }

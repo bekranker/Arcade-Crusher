@@ -28,7 +28,7 @@ public class Dad : MonoBehaviour
         int tempRandStand = Random.Range(0, _stants.Count);
         Vector3 targetStand = _stants[tempRandStand].transform.position;
         _animator.Play("Move");
-        while (transform.position.x != targetStand.x)
+        while (transform != null && transform.position.x != targetStand.x)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetStand, _speed * Time.deltaTime);
             await UniTask.Yield();
