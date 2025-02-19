@@ -11,7 +11,6 @@ namespace ZilyanusLib
     namespace Audio
     {
         using UnityEngine.Audio;
-        using UnityEngine.Rendering;
 
         public static class AudioClass
         {
@@ -22,11 +21,11 @@ namespace ZilyanusLib
                 return audioClip;
             }
 
-            public static void PlayAudio(string ClipName, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1) 
+            public static void PlayAudio(string ClipName, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1)
             {
                 if (ClipName == "") return;
                 AudioClip audioClip = Resources.Load("Audio/" + ClipName) as AudioClip;
-                if (audioClip == null) { Debug.LogWarning(ClipName + " Not Found"); return; }               
+                if (audioClip == null) { Debug.LogWarning(ClipName + " Not Found"); return; }
                 PlayAudio(audioClip, volume, AudioMixerName, AudioMixerGroupName, Pitch);
             }
 
@@ -34,7 +33,7 @@ namespace ZilyanusLib
             {
                 if (clip == null) return;
                 // iOS can be problem 
-                AudioMixer audioMixer = Resources.Load("Audio/"+ AudioMixerName) as AudioMixer;
+                AudioMixer audioMixer = Resources.Load("Audio/" + AudioMixerName) as AudioMixer;
                 AudioMixerGroup group = audioMixer.FindMatchingGroups(AudioMixerGroupName)[0];
 
                 PlayAudio(clip, group, volume, Pitch);
@@ -52,26 +51,26 @@ namespace ZilyanusLib
                 audioSource.clip = clip;
                 audioSource.spatialBlend = 1f;
                 audioSource.volume = volume;
-                audioSource.pitch = Random.Range(Pitch-0.05f, Pitch + 0.05f);
+                audioSource.pitch = Random.Range(Pitch - 0.05f, Pitch + 0.05f);
                 audioSource.Play();
                 Object.Destroy(gameObject, clip.length);
             }
 
             public static void PlayAudio(SoundData soundData, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1)
             {
-                PlayAudio(soundData.SoundName, soundData.Volume, AudioMixerName,AudioMixerGroupName, Pitch);
+                PlayAudio(soundData.SoundName, soundData.Volume, AudioMixerName, AudioMixerGroupName, Pitch);
             }
         }
     }
 
     namespace Spawner
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         public class SpawnerClass : MonoBehaviour
         {
             public static GameObject SpawnPrefab(GameObject Prefab, Transform Parent = null)
             {
-                
+
                 //Does not work runtime only editor
                 GameObject ParentGameObject = new GameObject();
                 PrefabUtility.InstantiatePrefab(Prefab, ParentGameObject.transform);
@@ -79,10 +78,10 @@ namespace ZilyanusLib
                 SpawnedPrefab.transform.SetParent(Parent);
                 DestroyImmediate(ParentGameObject);
                 return SpawnedPrefab;
-                
+
             }
         }
-        #endif
+#endif
     }
 }
 
