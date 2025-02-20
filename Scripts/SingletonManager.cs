@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEngine;
-
 public class SingletonManager : MonoBehaviour
 {
     private void Awake()
@@ -15,11 +14,15 @@ public class SingletonManager : MonoBehaviour
 
             foreach (var i in interfaces)
             {
-                // Static Instance alanını bul ve atama yap
-                var instanceProperty = i.GetProperty("Instance");
-                if (instanceProperty != null)
+                // Generic type'i al
+                var genericType = i.GetGenericArguments()[0];
+
+                // Instance property'sini bul
+                var instanceProperty = i.GetProperty("Instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+                if (instanceProperty != null && genericType.IsInstanceOfType(component))
                 {
-                    instanceProperty.SetValue(null, component);
+                    // Instance property'sine bileşeni ata
+                    instanceProperty.SetValue(null, component); // Static property, so pass null as target
                     Debug.Log($"Singleton atandı: {component.GetType().Name}");
                 }
             }

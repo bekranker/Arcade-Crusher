@@ -5,9 +5,10 @@ using Random = UnityEngine.Random;
 using TMPro;
 using ZilyanusLib.Audio;
 using System.Collections;
-using System.Linq;
+using Unity.Cinemachine;
 public class SimonSaidHandler : MonoBehaviour
 {
+    [SerializeField] private Color _listenPressedColor;
     [SerializeField] private List<SimonsButton> _buttons;
     [SerializeField] private float _delay;
     [SerializeField, Range(0, .15f)] private float _delayMighnus;
@@ -15,6 +16,10 @@ public class SimonSaidHandler : MonoBehaviour
     [SerializeField] private Sprite _unPressedSprite;
     [SerializeField] private Sprite _pressedSprite;
     [SerializeField] private int _startCount;
+    [Header("---Components")]
+    [SerializeField] private SimonsSaid_ButtonEffect _simonsSaid_ButtonEffect;
+    public CinemachineImpulseSource ImpulseSource;
+
     private Queue<SimonsButton> _buttonQueue = new();
     private Queue<SimonsButton> _inputQueue = new();
     private Queue<SimonsButton> _initialQueue = new();
@@ -32,7 +37,7 @@ public class SimonSaidHandler : MonoBehaviour
     {
         foreach (SimonsButton button in _buttons)
         {
-            button.ButtonText.text = button.ButtonName;
+            button.Init();
         }
         _delayCounter = _delay;
         _count = _startCount;
@@ -71,15 +76,14 @@ public class SimonSaidHandler : MonoBehaviour
 
         if (Input.GetKeyDown(_currentButton.ButtonKeyCode))
         {
-
             _currentButton.PressMe(.5f, _pressedSprite);
+            ImpulseSource.GenerateImpulse();
+            _simonsSaid_ButtonEffect.Spawn(_currentButton.ButtonPosition);
             Debug.Log("True Input");
-
             return;
         }
         if (Input.GetKeyUp(_currentButton.ButtonKeyCode))
         {
-
             _currentButton.ReleaseMe(_unPressedSprite);
             if (_inputQueue.Count == 0)
             {
@@ -89,7 +93,6 @@ public class SimonSaidHandler : MonoBehaviour
                 return;
             }
             _currentButton = _inputQueue.Dequeue();
-
             return;
         }
     }
@@ -99,8 +102,10 @@ public class SimonSaidHandler : MonoBehaviour
         {
             SimonsButton simonsButton = _buttonQueue.Dequeue();
             simonsButton.PlayMe(_soundVolume);
-            simonsButton.ChangeColor(simonsButton.PressedColor);
-            yield return new WaitForSeconds(_delay);
+            yield return new WaitForSeconds(_delay / 2);
+            ImpulseSource.GenerateImpulse();
+            simonsButton.ChangeColor(_listenPressedColor);
+            yield return new WaitForSeconds(_delay / 2);
             simonsButton.ChangeColor(simonsButton.UnPressedColor);
         }
         _canListenInputs = true;
@@ -116,6 +121,11 @@ public class SimonsButton
     public Color PressedColor, UnPressedColor;
     private string _path = "MiniGames/SimonSaid/";
     public KeyCode ButtonKeyCode;
+    public Vector3 ButtonPosition;
+    public void Init()
+    {
+        ButtonText.text = ButtonName;
+    }
     public void PlayMe(float volume)
     {
         AudioClass.PlayAudio($"{_path + ButtonName}", volume);
