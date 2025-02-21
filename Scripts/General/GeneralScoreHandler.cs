@@ -8,41 +8,77 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
 {
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private float _punchScale;
-    private float _scoreCounter;
+    public float ScoreCounter { get; set; }
     public CinemachineImpulseSource ImpulseSource;
     public GeneralScoreHandler Instance { get; set; }
-    public event Action OnIncrease, OnDecrease;
-    private int _trueScoreCounter;
+    public static event Action OnIncrease, OnDecrease;
+    public int TrueScoreCounter { get; set; }
+
+    void Start()
+    {
+        ChangeText();
+        TrueScoreCounter = 1;
+    }
+
     /// <summary>
     /// Increase the score
     /// </summary>
     /// <param name="score">amount of increasing</param>
-    public void IncreaseScore(float score)
+    public float IncreaseScore(float score)
     {
-        _trueScoreCounter++;
-        OnIncrease?.Invoke();
-        _scoreCounter += score;
+        TrueScoreCounter++;
+        ScoreCounter += score * TrueScoreCounter;
         ChangeText();
+        OnIncrease?.Invoke();
+        return ScoreCounter;
     }
+
     /// <summary>
     /// decrease the score
     /// </summary>
     /// <param name="score">amount of decresing</param>
-    public void DecreaseScore(float score)
+    public float DecreaseScore(float score)
     {
-        _trueScoreCounter = 0;
-        OnDecrease?.Invoke();
-        _scoreCounter -= score;
+        TrueScoreCounter = 0;
+        ScoreCounter -= score;
         ChangeText();
+        OnDecrease?.Invoke();
+        return ScoreCounter;
     }
+
     /// <summary>
-    /// Changing TMP_Text varibale with DO Punch Sclae Effect
+    /// Changing TMP_Text varibale with DO Punch Scale Effect
     /// </summary>
     private void ChangeText()
     {
         ImpulseSource.GenerateImpulse();
         DOTween.Kill(_scoreText.transform);
-        _scoreText.text = _scoreCounter.ToString();
+        _scoreText.text = "Score: " + FormatScore(ScoreCounter);
         _scoreText.transform.DOPunchScale(Vector3.one * _punchScale, .2f);
+    }
+
+    /// <summary>
+    /// Formats the score to a more readable format (e.g., 1k, 100k, 1M, 1B)
+    /// </summary>
+    /// <param name="score">The score to format</param>
+    /// <returns>Formatted score as a string</returns>
+    public static string FormatScore(float score)
+    {
+        if (score >= 1000000000) // 1 Billion
+        {
+            return (score / 1000000000).ToString("0.##") + "B";
+        }
+        else if (score >= 1000000) // 1 Million
+        {
+            return (score / 1000000).ToString("0.##") + "M";
+        }
+        else if (score >= 1000) // 1 Thousand
+        {
+            return (score / 1000).ToString("0.##") + "k";
+        }
+        else
+        {
+            return score.ToString("0");
+        }
     }
 }

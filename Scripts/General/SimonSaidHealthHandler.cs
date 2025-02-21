@@ -13,7 +13,7 @@ public class SimonSaidHealthHandler : MonoBehaviour
     [SerializeField] private GameObject _mighnessOneRect;
     private float _healthCount;
     private int _index;
-    public event Action OnDecrease, OnIncrease, OnDie;
+    public static event Action OnDecrease, OnIncrease, OnDie;
 
     void Start()
     {

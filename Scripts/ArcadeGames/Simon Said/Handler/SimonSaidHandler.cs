@@ -5,7 +5,8 @@ using Random = UnityEngine.Random;
 using TMPro;
 using ZilyanusLib.Audio;
 using System.Collections;
-using Unity.Cinemachine;
+
+//A
 public class SimonSaidHandler : MonoBehaviour
 {
     [SerializeField] private Color _listenPressedColor;
