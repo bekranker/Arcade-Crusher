@@ -121,10 +121,11 @@ public class SimonsButton
     public Color PressedColor, UnPressedColor;
     private string _path = "MiniGames/SimonSaid/";
     public KeyCode ButtonKeyCode;
-    public Vector3 ButtonPosition;
+    public Vector3 ButtonPosition { get; set; }
     public void Init()
     {
         ButtonText.text = ButtonName;
+        ButtonPosition = ButtonSpriteRenderer.gameObject.transform.position;
     }
     public void PlayMe(float volume)
     {

@@ -27,6 +27,10 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
         Spawn(position);
         CameraShake();
     }
+    private void WrongInput()
+    {
+
+    }
     private void CameraShake()
     {
         ImpulseSource.GenerateImpulse();

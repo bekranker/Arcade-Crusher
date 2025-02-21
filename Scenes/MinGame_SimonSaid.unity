@@ -7175,7 +7175,6 @@ MonoBehaviour:
     PressedColor: {r: 0.48235294, g: 0.18039216, b: 0.18039216, a: 1}
     UnPressedColor: {r: 1, g: 0.40784314, b: 0.4117647, a: 1}
     ButtonKeyCode: 122
-    ButtonPosition: {x: 0, y: 2, z: 0}
   - ButtonText: {fileID: 1945275630}
     ButtonSpriteRenderer: {fileID: 2005239103}
     ButtonName: x
@@ -7183,7 +7182,6 @@ MonoBehaviour:
     PressedColor: {r: 0.21624245, g: 0.3962264, b: 0.1439124, a: 1}
     UnPressedColor: {r: 0.58431375, g: 1, b: 0.4117647, a: 1}
     ButtonKeyCode: 120
-    ButtonPosition: {x: 2, y: 0, z: 0}
   - ButtonText: {fileID: 1552773401}
     ButtonSpriteRenderer: {fileID: 1501208478}
     ButtonName: c
@@ -7191,7 +7189,6 @@ MonoBehaviour:
     PressedColor: {r: 0.11249555, g: 0.2677963, b: 0.3018868, a: 1}
     UnPressedColor: {r: 0.4117647, g: 0.89411765, b: 1, a: 1}
     ButtonKeyCode: 99
-    ButtonPosition: {x: -2, y: 0, z: 0}
   - ButtonText: {fileID: 131736824}
     ButtonSpriteRenderer: {fileID: 173130839}
     ButtonName: v
@@ -7199,7 +7196,6 @@ MonoBehaviour:
     PressedColor: {r: 0.35308558, g: 0.17777678, b: 0.4433962, a: 1}
     UnPressedColor: {r: 0.8, g: 0.4117647, b: 1, a: 1}
     ButtonKeyCode: 118
-    ButtonPosition: {x: 0, y: -2, z: 0}
   _delay: 0.5
   _delayMighnus: 0.05
   _soundVolume: 0.3
@@ -7794,6 +7790,6 @@ SceneRoots:
   - {fileID: 2138894641}
   - {fileID: 248753355}
   - {fileID: 1797142268}
-  - {fileID: 1401540024}
   - {fileID: 1324503278}
+  - {fileID: 1401540024}
   - {fileID: 468836488}

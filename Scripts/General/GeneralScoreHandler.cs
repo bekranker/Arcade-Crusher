@@ -12,12 +12,14 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     public CinemachineImpulseSource ImpulseSource;
     public GeneralScoreHandler Instance { get; set; }
     public event Action OnIncrease, OnDecrease;
+    private int _trueScoreCounter;
     /// <summary>
     /// Increase the score
     /// </summary>
     /// <param name="score">amount of increasing</param>
     public void IncreaseScore(float score)
     {
+        _trueScoreCounter++;
         OnIncrease?.Invoke();
         _scoreCounter += score;
         ChangeText();
@@ -28,6 +30,7 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     /// <param name="score">amount of decresing</param>
     public void DecreaseScore(float score)
     {
+        _trueScoreCounter = 0;
         OnDecrease?.Invoke();
         _scoreCounter -= score;
         ChangeText();
