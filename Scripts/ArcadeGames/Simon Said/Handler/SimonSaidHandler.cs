@@ -17,9 +17,10 @@ public class SimonSaidHandler : MonoBehaviour
     [SerializeField] private Sprite _pressedSprite;
     [SerializeField] private int _startCount;
     [Header("---Components")]
+    [SerializeField] private SimonSaidHealthHandler _simonSaidHealthHandler;
     [SerializeField] private SimonsSaid_ButtonEffect _simonsSaid_ButtonEffect;
-    public CinemachineImpulseSource ImpulseSource;
-
+    public static event Action<Vector3> OnTrueInput;
+    public static event Action OnWrongInput, OnListen;
     private Queue<SimonsButton> _buttonQueue = new();
     private Queue<SimonsButton> _inputQueue = new();
     private Queue<SimonsButton> _initialQueue = new();
@@ -77,8 +78,7 @@ public class SimonSaidHandler : MonoBehaviour
         if (Input.GetKeyDown(_currentButton.ButtonKeyCode))
         {
             _currentButton.PressMe(.5f, _pressedSprite);
-            ImpulseSource.GenerateImpulse();
-            _simonsSaid_ButtonEffect.Spawn(_currentButton.ButtonPosition);
+            OnTrueInput?.Invoke(_currentButton.ButtonPosition);
             Debug.Log("True Input");
             return;
         }
@@ -103,7 +103,7 @@ public class SimonSaidHandler : MonoBehaviour
             SimonsButton simonsButton = _buttonQueue.Dequeue();
             simonsButton.PlayMe(_soundVolume);
             yield return new WaitForSeconds(_delay / 2);
-            ImpulseSource.GenerateImpulse();
+            OnListen?.Invoke();
             simonsButton.ChangeColor(_listenPressedColor);
             yield return new WaitForSeconds(_delay / 2);
             simonsButton.ChangeColor(simonsButton.UnPressedColor);
