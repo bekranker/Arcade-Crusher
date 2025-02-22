@@ -7493,7 +7493,7 @@ MonoBehaviour:
     UnPressedColor: {r: 0.8, g: 0.4117647, b: 1, a: 1}
     ButtonKeyCode: 118
   _delay: 0.5
-  _delayMighnus: 0.15
+  _delayMighnus: 0.05
   _soundVolume: 0.3
   _unPressedSprite: {fileID: 5578996957676414935, guid: 767da56e9bb984b31ba24846c93706c0, type: 3}
   _pressedSprite: {fileID: 7480157036536715560, guid: 767da56e9bb984b31ba24846c93706c0, type: 3}

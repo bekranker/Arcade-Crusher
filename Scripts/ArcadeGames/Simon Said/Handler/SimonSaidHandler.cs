@@ -128,6 +128,7 @@ public class SimonSaidHandler : MonoBehaviour
             yield return new WaitForSeconds(_delay / 2);
             simonsButton.ChangeColor(simonsButton.UnPressedColor);
         }
+        _delay -= _delayMighnus;
         _canListenInputs = true;
     }
 }
