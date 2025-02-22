@@ -11,6 +11,7 @@ public class SimonSaidHealthHandler : MonoBehaviour
     [SerializeField] private List<Image> _heartImages = new();
     [SerializeField, Range(0, 100)] private float _health;
     [SerializeField] private GameObject _mighnessOneRect;
+    [SerializeField] private GameObject _loseScreen;
     private float _healthCount;
     private int _index;
     public static event Action OnDecrease, OnIncrease, OnDie;
@@ -25,12 +26,14 @@ public class SimonSaidHealthHandler : MonoBehaviour
         _index = 2;
         _mighnessOneRect.SetActive(false);
     }
+
     [Button]
     public void DecreaseHealth(float value)
     {
-        if (_health < value)
+        if (_healthCount <= value)
         {
             Die();
+            _heartImages[_index].enabled = false;
             return;
         }
         _heartImages[_index].enabled = false;
@@ -51,14 +54,17 @@ public class SimonSaidHealthHandler : MonoBehaviour
     }
     private void TextEffect(string value)
     {
+        DOTween.Kill(_mighnessOneRect.transform);
         _mighnessOneRect.SetActive(true);
-        _mighnessOneRect.transform.localPosition = new Vector3(_heartImages[_index].transform.position.x, _mighnessOneRect.transform.localPosition.y, 0);
         _mighnessOneRect.GetComponent<TMP_Text>().text = value;
         _mighnessOneRect.transform.DOLocalMoveY(_mighnessOneRect.transform.localPosition.y + 10, .3f);
         _mighnessOneRect.GetComponent<TMP_Text>().DOFade(0, .3f);
     }
     public void Die()
     {
+        Debug.Log("Dead");
+        MiniGameController.Instance.PauseTheGame();
+        _loseScreen.SetActive(true);
         OnDie?.Invoke();
     }
 }

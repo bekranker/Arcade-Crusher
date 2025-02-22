@@ -1,7 +1,7 @@
 using TMPro;
 using Unity.Cinemachine;
 using UnityEngine;
-
+using ZilyanusLib;
 //B
 public class SimonsSaid_ButtonEffect : MonoBehaviour
 {
@@ -15,10 +15,11 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
     [Header("---Components")]
     [SerializeField] private CinemachineImpulseSource ImpulseSource;
     [SerializeField] private GeneralScoreHandler _scoreHandler;
+    [SerializeField] private SimonSaidHealthHandler _simonHealthHandler;
     [Header("---Debug")]
     public bool LoseEverythingOnWorngInput;
     public static SimonsSaid_ButtonEffect Instance { get; set; }
-
+    private string _path = "MiniGames/SimonSaid/";
     void OnEnable()
     {
         SimonSaidHandler.OnListen += CameraShake;
@@ -42,7 +43,7 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
     private void TrueInputEffect(Vector3 position)
     {
         Spawn(position);
-        CameraShake();
+        CameraShake(1);
         _scoreHandler.IncreaseScore(100);
     }
     private void WrongInput()
@@ -51,11 +52,15 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
 
         if (LoseEverythingOnWorngInput)
         {
-
+            _scoreHandler.DecreaseScore(_scoreHandler.ScoreCounter);
         }
         else
         {
+            _scoreHandler.DecreaseScore(_scoreHandler.ScoreCounter / 2);
         }
+        CameraShake(1.5f);
+        _simonHealthHandler.DecreaseHealth(1);
+        ZilyanusLib.Audio.AudioClass.PlayAudio($"{_path}LOSESOUND", .5f);
     }
     /// <summary>
     /// called when Increasing score
@@ -83,9 +88,12 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
         Destroy(spawnedText.gameObject, 1);
         return spawnedText.GetComponentInChildren<TMP_Text>();
     }
-    private void CameraShake()
+    private void CameraShake(float force)
     {
-        ImpulseSource.GenerateImpulse();
+        ImpulseSource.GenerateImpulse(force);
+    }
+    private void OpenDeadCanvas()
+    {
 
     }
 }

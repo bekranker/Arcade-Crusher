@@ -39,10 +39,10 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     /// <param name="score">amount of decresing</param>
     public float DecreaseScore(float score)
     {
+        OnDecrease?.Invoke();
         TrueScoreCounter = 0;
         ScoreCounter -= score;
         ChangeText();
-        OnDecrease?.Invoke();
         return ScoreCounter;
     }
 
@@ -53,8 +53,9 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     {
         ImpulseSource.GenerateImpulse();
         DOTween.Kill(_scoreText.transform);
+        _scoreText.transform.localScale = Vector3.one;
         _scoreText.text = "Score: " + FormatScore(ScoreCounter);
-        _scoreText.transform.DOPunchScale(Vector3.one * _punchScale, .2f);
+        _scoreText.transform.DOPunchScale(Vector3.one * _punchScale, .2f).OnComplete(() => { _scoreText.transform.localScale = Vector3.one; });
     }
 
     /// <summary>

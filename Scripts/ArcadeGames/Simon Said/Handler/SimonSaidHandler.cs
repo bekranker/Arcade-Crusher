@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 using TMPro;
 using ZilyanusLib.Audio;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 //A
 public class SimonSaidHandler : MonoBehaviour
@@ -21,7 +22,8 @@ public class SimonSaidHandler : MonoBehaviour
     [SerializeField] private SimonSaidHealthHandler _simonSaidHealthHandler;
     [SerializeField] private SimonsSaid_ButtonEffect _simonsSaid_ButtonEffect;
     public static event Action<Vector3> OnTrueInput;
-    public static event Action OnWrongInput, OnListen;
+    public static event Action<float> OnListen;
+    public static event Action OnWrongInput;
     private Queue<SimonsButton> _buttonQueue = new();
     private Queue<SimonsButton> _inputQueue = new();
     private Queue<SimonsButton> _initialQueue = new();
@@ -29,7 +31,7 @@ public class SimonSaidHandler : MonoBehaviour
     private bool _canListenInputs = false;
     private SimonsButton _currentButton;
     private float _delayCounter;
-
+    private List<KeyCode> _keys = new();
 
     void Start()
     {
@@ -40,6 +42,7 @@ public class SimonSaidHandler : MonoBehaviour
         foreach (SimonsButton button in _buttons)
         {
             button.Init();
+            _keys.Add(button.ButtonKeyCode);
         }
         _delayCounter = _delay;
         _count = _startCount;
@@ -69,6 +72,14 @@ public class SimonSaidHandler : MonoBehaviour
     }
     void Update()
     {
+        if (MiniGameController.Instance.Paused)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            return;
+        }
         ListenInputs();
     }
     private void ListenInputs()
@@ -80,8 +91,16 @@ public class SimonSaidHandler : MonoBehaviour
         {
             _currentButton.PressMe(.5f, _pressedSprite);
             OnTrueInput?.Invoke(_currentButton.ButtonPosition);
-            Debug.Log("True Input");
             return;
+        }
+        foreach (KeyCode key in _keys)
+        {
+            if (Input.GetKeyDown(key) && key != _currentButton.ButtonKeyCode && !Input.GetKeyDown(_currentButton.ButtonKeyCode))
+            {
+                print("sa");
+                OnWrongInput?.Invoke();
+                return;
+            }
         }
         if (Input.GetKeyUp(_currentButton.ButtonKeyCode))
         {
@@ -104,7 +123,7 @@ public class SimonSaidHandler : MonoBehaviour
             SimonsButton simonsButton = _buttonQueue.Dequeue();
             simonsButton.PlayMe(_soundVolume);
             yield return new WaitForSeconds(_delay / 2);
-            OnListen?.Invoke();
+            OnListen?.Invoke(1);
             simonsButton.ChangeColor(_listenPressedColor);
             yield return new WaitForSeconds(_delay / 2);
             simonsButton.ChangeColor(simonsButton.UnPressedColor);
