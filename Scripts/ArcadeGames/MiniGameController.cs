@@ -4,9 +4,10 @@ using UnityEngine;
 public class MiniGameController : MonoBehaviour, ISingleton<MiniGameController>
 {
     public static MiniGameController Instance { get; set; }
-
     public bool Paused = false;
     public static event Action OnPause, OnContunieToPlay;
+
+
     private void Awake()
     {
         if (Instance == null)
