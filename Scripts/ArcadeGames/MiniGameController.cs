@@ -18,15 +18,21 @@ public class MiniGameController : MonoBehaviour, ISingleton<MiniGameController>
         {
             Destroy(gameObject);
         }
+        if (Paused)
+        {
+            PauseTheGame();
+        }
     }
     public void PauseTheGame()
     {
         OnPause?.Invoke();
+        Time.timeScale = 0;
         Paused = true;
     }
     public void ContunieToPlay()
     {
-        OnContunieToPlay.Invoke();
+        OnContunieToPlay?.Invoke();
+        Time.timeScale = 1;
         Paused = false;
     }
 }

@@ -1,8 +1,21 @@
 using UnityEngine;
 
-public class Coin : MonoBehaviour, ICollectable, IPoolObject<Coin>
+public class Coin : Collectables, IPoolObject
 {
-    public void CollectMe()
+    public string PoolKey { get => "Coin"; set => value = default; }
+
+    public override void CollectMe()
     {
+        print("sa");
+    }
+
+    public Coin GetItem()
+    {
+        return this;
+    }
+
+    public void SetItem(Coin item)
+    {
+        Debug.Log("Coin set in pool");
     }
 }
