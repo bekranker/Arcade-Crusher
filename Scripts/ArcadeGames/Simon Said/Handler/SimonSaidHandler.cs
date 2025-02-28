@@ -72,14 +72,14 @@ public class SimonSaidHandler : MonoBehaviour
     }
     void Update()
     {
-        if (MiniGameController.Instance.Paused)
-        {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            return;
-        }
+        // if (MiniGameController.Instance.Paused)
+        // {
+        //     if (Input.GetKeyDown(KeyCode.R))
+        //     {
+        //         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //     }
+        //     return;
+        // }
         ListenInputs();
     }
     private void ListenInputs()

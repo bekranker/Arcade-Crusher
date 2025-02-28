@@ -10,8 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f03f4c7f90da740b581855ae8bcf3e52, type: 3}
-  m_Name: Level One
+  m_Name: Level Five
   m_EditorClassIdentifier: 
-  Biom:
-  - {fileID: 11400000, guid: 4ae288dd332e14f46b2e9acf7458892f, type: 2}
-  Length: 1000
+  SubLevels: []
+  LevelMaterials:
+  - Key: Coin
+    Posibility: 15
+    HeightLine: 30
+  - Key: Turret
+    Posibility: 5
+    HeightLine: 3
+  Frequency: 0.46
+  Length: 100

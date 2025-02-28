@@ -1,10 +1,18 @@
+using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RunnerMovement : MonoBehaviour
 {
     [Header("---Components")]
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Grounded _playerGrounded;
+    [SerializeField] private Slider _slider;
+    [SerializeField] private Slider _jetpackSlider;
+    [SerializeField] private ProcuderalGenerator _procuderalGenerator;
+    [SerializeField] private LoseScreen _loseScreen;
+    [SerializeField] private CinemachineCamera _cinemachine;
+    [SerializeField] private RunnerGameManager _runnerManager;
     [Header("---Raycast props")]
     [SerializeField] private float _length;
     [SerializeField] private LayerMask _groundMask;
@@ -20,15 +28,30 @@ public class RunnerMovement : MonoBehaviour
     private int _direction = 1;
     private RaycastHit2D _hit2D;
     private float _currentSpeed;
+    public bool _loseJustOnes, _winJustOnes;
 
     void Awake()
     {
         _currentJumpValue = _jumpValue;
+        _jetpackSlider.maxValue = _currentJumpValue;
         _currentSpeed = _speedMultipilier;
+        _slider.maxValue = _runnerManager.CurrentLevel.Length;
     }
     private void Update()
     {
-
+        // if (TouchCorner())
+        // {
+        //     _loseScreen.LoseGame();
+        //     print("lose");
+        //     return;
+        // }
+        if (!_winJustOnes && transform.position.x >= _runnerManager.CurrentLevel.Length)
+        {
+            Debug.Log("win");
+            _runnerManager.NextLevel();
+            _winJustOnes = true;
+            return;
+        }
         transform.position += Vector3.right * _direction * Time.deltaTime * _currentSpeed;
         if (_currentSpeed < _maxSpeed)
         {
@@ -39,6 +62,13 @@ public class RunnerMovement : MonoBehaviour
         if (_hit2D.collider != null)
         {
             _direction *= -1;
+            if (_direction == -1)
+            {
+                _cinemachine.Target.TrackingTarget = null;
+            }
+            else
+                _cinemachine.Target.TrackingTarget = transform;
+
         }
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
@@ -57,5 +87,23 @@ public class RunnerMovement : MonoBehaviour
         {
             _currentJumpValue = _jumpValue;
         }
+        UpdateSlider();
+        UpdatePlayerSlider();
+    }
+    private void UpdateSlider()
+    {
+        if (transform.position.x > 0)
+            _slider.value = Mathf.Abs(transform.position.x);
+    }
+    private void UpdatePlayerSlider()
+    {
+        _jetpackSlider.value = _currentJumpValue;
+    }
+    private bool TouchCorner()
+    {
+        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero);
+        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
+
+        return transform.position.x > max.x || transform.position.x < min.x;
     }
 }

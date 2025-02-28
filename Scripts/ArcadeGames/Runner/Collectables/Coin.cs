@@ -1,12 +1,18 @@
 using UnityEngine;
 
-public class Coin : Collectables, IPoolObject
+public class Coin : Collectables, IPoolObject, IMaterial
 {
     public string PoolKey { get => "Coin"; set => value = default; }
-
+    GeneralScoreHandler _generalScoreHandler;
+    Player _player;
+    void Start()
+    {
+        _generalScoreHandler = FindAnyObjectByType<GeneralScoreHandler>();
+    }
     public override void CollectMe()
     {
-        print("sa");
+        _generalScoreHandler.IncreaseScore(100);
+        gameObject.SetActive(false);
     }
 
     public Coin GetItem()
@@ -17,5 +23,10 @@ public class Coin : Collectables, IPoolObject
     public void SetItem(Coin item)
     {
         Debug.Log("Coin set in pool");
+    }
+
+    public void Init(Player player)
+    {
+        _player = player;
     }
 }

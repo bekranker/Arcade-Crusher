@@ -3,8 +3,7 @@ using UnityEngine;
 [System.Serializable]
 public class Material
 {
-    public GameObject Prefab;
+    public string Key;
     public int Posibility;
-    public float HeightLine;
-    public float Distance;
+    public int HeightLine;
 }
