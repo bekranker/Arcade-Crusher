@@ -7,6 +7,9 @@ public class ProcuderalRunnerLevelSCB : ScriptableObject
     public List<Material> LevelMaterials = new();
     public float Frequency;
     public int Length;
+
+    public int Index { get; set; }
+
 }
 [System.Serializable]
 public class LevelData

@@ -5,8 +5,23 @@ public class Grounded : MonoBehaviour
     [SerializeField] private LayerMask _groundedLayer;
     [SerializeField] private Transform _jumpPivot;
     [SerializeField] private float _rayLength;
+    [SerializeField] private float _coyoteTime;
 
+    private float _coyoteCounter;
 
+    void Start()
+    {
+        _coyoteCounter = _coyoteTime;
+    }
+    void Update()
+    {
+        if (GetGrounded() != null)
+        {
+            _coyoteCounter = _coyoteTime;
+        }
+        else
+            _coyoteCounter -= Time.deltaTime;
+    }
     /// <summary>
     /// Is raycast touching the Jumable Platform Layer;
     /// </summary>
@@ -14,7 +29,7 @@ public class Grounded : MonoBehaviour
     public bool IsGrounded()
     {
         //mean true
-        return GetGrounded() != null;
+        return _coyoteCounter > 0;
     }
     public GameObject GetGrounded()
     {

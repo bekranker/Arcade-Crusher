@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Cysharp.Threading.Tasks;
-using UnityEngine.Events;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("----Skateboard Components")]
@@ -43,12 +41,11 @@ public class PlayerMovement : MonoBehaviour
         _playerActions.Player.Move.canceled += Move;
         _playerActions.Player.Sprint.performed += Sprint;
         _playerActions.Player.Point.performed += PointRun;
-
     }
     void Update()
     {
-        Run();
-        GoPoint();
+        //Run();
+        //GoPoint();
     }
     private void OnDisable()
     {

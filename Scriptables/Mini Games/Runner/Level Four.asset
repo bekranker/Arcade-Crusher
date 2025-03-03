@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f03f4c7f90da740b581855ae8bcf3e52, type: 3}
   m_Name: Level Four
   m_EditorClassIdentifier: 
-  SubLevels: []
   LevelMaterials:
   - Key: Coin
     Posibility: 15
     HeightLine: 30
   Frequency: 0.3
-  Length: 100
+  Length: 10

@@ -23,7 +23,6 @@ public class RunnerMovement : MonoBehaviour
     [SerializeField] private float _jumpMultiplier;
     [SerializeField] private float _speedIncreaseMultiplier;
     [SerializeField] private float _maxSpeed;
-
     private float _currentJumpValue;
     private int _direction = 1;
     private RaycastHit2D _hit2D;
@@ -39,12 +38,7 @@ public class RunnerMovement : MonoBehaviour
     }
     private void Update()
     {
-        // if (TouchCorner())
-        // {
-        //     _loseScreen.LoseGame();
-        //     print("lose");
-        //     return;
-        // }
+
         if (!_winJustOnes && transform.position.x >= _runnerManager.CurrentLevel.Length)
         {
             Debug.Log("win");
@@ -64,6 +58,7 @@ public class RunnerMovement : MonoBehaviour
             _direction *= -1;
             if (_direction == -1)
             {
+
                 _cinemachine.Target.TrackingTarget = null;
             }
             else
@@ -98,12 +93,5 @@ public class RunnerMovement : MonoBehaviour
     private void UpdatePlayerSlider()
     {
         _jetpackSlider.value = _currentJumpValue;
-    }
-    private bool TouchCorner()
-    {
-        Vector2 min = Camera.main.ScreenToWorldPoint(Vector2.zero);
-        Vector2 max = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height));
-
-        return transform.position.x > max.x || transform.position.x < min.x;
     }
 }

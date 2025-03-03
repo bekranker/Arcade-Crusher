@@ -16,5 +16,8 @@ MonoBehaviour:
   - Key: Coin
     Posibility: 15
     HeightLine: 10
-  Frequency: 0.54
-  Length: 100
+  - Key: Turret
+    Posibility: 3
+    HeightLine: 17
+  Frequency: 0.14
+  Length: 1032

@@ -190,6 +190,7 @@ GameObject:
   - component: {fileID: 5907656660509813665}
   - component: {fileID: 6796093440757575769}
   - component: {fileID: 1497655678481607100}
+  - component: {fileID: 905979394446397406}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -488,6 +489,33 @@ MonoBehaviour:
   _interactables:
     serializedVersion: 2
     m_Bits: 192
+--- !u!114 &905979394446397406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5250874482359802715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e8f771c0b0ce41ef9a6c3c0be193706, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rb: {fileID: 6348052139666529501}
+  _acceleration:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _decceleration:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speed: 0
+  MovementInput: {x: 0, y: 0}
 --- !u!1 &5487808422028294637
 GameObject:
   m_ObjectHideFlags: 0

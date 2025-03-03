@@ -16,5 +16,8 @@ MonoBehaviour:
   - Key: Coin
     Posibility: 15
     HeightLine: 10
+  - Key: Spike
+    Posibility: 15
+    HeightLine: 5
   Frequency: 0.54
-  Length: 100
+  Length: 10

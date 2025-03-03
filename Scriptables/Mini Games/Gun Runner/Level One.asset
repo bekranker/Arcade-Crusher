@@ -10,14 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f03f4c7f90da740b581855ae8bcf3e52, type: 3}
-  m_Name: Level Five
+  m_Name: Level One
   m_EditorClassIdentifier: 
-  LevelMaterials:
-  - Key: Coin
-    Posibility: 15
-    HeightLine: 30
-  - Key: Turret
-    Posibility: 5
-    HeightLine: 3
-  Frequency: 0.46
-  Length: 10
+  LevelMaterials: []
+  Frequency: 0
+  Length: 0
