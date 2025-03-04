@@ -1,11 +1,10 @@
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BulletManager : MonoBehaviour
 {
-    public int BulletCount;
     [Header("---Bullet Props")]
+    public int BulletCount;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private Bullet BulletPrefab;
     public Vector2 Direction;
@@ -18,7 +17,7 @@ public class BulletManager : MonoBehaviour
     public void Shoot(InputAction.CallbackContext context)
     {
         if (BulletCount - 1 < 0) return;
-
+        if (MovementInput.x == 0 && MovementInput.y == 0) return;
         Bullet spawnedBullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
         if (Direction.y <= 0)
         {
