@@ -1,18 +1,13 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class GenericPlayerMovement : BaseMovement
+public class GroundPlayerMovement : BaseMovement
 {
-    public bool CanWalk; //dont execute run function if it is dahsing.
-    float _direction;
+    public bool CanWalk;
     float _elapsedTime = 0;
-    private Player_Actions _playerActions;
-    public static GenericPlayerMovement Instance;
-    public Vector2 MovementInput;
+    public static GroundPlayerMovement Instance;
     void Awake()
     {
         CanWalk = true;
-        _playerActions = new();
         if (Instance == null)
         {
             Instance = this;
@@ -28,26 +23,15 @@ public class GenericPlayerMovement : BaseMovement
     {
         Run();
     }
-    void OnEnable()
-    {
-        _playerActions.Player.Enable();
-
-        _playerActions.Player.Move.performed += Move;
-        _playerActions.Player.Move.canceled += Move;
-    }
-    void OnDisable()
-    {
-        _playerActions.Player.Move.performed -= Move;
-        _playerActions.Player.Move.canceled -= Move;
-        _playerActions.Player.Disable();
-
-    }
     /// <summary>
     /// Physically movement with acceleration and deceleration using AddForce
     /// </summary>
     public override void Run()
     {
         if (!CanWalk) return;
+        if (!_grounded.IsGrounded()) return;
+
+        print("Ground Movement");
 
         // Input yoksa yavaşlat
         if (MovementInput.x == 0)
@@ -77,14 +61,6 @@ public class GenericPlayerMovement : BaseMovement
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
     }
 
-    /// <summary>
-    /// we are reading directions from player input
-    /// </summary>
-    /// <param name="context">it is returning new input system paramteres</param>
-    void Move(InputAction.CallbackContext context)
-    {
-        MovementInput = context.ReadValue<Vector2>();
-        _direction = Mathf.Sign(MovementInput.x);
-    }
+
 
 }

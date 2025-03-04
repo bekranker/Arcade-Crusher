@@ -7,7 +7,7 @@ public class PlayerJump : MonoBehaviour
 {
     [Header("---Jump Values")]
     [SerializeField] private Rigidbody2D _rb;
-    [SerializeField] private float _jumpValue;
+    [SerializeField] private Vector2 _jumpValue;
 
 
     public Vector2 Direction;
@@ -37,19 +37,25 @@ public class PlayerJump : MonoBehaviour
     private void CalculateDirection(InputAction.CallbackContext context)
     {
         Direction = context.ReadValue<Vector2>();
-        MovementInput.y = Mathf.Sign(Direction.y);
+        MovementInput.y = Mathf.Sign(-Direction.y);
+        MovementInput.x = Mathf.Sign(-Direction.x);
     }
     public void JumpMe(InputAction.CallbackContext context)
     {
-        if (Direction.y == 0)
-        {
-            _rb.linearVelocityX = -Direction.x * _jumpValue;
-            return;
-        }
-        else
-        {
-            _rb.linearVelocityY = -Direction.y * _jumpValue;
-            return;
-        }
+        _rb.linearVelocity = Vector2.zero;
+        // if (Direction.y == 0 && Direction.x != 0)
+        // {
+        //     _rb.AddForce(MovementInput * _jumpValue);
+        //     //_rb.linearVelocityX = MovementInput.x * _jumpValue.x;
+        //     return;
+        // }
+        // if (Direction.y != 0 && Direction.x == 0)
+        // {
+        //     _rb.AddForce(MovementInput * _jumpValue);
+        //     //_rb.linearVelocityY = MovementInput.y * _jumpValue.y;
+        //     return;
+        // }
+        _rb.AddForce(MovementInput * _jumpValue);
+        return;
     }
 }

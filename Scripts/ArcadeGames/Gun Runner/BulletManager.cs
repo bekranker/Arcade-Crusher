@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class BulletManager : MonoBehaviour
 {
     [Header("---Bullet Props")]
+    [SerializeField] private Transform _bulletPos;
     public int BulletCount;
     [SerializeField] private float _bulletSpeed;
     [SerializeField] private Bullet BulletPrefab;
@@ -18,15 +19,9 @@ public class BulletManager : MonoBehaviour
     {
         if (BulletCount - 1 < 0) return;
         if (MovementInput.x == 0 && MovementInput.y == 0) return;
-        Bullet spawnedBullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
-        if (Direction.y <= 0)
-        {
-            spawnedBullet.DirectionToGo = new Vector2(-Direction.x, 0);
-        }
-        else
-        {
-            spawnedBullet.DirectionToGo = new Vector2(-Direction.y, 0);
-        }
+        Bullet spawnedBullet = Instantiate(BulletPrefab, _bulletPos.position, Quaternion.identity);
+        print(Direction);
+        spawnedBullet.DirectionToGo = Direction;
     }
     void OnEnable()
     {
@@ -34,20 +29,26 @@ public class BulletManager : MonoBehaviour
         _playerAction.Player.Look.performed += CalculateDirection;
         _playerAction.Player.Look.canceled += CalculateDirection;
         _playerAction.Player.Attack.performed += Shoot;
-        _playerAction.Player.Attack.canceled += Shoot;
     }
     void OnDisable()
     {
         _playerAction.Player.Look.performed -= CalculateDirection;
         _playerAction.Player.Look.canceled -= CalculateDirection;
         _playerAction.Player.Attack.performed -= Shoot;
-        _playerAction.Player.Attack.canceled -= Shoot;
         _playerAction.Disable();
     }
     private void CalculateDirection(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();
-        Direction.x = Mathf.Sign(MovementInput.x);
-        Direction.y = Mathf.Sign(MovementInput.y);
+        Direction.x = Sign(MovementInput.x);
+        Direction.y = Sign(MovementInput.y);
+    }
+    public static float Sign(float f)
+    {
+        if (f == 0)
+        {
+            return 0;
+        }
+        return (f > 0f) ? 1f : (-1f);
     }
 }

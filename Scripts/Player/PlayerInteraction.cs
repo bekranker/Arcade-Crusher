@@ -8,6 +8,11 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private LayerMask _interactables;
 
     Player_Actions _playerActions;
+
+    public PlayerInteraction()
+    {
+    }
+
     void Awake()
     {
         _playerActions = new();

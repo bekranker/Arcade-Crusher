@@ -464,7 +464,7 @@ MonoBehaviour:
     m_Bits: 512
   _jumpPivot: {fileID: 2055945115}
   _rayLength: 0.63
-  _coyoteTime: 0
+  _coyoteTime: 0.1
 --- !u!114 &212707214
 MonoBehaviour:
   m_ObjectHideFlags: 0

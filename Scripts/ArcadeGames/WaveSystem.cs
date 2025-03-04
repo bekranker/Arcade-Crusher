@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class WaveSystem : WaveSCB
@@ -22,4 +20,5 @@ public class WaveSystem : WaveSCB
     {
         Index = Vector2.zero;
     }
+
 }

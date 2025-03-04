@@ -15,7 +15,6 @@ public class Player : MonoBehaviour, IDamage
         _healthCounter = 0;
         _loseScreen.LoseGame();
     }
-
     public void TakeDamage(float amount)
     {
         if (_healthCounter - amount <= 0)
@@ -25,14 +24,4 @@ public class Player : MonoBehaviour, IDamage
         }
         _healthCounter -= amount;
     }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("Player Interaction");
-        if (collision.gameObject.TryGetComponent<Collectables>(out Collectables collectable))
-        {
-            collectable.CollectMe();
-        }
-    }
 }
-

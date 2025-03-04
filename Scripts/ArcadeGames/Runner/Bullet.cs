@@ -14,6 +14,7 @@ public class Bullet : Collectables, IPoolObject, ICollectable
 
     IEnumerator Start()
     {
+        transform.right = DirectionToGo;
         yield return new WaitForSeconds(3);
         Destroy(gameObject);
     }
@@ -23,7 +24,7 @@ public class Bullet : Collectables, IPoolObject, ICollectable
     }
     public void BulletMove()
     {
-        _rb.linearVelocity = DirectionToGo * _speed;
+        _rb.linearVelocity = transform.right * _speed;
     }
     public override void CollectMe()
     {

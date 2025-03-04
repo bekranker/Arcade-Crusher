@@ -22,6 +22,10 @@ public class MiniGameController : MonoBehaviour, ISingleton<MiniGameController>
         {
             PauseTheGame();
         }
+        else
+        {
+            ContunieToPlay();
+        }
     }
     public void PauseTheGame()
     {
