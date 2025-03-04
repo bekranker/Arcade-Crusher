@@ -1,28 +1,54 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BulletManager : MonoBehaviour
 {
     public int BulletCount;
     [Header("---Bullet Props")]
     [SerializeField] private float _bulletSpeed;
-    [SerializeField] private GameObject BulletPrefab;
+    [SerializeField] private Bullet BulletPrefab;
     public Vector2 Direction;
+    public Vector2 MovementInput;
     private Player_Actions _playerAction;
-    public void Shoot()
+    void Awake()
     {
+        _playerAction = new();
+    }
+    public void Shoot(InputAction.CallbackContext context)
+    {
+        if (BulletCount - 1 < 0) return;
 
+        Bullet spawnedBullet = Instantiate(BulletPrefab, transform.position, Quaternion.identity);
+        if (Direction.y <= 0)
+        {
+            spawnedBullet.DirectionToGo = new Vector2(-Direction.x, 0);
+        }
+        else
+        {
+            spawnedBullet.DirectionToGo = new Vector2(-Direction.y, 0);
+        }
     }
     void OnEnable()
     {
+        _playerAction.Enable();
+        _playerAction.Player.Look.performed += CalculateDirection;
+        _playerAction.Player.Look.canceled += CalculateDirection;
+        _playerAction.Player.Attack.performed += Shoot;
+        _playerAction.Player.Attack.canceled += Shoot;
     }
-
-    public void ShootABullet()
+    void OnDisable()
     {
-
+        _playerAction.Player.Look.performed -= CalculateDirection;
+        _playerAction.Player.Look.canceled -= CalculateDirection;
+        _playerAction.Player.Attack.performed -= Shoot;
+        _playerAction.Player.Attack.canceled -= Shoot;
+        _playerAction.Disable();
     }
-    public void AddBullet()
+    private void CalculateDirection(InputAction.CallbackContext context)
     {
-
+        MovementInput = context.ReadValue<Vector2>();
+        Direction.x = Mathf.Sign(MovementInput.x);
+        Direction.y = Mathf.Sign(MovementInput.y);
     }
-
 }
