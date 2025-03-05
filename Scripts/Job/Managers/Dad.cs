@@ -17,24 +17,14 @@ public class Dad : MonoBehaviour
     [Header("----Move Props")]
     [SerializeField] private float _speed;
 
-    [SerializeField] private List<Transform> _stants = new();
 
     void Start()
     {
-        Move();
+        InitializeDad();
     }
-    public async void Move()
+    public async void InitializeDad()
     {
-        int tempRandStand = Random.Range(0, _stants.Count);
-        Vector3 targetStand = _stants[tempRandStand].transform.position;
-        _animator.Play("Move");
-        while (transform != null && transform.position.x != targetStand.x)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, targetStand, _speed * Time.deltaTime);
-            await UniTask.Yield();
-        }
-        transform.position = targetStand;
-
+        print("Prepeare Cooking");
         await UniTask.Delay(TimeSpan.FromSeconds(_sleepTimeForSelectingAction));
         SetAction();
     }
@@ -51,7 +41,7 @@ public class Dad : MonoBehaviour
             _animator.Play("Cooking");
             await Waiting();
         }
-        Move();
+        InitializeDad();
     }
     private async UniTask Stan()
     {
@@ -63,7 +53,6 @@ public class Dad : MonoBehaviour
             _stanSlider.value = counter;
             await UniTask.Yield();
         }
-        counter = 0;
     }
     private async UniTask Waiting()
     {
@@ -73,6 +62,5 @@ public class Dad : MonoBehaviour
             counter -= Time.deltaTime;
             await UniTask.Yield();
         }
-        counter = 0;
     }
 }

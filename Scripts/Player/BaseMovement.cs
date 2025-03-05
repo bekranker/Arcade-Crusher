@@ -11,13 +11,10 @@ public abstract class BaseMovement : MonoBehaviour
     [SerializeField] protected Grounded _grounded;
     [SerializeField] protected float _direction;
     private Player_Actions _playerActions;
+    public bool CanWalk;
 
     public Vector2 MovementInput;
 
-    void Awake()
-    {
-        print("mk");
-    }
     /// <summary>
     /// we are reading directions from player input
     /// </summary>

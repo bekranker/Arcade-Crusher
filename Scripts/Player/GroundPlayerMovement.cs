@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class GroundPlayerMovement : BaseMovement
 {
-    public bool CanWalk;
     float _elapsedTime = 0;
     public static GroundPlayerMovement Instance;
     void Awake()

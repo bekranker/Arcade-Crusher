@@ -1,3 +1,4 @@
+using ArcadeCrusher;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,15 +41,8 @@ public class BulletManager : MonoBehaviour
     private void CalculateDirection(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();
-        Direction.x = Sign(MovementInput.x);
-        Direction.y = Sign(MovementInput.y);
+        Direction.x = ArcadeCrusherMath.Sign(MovementInput.x);
+        Direction.y = ArcadeCrusherMath.Sign(MovementInput.y);
     }
-    public static float Sign(float f)
-    {
-        if (f == 0)
-        {
-            return 0;
-        }
-        return (f > 0f) ? 1f : (-1f);
-    }
+
 }

@@ -19,5 +19,8 @@ MonoBehaviour:
   - Key: Turret
     Posibility: 3
     HeightLine: 17
+  - Key: Spike
+    Posibility: 39
+    HeightLine: 31
   Frequency: 0.14
-  Length: 1032
+  Length: 250

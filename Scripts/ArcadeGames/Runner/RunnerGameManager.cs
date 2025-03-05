@@ -18,7 +18,6 @@ public class RunnerGameManager : MonoBehaviour
     [HideInInspector] public float CurrentFrequency;
     private bool _startTheGame = false;
 
-
     void Start()
     {
         InitializeIndex();

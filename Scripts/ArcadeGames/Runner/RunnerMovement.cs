@@ -7,8 +7,6 @@ public class RunnerMovement : MonoBehaviour
     [Header("---Components")]
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private Grounded _playerGrounded;
-    [SerializeField] private Slider _slider;
-    [SerializeField] private Slider _jetpackSlider;
     [SerializeField] private ProcuderalGenerator _procuderalGenerator;
     [SerializeField] private LoseScreen _loseScreen;
     [SerializeField] private CinemachineCamera _cinemachine;
@@ -23,22 +21,27 @@ public class RunnerMovement : MonoBehaviour
     [SerializeField] private float _jumpMultiplier;
     [SerializeField] private float _speedIncreaseMultiplier;
     [SerializeField] private float _maxSpeed;
+    [Header("---UI")]
+    [SerializeField] private Slider _slider;
     private float _currentJumpValue;
     private int _direction = 1;
     private RaycastHit2D _hit2D;
     private float _currentSpeed;
+    public bool CanJump;
     public bool _loseJustOnes, _winJustOnes;
 
     void Awake()
     {
         _currentJumpValue = _jumpValue;
-        _jetpackSlider.maxValue = _currentJumpValue;
         _currentSpeed = _speedMultipilier;
+        ChangeUIVisual();
+    }
+    public void ChangeUIVisual()
+    {
         _slider.maxValue = _runnerManager.CurrentLevel.Length;
     }
     private void Update()
     {
-
         if (!_winJustOnes && transform.position.x >= _runnerManager.CurrentLevel.Length)
         {
             Debug.Log("win");
@@ -65,33 +68,34 @@ public class RunnerMovement : MonoBehaviour
                 _cinemachine.Target.TrackingTarget = transform;
 
         }
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
+        if (CanJump)
         {
-            _rb.AddForce(Vector2.up * _currentJumpValue * 4, ForceMode2D.Impulse);
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
+            {
+                _rb.AddForce(Vector2.up * _currentJumpValue * 4, ForceMode2D.Impulse);
+            }
+            if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space))
+            {
+                _rb.AddForce(Vector2.up * _currentJumpValue * _jumpMultiplier);
+                _currentJumpValue -= Time.deltaTime * _jumpDecreaseSpeed;
+            }
+            if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
+            {
+                _rb.linearVelocityY /= 2;
+            }
         }
-        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space))
-        {
-            _rb.AddForce(Vector2.up * _currentJumpValue * _jumpMultiplier);
-            _currentJumpValue -= Time.deltaTime * _jumpDecreaseSpeed;
-        }
-        if (Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.Space))
-        {
-            _rb.linearVelocityY /= 2;
-        }
+
         if (_playerGrounded.IsGrounded())
         {
             _currentJumpValue = _jumpValue;
+            CanJump = true;
         }
         UpdateSlider();
-        UpdatePlayerSlider();
     }
     private void UpdateSlider()
     {
         if (transform.position.x > 0)
             _slider.value = Mathf.Abs(transform.position.x);
     }
-    private void UpdatePlayerSlider()
-    {
-        _jetpackSlider.value = _currentJumpValue;
-    }
+
 }

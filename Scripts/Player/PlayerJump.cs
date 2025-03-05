@@ -1,4 +1,4 @@
-using System.Collections;
+using ArcadeCrusher;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,25 +37,13 @@ public class PlayerJump : MonoBehaviour
     private void CalculateDirection(InputAction.CallbackContext context)
     {
         Direction = context.ReadValue<Vector2>();
-        MovementInput.y = Mathf.Sign(-Direction.y);
-        MovementInput.x = Mathf.Sign(-Direction.x);
+        MovementInput.y = ArcadeCrusherMath.Sign(-Direction.y);
+        MovementInput.x = ArcadeCrusherMath.Sign(-Direction.x);
     }
     public void JumpMe(InputAction.CallbackContext context)
     {
         _rb.linearVelocity = Vector2.zero;
-        // if (Direction.y == 0 && Direction.x != 0)
-        // {
-        //     _rb.AddForce(MovementInput * _jumpValue);
-        //     //_rb.linearVelocityX = MovementInput.x * _jumpValue.x;
-        //     return;
-        // }
-        // if (Direction.y != 0 && Direction.x == 0)
-        // {
-        //     _rb.AddForce(MovementInput * _jumpValue);
-        //     //_rb.linearVelocityY = MovementInput.y * _jumpValue.y;
-        //     return;
-        // }
-        _rb.AddForce(MovementInput * _jumpValue);
+        _rb.AddForce(MovementInput * _jumpValue * 10, ForceMode2D.Impulse);
         return;
     }
 }

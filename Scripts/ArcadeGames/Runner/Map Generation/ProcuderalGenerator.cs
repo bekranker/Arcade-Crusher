@@ -22,6 +22,7 @@ public class ProcuderalGenerator : MonoBehaviour
     private float _previousHeight;
     private int _nextSpawnX;
     private List<GameObject> _spawnedGrounds = new();
+    private List<GameObject> _spawnedEnvironments = new();
 
 
 
@@ -76,6 +77,7 @@ public class ProcuderalGenerator : MonoBehaviour
             if (possibility <= selectedMaterial.Posibility)
             {
                 GameObject tempCreatedObject = _poolManager.Get(selectedMaterial.Key);
+                _spawnedEnvironments.Add(tempCreatedObject);
                 IMaterial spawnedMaterial = tempCreatedObject.GetComponent<IMaterial>();
                 if (spawnedMaterial != null)
                     spawnedMaterial.Init(_player);
@@ -91,11 +93,14 @@ public class ProcuderalGenerator : MonoBehaviour
         _previousHeight = 0;
         _nextSpawnX = 0;
         int groundCount = _runnerGameManager.CurrentLevel.Length;
-        print(groundCount);
 
         float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
         float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
         _playerT.position = new Vector2(_nextSpawnX + 5, height + 5);
+        foreach (GameObject prop in _spawnedEnvironments)
+        {
+            Destroy(prop);
+        }
         for (int i = 0; i < groundCount; i++)
         {
             float heightDifference = Mathf.Abs(height - _previousHeight);

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerAirMovement : BaseMovement
 {
-    public bool CanWalk;
     float _elapsedTime = 0;
     public static PlayerAirMovement Instance;
     void Awake()
@@ -50,7 +49,7 @@ public class PlayerAirMovement : BaseMovement
         _rb.AddForce(Vector2.right * accelerationForce, ForceMode2D.Force);
 
         // Maksimum hızı aşmasını önle
-        _rb.linearVelocity = new Vector2(Mathf.Clamp(_rb.linearVelocityX, -_maxSpeed, _maxSpeed), _rb.linearVelocityY);
+        _rb.linearVelocity = new Vector2(Mathf.Clamp(_rb.linearVelocityX, -_maxSpeed, _maxSpeed), Mathf.Clamp(_rb.linearVelocityY, -_maxSpeed, _maxSpeed));
 
         // Yüzünü hareket yönüne çevir
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);

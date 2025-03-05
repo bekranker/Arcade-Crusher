@@ -5,7 +5,7 @@ public class Bullet : Collectables, IPoolObject, ICollectable
 {
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _speed;
-    public Vector2 DirectionToGo;
+    public Vector2 DirectionToGo = Vector2.up;
 
 
     public Player Player { get; set; }
