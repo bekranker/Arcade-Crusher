@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZilyanusLib.Audio;
 
 public class Player : MonoBehaviour, IDamage
 {
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour, IDamage
     {
         _healthCounter = 0;
         _loseScreen.LoseGame();
+        AudioClass.PlayAudio("MiniGames/UFORunner/LOSESOUND");
     }
     public void TakeDamage(float amount)
     {

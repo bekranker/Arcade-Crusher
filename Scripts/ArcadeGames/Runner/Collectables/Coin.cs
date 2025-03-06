@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using ZilyanusLib;
+using ZilyanusLib.Audio;
 public class Coin : Collectables, IPoolObject, IMaterial
 {
     public string PoolKey { get => "Coin"; set => value = default; }
@@ -12,6 +13,7 @@ public class Coin : Collectables, IPoolObject, IMaterial
     public override void CollectMe()
     {
         _generalScoreHandler.IncreaseScore(100);
+        AudioClass.PlayAudio("MiniGames/UFORunner/UFOCOIN", .45f, "General", "Sound", 1, .2f);
         gameObject.SetActive(false);
     }
 

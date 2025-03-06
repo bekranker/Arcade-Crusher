@@ -21,25 +21,25 @@ namespace ZilyanusLib
                 return audioClip;
             }
 
-            public static void PlayAudio(string ClipName, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1)
+            public static void PlayAudio(string ClipName, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1, float gap = .05f)
             {
                 if (ClipName == "") return;
                 AudioClip audioClip = Resources.Load("Audio/" + ClipName) as AudioClip;
                 if (audioClip == null) { Debug.LogWarning(ClipName + " Not Found"); return; }
-                PlayAudio(audioClip, volume, AudioMixerName, AudioMixerGroupName, Pitch);
+                PlayAudio(audioClip, volume, AudioMixerName, AudioMixerGroupName, Pitch, gap);
             }
 
-            public static void PlayAudio(AudioClip clip, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1)
+            public static void PlayAudio(AudioClip clip, float volume = 1f, string AudioMixerName = "General", string AudioMixerGroupName = "Sound", float Pitch = 1, float gap = .05f)
             {
                 if (clip == null) return;
                 // iOS can be problem 
                 AudioMixer audioMixer = Resources.Load("Audio/" + AudioMixerName) as AudioMixer;
                 AudioMixerGroup group = audioMixer.FindMatchingGroups(AudioMixerGroupName)[0];
 
-                PlayAudio(clip, group, volume, Pitch);
+                PlayAudio(clip, group, volume, Pitch, gap);
             }
 
-            public static void PlayAudio(AudioClip clip, AudioMixerGroup group, float volume = 1f, float Pitch = 1)
+            public static void PlayAudio(AudioClip clip, AudioMixerGroup group, float volume = 1f, float Pitch = 1, float gap = .05f)
             {
                 if (clip == null) return;
                 GameObject gameObject = new GameObject("One shot audio");
@@ -51,7 +51,7 @@ namespace ZilyanusLib
                 audioSource.clip = clip;
                 audioSource.spatialBlend = 1f;
                 audioSource.volume = volume;
-                audioSource.pitch = Random.Range(Pitch - 0.05f, Pitch + 0.05f);
+                audioSource.pitch = Random.Range(Pitch - gap, Pitch + gap);
                 audioSource.Play();
                 Object.Destroy(gameObject, clip.length);
             }
