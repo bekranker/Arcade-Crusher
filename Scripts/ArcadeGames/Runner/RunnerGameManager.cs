@@ -43,9 +43,9 @@ public class RunnerGameManager : MonoBehaviour
 
     public void NextLevel()
     {
-        MiniGameController.Instance.PauseTheGame();
         _cinemachineCamera.Target.TrackingTarget = null;
         _cinemachineCamera.transform.position = _player.transform.position;
+        MiniGameController.Instance.PauseTheGame();
         //opening the UI
         _nextLevelTexts.SetActive(true);
         //sub leveller farklı sayılarda olursa diye
