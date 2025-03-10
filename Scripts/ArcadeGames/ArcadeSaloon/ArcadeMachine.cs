@@ -1,13 +1,18 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
-public class ArcadeMachine : MonoBehaviour, ISingleton<ArcadeMachine>
+public class ArcadeMachine : MonoBehaviour, ISingleton<ArcadeMachine>, IObjectInteractable
 {
     [SerializeField] private string _sceneName;
 
     public ArcadeMachine Instance { get; set; }
 
-    public void SceneChange(string name)
+    public void ExecuteInteraction()
     {
-        SceneManager.LoadScene(name);
+        SceneChange();
+    }
+
+    public void SceneChange()
+    {
+        print("Changing Scene");
+        LevelTransaction.Instance.GoThatScene(_sceneName);
     }
 }

@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 6796093440757575769}
   - component: {fileID: 1497655678481607100}
   - component: {fileID: 905979394446397406}
+  - component: {fileID: 9190063525429829355}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -261,7 +262,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -173652539
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 1258566929, guid: c483493eb3ec0f143b5d78ad823ac661, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -378,7 +379,7 @@ SortingGroup:
   m_GameObject: {fileID: 5250874482359802715}
   m_Enabled: 1
   m_SortingLayerID: -173652539
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_SortAtRoot: 1
 --- !u!114 &6796093440757575769
@@ -515,7 +516,29 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _speed: 0
+  _maxSpeed: 0
+  _grounded: {fileID: 9190063525429829355}
+  _direction: 0
+  CanWalk: 0
   MovementInput: {x: 0, y: 0}
+--- !u!114 &9190063525429829355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5250874482359802715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bec9c1c7cf96d45ceb56665455636d1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundedLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  _jumpPivot: {fileID: 0}
+  _rayLength: 0
+  _coyoteTime: 0
 --- !u!1 &5487808422028294637
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,7 +1011,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -173652539
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1821131959486461784, guid: 6b26933efd6db4635841e85e44a17a1a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1010,7 +1033,7 @@ SortingGroup:
   m_GameObject: {fileID: 8038405395530040565}
   m_Enabled: 1
   m_SortingLayerID: -173652539
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: -1
   m_SortAtRoot: 1
 --- !u!114 &6373235958452368212

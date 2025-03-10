@@ -9,9 +9,6 @@ public class PlayerInteraction : MonoBehaviour
 
     Player_Actions _playerActions;
 
-    public PlayerInteraction()
-    {
-    }
 
     void Awake()
     {
@@ -19,10 +16,10 @@ public class PlayerInteraction : MonoBehaviour
     }
     void OnEnable()
     {
+        _playerActions.Enable();
         _playerActions.Player.Interact.performed += Interact;
         _playerActions.Player.Interact.canceled += Interact;
 
-        _playerActions.Enable();
     }
     void OnDisable()
     {
@@ -66,9 +63,4 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
     }
-    void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position, _interactionAreaSize);
-    }
-
 }

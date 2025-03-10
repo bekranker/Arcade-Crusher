@@ -30,7 +30,6 @@ public class GroundPlayerMovement : BaseMovement
         if (!CanWalk) return;
         if (!_grounded.IsGrounded()) return;
 
-        print("Ground Movement");
 
         // Input yoksa yavaşlat
         if (MovementInput.x == 0)
@@ -59,7 +58,4 @@ public class GroundPlayerMovement : BaseMovement
         // Yüzünü hareket yönüne çevir
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
     }
-
-
-
 }

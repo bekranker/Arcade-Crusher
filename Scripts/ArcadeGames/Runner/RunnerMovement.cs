@@ -27,7 +27,7 @@ public class RunnerMovement : MonoBehaviour
     [SerializeField] private float _maxSpeed;
     [Header("---UI")]
     [SerializeField] private Slider _slider;
-
+    private bool _inited;
     private bool _didTouch;
 
     public event Action OnJumpStart, OnJumpEnd, OnJumpHolding;
@@ -61,6 +61,11 @@ public class RunnerMovement : MonoBehaviour
     }
     private void Update()
     {
+        if (_playerGrounded.IsGrounded() && !_inited)
+        {
+            _cinemachine.Target.TrackingTarget = transform;
+            _inited = true;
+        }
         JumpHolding();
         if (!_winJustOnes && transform.position.x >= _runnerManager.CurrentLevel.Length)
         {

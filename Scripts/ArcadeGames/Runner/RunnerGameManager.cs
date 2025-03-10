@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class RunnerGameManager : MonoBehaviour
@@ -11,7 +12,7 @@ public class RunnerGameManager : MonoBehaviour
     [SerializeField] private Player _player;
     [SerializeField] private TMP_Text _levelTMP;
     [SerializeField] private GameObject _nextLevelTexts;
-
+    [SerializeField] private CinemachineCamera _cinemachineCamera;
     [HideInInspector] public List<Material> CurrentMaterials = new();
     public Vector2Int LevelIndex;
     [HideInInspector] public ProcuderalRunnerLevelSCB CurrentLevel;
@@ -34,6 +35,7 @@ public class RunnerGameManager : MonoBehaviour
     public void StartLevel()
     {
         _nextLevelTexts.SetActive(false);
+        _cinemachineCamera.Target.TrackingTarget = _player.transform;
 
         MiniGameController.Instance.ContunieToPlay();
         _startTheGame = true;
@@ -42,6 +44,8 @@ public class RunnerGameManager : MonoBehaviour
     public void NextLevel()
     {
         MiniGameController.Instance.PauseTheGame();
+        _cinemachineCamera.Target.TrackingTarget = null;
+        _cinemachineCamera.transform.position = _player.transform.position;
         //opening the UI
         _nextLevelTexts.SetActive(true);
         //sub leveller farklı sayılarda olursa diye

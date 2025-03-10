@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Unity.Cinemachine;
 using UnityEngine;
 
 //<3
@@ -10,6 +11,7 @@ public class ProcuderalGenerator : MonoBehaviour
     [SerializeField] private Transform _playerT;
     [SerializeField] private Player _player;
     [SerializeField] private RunnerGameManager _runnerGameManager;
+    [SerializeField] private CinemachineCamera _cinemachineCamera;
     [Header("---Props")]
     [SerializeField] private float _heightMultiplier;
     [SerializeField] private float _randomOffsetRange = 100f;
@@ -43,8 +45,7 @@ public class ProcuderalGenerator : MonoBehaviour
         print(groundCount);
         float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
         float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
-
-        _playerT.position = new Vector2(_nextSpawnX + 5, height + 15);
+        _playerT.position = new Vector2(0 + 5, height + (height / 2));
 
         for (int i = 0; i < groundCount; i++)
         {
@@ -85,7 +86,6 @@ public class ProcuderalGenerator : MonoBehaviour
             }
         }
 
-
     }
     [Button("Re Generate")]
     public void ReGenerate()
@@ -93,6 +93,7 @@ public class ProcuderalGenerator : MonoBehaviour
         _previousHeight = 0;
         _nextSpawnX = 0;
         int groundCount = _runnerGameManager.CurrentLevel.Length;
+        _cinemachineCamera.Target.TrackingTarget = null;
 
         float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
         float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
