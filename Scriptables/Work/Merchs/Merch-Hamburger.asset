@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c4adba52cfa4eb495f0940e4b91481, type: 3}
+  m_Name: Merch-Hamburger
+  m_EditorClassIdentifier: 
+  MerchableFoods:
+  - {fileID: 11400000, guid: 567e9b32d4cc24f5982bbf070ae610dc, type: 2}
+  - {fileID: 11400000, guid: f14b2dcaa9c8a44ef940f69cab256b27, type: 2}
+  CreatedItem: {fileID: 11400000, guid: f0fba57857f034ee6ba5c33872b314a6, type: 2}

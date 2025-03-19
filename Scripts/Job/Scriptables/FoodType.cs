@@ -6,4 +6,6 @@ public class FoodType : ScriptableObject, ISlotObject
 {
     public Sprite FoodSprite;
     public float Price;
+    public bool HasToCook;
+    public float CookDelay;
 }

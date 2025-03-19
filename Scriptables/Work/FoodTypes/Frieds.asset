@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a58272b69186648b0938d2dcbc86a8b3, type: 3}
   m_Name: Frieds
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3182744217553632306, guid: 3595053c2643f492396045ef9fd4b8bf, type: 3}
+  FoodSprite: {fileID: 4072781609450385370, guid: e1355aa18bee140259b40207be1c384f, type: 3}
   Price: 5
+  HasToCook: 0
+  CookDelay: 0

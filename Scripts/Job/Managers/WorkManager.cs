@@ -33,6 +33,20 @@ public class WorkManager : MonoBehaviour
         Hand.Add(foodType);
         Debug.Log("Aldim");
     }
+    public void MetchResource(FoodType foodType)
+    {
+        FoodType selectedFoodType = null;
+        foreach (MerchFoods merchs in MerchFoods)
+        {
+            foreach (FoodType foods in merchs.MerchableFoods)
+            {
+                if (foods == foodType)
+                {
+                    selectedFoodType = merchs.CreatedItem;
+                }
+            }
+        }
+    }
     /// <summary>
     /// I think this function throwing to trash 💀
     /// </summary>
