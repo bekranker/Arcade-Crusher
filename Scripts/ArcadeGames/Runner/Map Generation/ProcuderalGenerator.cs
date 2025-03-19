@@ -16,6 +16,7 @@ public class ProcuderalGenerator : MonoBehaviour
     [SerializeField] private float _heightMultiplier;
     [SerializeField] private float _randomOffsetRange = 100f;
     [SerializeField] private float _maxHeightDifference;
+    [SerializeField] private float _groundPivotHeight;
 
     [Tooltip("Maps parent")]
     [SerializeField] private Transform _map;
@@ -45,7 +46,7 @@ public class ProcuderalGenerator : MonoBehaviour
         print(groundCount);
         float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
         float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
-        _playerT.position = new Vector2(0 + 5, height + (height / 2));
+        _playerT.position = new Vector2(0, height * 2f);
 
         for (int i = 0; i < groundCount; i++)
         {

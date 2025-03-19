@@ -14,7 +14,6 @@ public class CustomerHandler : MonoBehaviour
     [SerializeField] private List<CustomerType> MyCustomerTypes = new();
     [Tooltip("Customer Prefab to Instiante")]
     [SerializeField] private Customer _customer;
-    [SerializeField] private SeatHandler _seatHandler;
     [SerializeField] private WorkManager _workManager;
     [SerializeField] private MoneyHandler _moneyHandler;
 
@@ -69,12 +68,12 @@ public class CustomerHandler : MonoBehaviour
         {
             Customer currentCustomer = Instantiate(_customer, _spawnPoint.position, Quaternion.identity);
 
-            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)], _workManager, _seatHandler, _moneyHandler);
+            currentCustomer.Init(this, MyCustomerTypes[Random.Range(0, MyCustomerTypes.Count)], _workManager, _moneyHandler);
 
             currentCustomer.MoveState.TargetPosition = LinePoint();
             currentCustomer.MoveState.AfterMove = () =>
             {
-                _seatHandler.TakeASeat();
+                SeatHandler.Instance.TakeASeat();
             };
             currentCustomer.StateMachine.ChangeState(currentCustomer.MoveState);
 

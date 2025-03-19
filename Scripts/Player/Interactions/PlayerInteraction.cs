@@ -19,7 +19,6 @@ public class PlayerInteraction : MonoBehaviour
         _playerActions.Enable();
         _playerActions.Player.Interact.performed += Interact;
         _playerActions.Player.Interact.canceled += Interact;
-
     }
     void OnDisable()
     {

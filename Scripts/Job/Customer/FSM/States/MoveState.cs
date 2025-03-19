@@ -11,12 +11,6 @@ public class MoveState : MonoBehaviour, IState
     [SerializeField] private Customer _customer;
 
     private bool _invokeOnce;
-    /// <summary>
-    /// NPC movement function. The NPC will be moving towards seat position
-    /// </summary>
-    /// <param name="targetPoint"></param>
-
-
     public void OnExit()
     {
     }

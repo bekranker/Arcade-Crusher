@@ -143,6 +143,33 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""InventoryOne"",
+                    ""type"": ""Button"",
+                    ""id"": ""97553fe2-e5d0-4c9a-bb8d-50fca0a24fdd"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryTwo"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0bdf7ba-172f-4938-86da-6bbdd1b94343"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryThree"",
+                    ""type"": ""Button"",
+                    ""id"": ""a8aa5805-dc17-4d48-9f7a-e496b34972ea"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -704,6 +731,39 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Point"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53f51d47-ecb0-4be3-864d-e99e64d13c87"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""InventoryOne"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""492c9383-5f51-4ad5-ba92-a3dbd0bd8085"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""InventoryTwo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b4fdde8a-4fcc-4e35-ada5-a120158cb68d"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""InventoryThree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1623,6 +1683,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         m_Player_DebugMoveToSeat = m_Player.FindAction("DebugMoveToSeat", throwIfNotFound: true);
         m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
         m_Player_Point = m_Player.FindAction("Point", throwIfNotFound: true);
+        m_Player_InventoryOne = m_Player.FindAction("InventoryOne", throwIfNotFound: true);
+        m_Player_InventoryTwo = m_Player.FindAction("InventoryTwo", throwIfNotFound: true);
+        m_Player_InventoryThree = m_Player.FindAction("InventoryThree", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1722,6 +1785,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_DebugMoveToSeat;
     private readonly InputAction m_Player_MouseMove;
     private readonly InputAction m_Player_Point;
+    private readonly InputAction m_Player_InventoryOne;
+    private readonly InputAction m_Player_InventoryTwo;
+    private readonly InputAction m_Player_InventoryThree;
     public struct PlayerActions
     {
         private @Player_Actions m_Wrapper;
@@ -1739,6 +1805,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         public InputAction @DebugMoveToSeat => m_Wrapper.m_Player_DebugMoveToSeat;
         public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
         public InputAction @Point => m_Wrapper.m_Player_Point;
+        public InputAction @InventoryOne => m_Wrapper.m_Player_InventoryOne;
+        public InputAction @InventoryTwo => m_Wrapper.m_Player_InventoryTwo;
+        public InputAction @InventoryThree => m_Wrapper.m_Player_InventoryThree;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1787,6 +1856,15 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @Point.started += instance.OnPoint;
             @Point.performed += instance.OnPoint;
             @Point.canceled += instance.OnPoint;
+            @InventoryOne.started += instance.OnInventoryOne;
+            @InventoryOne.performed += instance.OnInventoryOne;
+            @InventoryOne.canceled += instance.OnInventoryOne;
+            @InventoryTwo.started += instance.OnInventoryTwo;
+            @InventoryTwo.performed += instance.OnInventoryTwo;
+            @InventoryTwo.canceled += instance.OnInventoryTwo;
+            @InventoryThree.started += instance.OnInventoryThree;
+            @InventoryThree.performed += instance.OnInventoryThree;
+            @InventoryThree.canceled += instance.OnInventoryThree;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1830,6 +1908,15 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @Point.started -= instance.OnPoint;
             @Point.performed -= instance.OnPoint;
             @Point.canceled -= instance.OnPoint;
+            @InventoryOne.started -= instance.OnInventoryOne;
+            @InventoryOne.performed -= instance.OnInventoryOne;
+            @InventoryOne.canceled -= instance.OnInventoryOne;
+            @InventoryTwo.started -= instance.OnInventoryTwo;
+            @InventoryTwo.performed -= instance.OnInventoryTwo;
+            @InventoryTwo.canceled -= instance.OnInventoryTwo;
+            @InventoryThree.started -= instance.OnInventoryThree;
+            @InventoryThree.performed -= instance.OnInventoryThree;
+            @InventoryThree.canceled -= instance.OnInventoryThree;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -2095,6 +2182,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         void OnDebugMoveToSeat(InputAction.CallbackContext context);
         void OnMouseMove(InputAction.CallbackContext context);
         void OnPoint(InputAction.CallbackContext context);
+        void OnInventoryOne(InputAction.CallbackContext context);
+        void OnInventoryTwo(InputAction.CallbackContext context);
+        void OnInventoryThree(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

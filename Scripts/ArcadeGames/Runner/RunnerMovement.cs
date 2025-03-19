@@ -88,7 +88,7 @@ public class RunnerMovement : MonoBehaviour
                 AudioClass.PlayAudio("MiniGames/UFORunner/UFOWALL", .4f, "General", "Sound", 1, .3f);
             }
             _direction *= -1;
-            transform.localScale = Vector2.one * _direction;
+            transform.localScale = new Vector2(_direction, 1);
             if (_direction == -1)
             {
                 _cinemachine.Target.TrackingTarget = null;

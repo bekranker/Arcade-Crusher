@@ -81,7 +81,7 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
     {
         _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
         _customer.StateMachine.ChangeState(_customer.MoveState);
-        _customer.SeatHandler.SetSeatEmpty(Seat);
+        SeatHandler.Instance.SetSeatEmpty(Seat);
         _customer.MoneyHandler.DecreaseMoney(_myOrders.Count * 10);
     }
     private void CustomerWin()
@@ -112,7 +112,7 @@ public class OrderState : MonoBehaviour, IState, IObjectInteractable
             _customer.MoveState.TargetPosition = new Vector3(12, 0.5f, 0);
             _customer.StateMachine.ChangeState(_customer.MoveState);
             _customer.MoneyHandler.DecreaseMoney(_myOrders.Count * 10);
-            _customer.SeatHandler.WrongOrder(Seat);
+            SeatHandler.Instance.WrongOrder(Seat);
         }
     }
 }

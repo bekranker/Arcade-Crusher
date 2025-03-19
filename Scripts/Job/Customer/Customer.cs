@@ -4,7 +4,6 @@ using UnityEngine;
 public class Customer : MonoBehaviour, IBaseData
 {
     [Header("---Movement")]
-
     [Tooltip("NPC movement Speed")]
     [SerializeField] private float _speed;
     [Header("---Prefab and Components")]
@@ -22,7 +21,6 @@ public class Customer : MonoBehaviour, IBaseData
     public OrderState OrderState;
     public EatState EatState;
     public WorkManager WorkManager { get; set; }
-    public SeatHandler SeatHandler { get; set; }
     public MoneyHandler MoneyHandler { get; set; }
     void Update()
     {
@@ -34,7 +32,7 @@ public class Customer : MonoBehaviour, IBaseData
     /// this funtion will be called when created.
     /// </summary>
     /// <param name="seatHandler"></param>
-    public void Init(CustomerHandler customerHandler, CustomerType typeOfCustomer, WorkManager workManager, SeatHandler seatHandler, MoneyHandler moneyHandler)
+    public void Init(CustomerHandler customerHandler, CustomerType typeOfCustomer, WorkManager workManager, MoneyHandler moneyHandler)
     {
         _spriteRenderer.sprite = typeOfCustomer.PlaceHolder;
         MyCustomerHandler = customerHandler;
@@ -42,9 +40,12 @@ public class Customer : MonoBehaviour, IBaseData
         _name = MyCustomerType.CustomerName;
         _NPCName.text = _name;
         WorkManager = workManager;
-        SeatHandler = seatHandler;
         MoneyHandler = moneyHandler;
         StateMachine = new StateMachine();
     }
+    /// <summary>
+    /// For Debugging
+    /// </summary>
+    /// <param name="stateName"></param>
     public void ChangeState(string stateName) => _stateName.text = stateName + " state";
 }

@@ -13,8 +13,19 @@ public class SeatHandler : MonoBehaviour
     [SerializeField] private WorkManager _workManager;
     public Dictionary<Transform, bool> EmptySeats = new();
 
+    public static SeatHandler Instance;
 
-
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         for (int i = 0; i < _seatPoints.Count; i++)

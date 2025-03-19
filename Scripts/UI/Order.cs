@@ -30,7 +30,7 @@ public class Order : MonoBehaviour
         DOTween.Kill(transform);
 
         transform.DOScale(Vector2.one, _scaleDuration);
-        _orderImage.sprite = _foodType.Prefab.GetComponent<SpriteRenderer>().sprite;
+        _orderImage.sprite = _foodType.FoodSprite;
     }
     private void ChangeText()
     {

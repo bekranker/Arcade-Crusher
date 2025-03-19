@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-
+using DG.Tweening;
 public class Bullet : Collectables, IPoolObject, ICollectable
 {
     [SerializeField] private Rigidbody2D _rb;
@@ -14,6 +14,7 @@ public class Bullet : Collectables, IPoolObject, ICollectable
 
     IEnumerator Start()
     {
+        //transform.DOPunchScale(Vector3.one * Random.Range(1.2f, 1.5f), .2f);
         transform.right = DirectionToGo;
         yield return new WaitForSeconds(3);
         Destroy(gameObject);

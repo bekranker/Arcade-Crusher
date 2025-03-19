@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "FoodType", menuName = "Scriptable Objects/Work/FoodType")]
-public class FoodType : ScriptableObject
+public class FoodType : ScriptableObject, ISlotObject
 {
-    public GameObject Prefab;
+    public Sprite FoodSprite;
     public float Price;
 }

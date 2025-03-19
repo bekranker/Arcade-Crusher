@@ -1,17 +1,44 @@
 using UnityEngine;
 using DG.Tweening;
-public class OrderResource : MonoBehaviour, IObjectInteractable
+using System;
+using System.Collections.Generic;
+public class OrderResource : MonoBehaviour, IObjectInteractable, IObjectInteractableNearBy
 {
-    [SerializeField] private WorkManager _workManager;
-    [SerializeField] private FoodType _foodType;
+    [SerializeField] private List<GameObject> _ui;
     [SerializeField, Range(0, 10)] private float _shakeSpeed;
+    public event Action OnInteraction;
+    private bool _nearByInteraction;
+
+    void Start()
+    {
+        _nearByInteraction = true;
+        _ui?.ForEach((ui) => ui.SetActive(false));
+    }
     public void ExecuteInteraction()
     {
-        _workManager.TakeResource(_foodType);
         DOTween.Kill(transform);
         transform.localScale = Vector2.one;
         transform.DOPunchScale(Vector3.one * _shakeSpeed, .3f);
+        OnInteraction?.Invoke();
+    }
+    public void ExecuteNearInteraction()
+    {
+        if (!_nearByInteraction) return;
+        _ui?.ForEach((ui) =>
+        {
+            ui.SetActive(true);
+        });
+        _nearByInteraction = false;
+        Debug.Log("Near By");
     }
 
-    public FoodType GetFood() => _foodType;
+    public void ExitArea()
+    {
+        _nearByInteraction = true;
+        _ui?.ForEach((ui) =>
+        {
+            ui.SetActive(false);
+        });
+        Debug.Log("Exited from area");
+    }
 }
