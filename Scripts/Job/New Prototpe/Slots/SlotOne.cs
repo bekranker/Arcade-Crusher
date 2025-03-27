@@ -7,5 +7,4 @@ public class SlotOne : Slots, IObjectInteractOne
         InvokeOnSlotAction();
         print("Slot One");
     }
-
 }

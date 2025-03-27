@@ -1,6 +1,5 @@
 using System;
 using DG.Tweening;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public abstract class Slots : MonoBehaviour

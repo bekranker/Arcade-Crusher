@@ -17,6 +17,7 @@ public class SlotInfinity : Slot
     }
     private void ExecuteAction()
     {
+        print("food taken");
         Take(0, _food);
     }
     public override void Take(float seconds, FoodType slotObject)

@@ -106,7 +106,7 @@ public class SeatHandler : MonoBehaviour
     public void WrongOrder(Transform seat)
     {
         if (!EmptySeats.ContainsKey(seat)) return;
-        _workManager.ThrowToTrash();
+        _workManager.ClearHand();
         EmptySeats[seat] = true;
     }
 }

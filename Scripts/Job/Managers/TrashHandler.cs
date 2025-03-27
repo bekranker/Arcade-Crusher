@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class TrashHandler : MonoBehaviour, IObjectInteractable
@@ -6,6 +7,13 @@ public class TrashHandler : MonoBehaviour, IObjectInteractable
 
     public void ExecuteInteraction()
     {
-        _workManager.ThrowToTrash();
+        _workManager.ClearHand();
+        DoTweenEffect();
+    }
+    private void DoTweenEffect()
+    {
+        DOTween.Kill(transform);
+        transform.localScale = Vector2.one;
+        transform.DOPunchScale(DoTweenProps.Instance.PunchScale_Slot, DoTweenProps.Instance.Delay_SlotDelay);
     }
 }

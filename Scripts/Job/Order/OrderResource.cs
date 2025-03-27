@@ -18,7 +18,7 @@ public class OrderResource : MonoBehaviour, IObjectInteractable, IObjectInteract
     {
         DOTween.Kill(transform);
         transform.localScale = Vector2.one;
-        transform.DOPunchScale(Vector3.one * _shakeSpeed, .3f);
+        transform.DOPunchScale(DoTweenProps.Instance.PunchScale_Slot, DoTweenProps.Instance.Delay_SlotDelay);
         OnInteraction?.Invoke();
     }
     public void ExecuteNearInteraction()

@@ -1,12 +1,12 @@
-using Sirenix.OdinInspector;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class SlotTimer : Slot
 {
-    [SerializeField] private FoodType _slotObject;
     [SerializeField] private float _delay;
     [SerializeField] private Slots _slot;
-
+    private FoodType _cookedFood;
+    private bool _cooked;
     void OnEnable()
     {
         _slot.OnSlotAction += ExecuteAction;
@@ -17,10 +17,33 @@ public class SlotTimer : Slot
     }
     private void ExecuteAction()
     {
-        Take(_delay, _slotObject);
+        if (SlotObjects.Count != 0) return;
+        if (_cooked)
+        {
+            Take(_delay, _cookedFood);
+        }
+        else
+        {
+            CookingAction();
+        }
     }
-    public override void Take(float seconds, FoodType slotObject)
+    private async void CookingAction()
     {
-        base.Take(seconds, slotObject);
+        if (SlotObjects.Count == 0)
+        {
+            Put(WorkManager.Instance.Hand[0]);
+            WorkManager.Instance.ClearHand();
+            return;
+        }
+        _cookedFood = await WorkManager.Instance.Cook(SlotObjects[0], _delay);
+        if (_cookedFood == null)
+        {
+            Debug.LogError("Cooking Failed");
+            return;
+        }
+        _cooked = true;
+        SlotObjects.Clear();
+        Put(_cookedFood);
+
     }
 }
