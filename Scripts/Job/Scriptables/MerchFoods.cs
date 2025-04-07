@@ -6,4 +6,6 @@ public class MerchFoods : ScriptableObject
 {
     public List<FoodType> MerchableFoods = new();
     public FoodType CreatedItem;
+    public float CookingTime;
+
 }

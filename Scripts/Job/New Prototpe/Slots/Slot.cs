@@ -33,5 +33,6 @@ public abstract class Slot : MonoBehaviour
         await UniTask.Delay(System.TimeSpan.FromSeconds(seconds));
         WorkManager.Instance.TakeResource(slotObject);
         SlotObjects.Remove(slotObject);
+        Debug.Log("Alindi");
     }
 }

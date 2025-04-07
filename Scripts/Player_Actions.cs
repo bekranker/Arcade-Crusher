@@ -170,6 +170,15 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootZX"",
+                    ""type"": ""Value"",
+                    ""id"": ""6ad39f18-b759-42ef-9d56-14a23dd0a277"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -766,6 +775,61 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""InventoryThree"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""e5ba355e-7e74-44fd-b807-a3a8d2979236"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootZX"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""id"": ""89abc941-8dc8-4aa5-8980-c06c5192165b"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootZX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Down"",
+                    ""id"": ""6118a618-fa7e-401d-9eab-087d09655547"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootZX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left"",
+                    ""id"": ""c369148d-8e34-4d6a-ace9-3c1682287ae9"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootZX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Right"",
+                    ""id"": ""aad6c7a7-32c8-4e79-8804-6eb11827aa98"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShootZX"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         },
@@ -1686,6 +1750,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         m_Player_InventoryOne = m_Player.FindAction("InventoryOne", throwIfNotFound: true);
         m_Player_InventoryTwo = m_Player.FindAction("InventoryTwo", throwIfNotFound: true);
         m_Player_InventoryThree = m_Player.FindAction("InventoryThree", throwIfNotFound: true);
+        m_Player_ShootZX = m_Player.FindAction("ShootZX", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1788,6 +1853,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_InventoryOne;
     private readonly InputAction m_Player_InventoryTwo;
     private readonly InputAction m_Player_InventoryThree;
+    private readonly InputAction m_Player_ShootZX;
     public struct PlayerActions
     {
         private @Player_Actions m_Wrapper;
@@ -1808,6 +1874,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         public InputAction @InventoryOne => m_Wrapper.m_Player_InventoryOne;
         public InputAction @InventoryTwo => m_Wrapper.m_Player_InventoryTwo;
         public InputAction @InventoryThree => m_Wrapper.m_Player_InventoryThree;
+        public InputAction @ShootZX => m_Wrapper.m_Player_ShootZX;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1865,6 +1932,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @InventoryThree.started += instance.OnInventoryThree;
             @InventoryThree.performed += instance.OnInventoryThree;
             @InventoryThree.canceled += instance.OnInventoryThree;
+            @ShootZX.started += instance.OnShootZX;
+            @ShootZX.performed += instance.OnShootZX;
+            @ShootZX.canceled += instance.OnShootZX;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1917,6 +1987,9 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
             @InventoryThree.started -= instance.OnInventoryThree;
             @InventoryThree.performed -= instance.OnInventoryThree;
             @InventoryThree.canceled -= instance.OnInventoryThree;
+            @ShootZX.started -= instance.OnShootZX;
+            @ShootZX.performed -= instance.OnShootZX;
+            @ShootZX.canceled -= instance.OnShootZX;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -2185,6 +2258,7 @@ public partial class @Player_Actions: IInputActionCollection2, IDisposable
         void OnInventoryOne(InputAction.CallbackContext context);
         void OnInventoryTwo(InputAction.CallbackContext context);
         void OnInventoryThree(InputAction.CallbackContext context);
+        void OnShootZX(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
