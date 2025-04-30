@@ -3,6 +3,8 @@ using UnityEngine;
 using DG.Tweening;
 using Unity.Cinemachine;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler>
 {
@@ -10,40 +12,66 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     [SerializeField] private float _punchScale;
     public float ScoreCounter { get; set; }
     public CinemachineImpulseSource ImpulseSource;
-    public GeneralScoreHandler Instance { get; set; }
+    public static GeneralScoreHandler Instance { get; set; }
     public static event Action OnIncrease, OnDecrease;
-    public int TrueScoreCounter { get; set; }
 
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
     void Start()
     {
         ChangeText();
-        TrueScoreCounter = 1;
     }
 
     /// <summary>
     /// Increase the score
     /// </summary>
     /// <param name="score">amount of increasing</param>
-    public float IncreaseScore(float score)
+    public void IncreaseScore(float score)
     {
-        TrueScoreCounter++;
-        ScoreCounter += score * TrueScoreCounter;
-        ChangeText();
+        StartCoroutine(IncreaseScoreIE(score));
+    }
+    public void DecreaseScore(float score)
+    {
+        StartCoroutine(DecreaseScoreIE(score));
+    }
+    public IEnumerator IncreaseScoreIE(float score)
+    {
+        float targetScore = ScoreCounter + score;
+        while (ScoreCounter < targetScore)
+        {
+            ScoreCounter += 1;
+            yield return new WaitForSeconds(.002f);
+            ChangeText();
+        }
         OnIncrease?.Invoke();
-        return ScoreCounter;
+        yield return new WaitForEndOfFrame();
     }
 
     /// <summary>
     /// decrease the score
     /// </summary>
     /// <param name="score">amount of decresing</param>
-    public float DecreaseScore(float score)
+    public IEnumerator DecreaseScoreIE(float score)
     {
         OnDecrease?.Invoke();
-        TrueScoreCounter = 0;
-        ScoreCounter -= score;
-        ChangeText();
-        return ScoreCounter;
+        float targetScore = ScoreCounter - score;
+        while (ScoreCounter < targetScore)
+        {
+            ScoreCounter -= 1;
+            yield return new WaitForSeconds(.1f);
+            ChangeText();
+        }
+        OnDecrease?.Invoke();
+        yield return new WaitForEndOfFrame();
     }
 
     /// <summary>

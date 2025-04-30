@@ -3,20 +3,35 @@ using ZilyanusLib.Audio;
 
 public class Player : MonoBehaviour, IDamage
 {
+    public static Player Instance { get; private set; }
+
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private float _defaultHealth;
     private float _healthCounter;
     [SerializeField] private LoseScreen _loseScreen;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject); // Ensure only one instance exists
+            return;
+        }
+        Instance = this;
+    }
+
     void Start()
     {
         _healthCounter = _defaultHealth;
     }
+
     public void Die()
     {
         _healthCounter = 0;
         _loseScreen.LoseGame();
-        AudioClass.PlayAudio("MiniGames/UFORunner/LOSESOUND");
+        //AudioClass.PlayAudio("MiniGames/UFORunner/LOSESOUND"); => add this with event Action
     }
+
     public void TakeDamage(float amount)
     {
         if (_healthCounter - amount <= 0)
@@ -25,5 +40,6 @@ public class Player : MonoBehaviour, IDamage
             return;
         }
         _healthCounter -= amount;
+        //add screen shake here
     }
 }

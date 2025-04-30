@@ -37,7 +37,6 @@ public class TimeHandler : MonoBehaviour
         else
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject); // Sahne geçişlerinde objeyi koru
         }
     }
 

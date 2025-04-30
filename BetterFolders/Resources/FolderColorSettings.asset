@@ -14,6 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   modifierKey: 8
   folderRules:
+  - folderName: Draws
+    folderColor: {r: 1, g: 0.81757694, b: 0.21226418, a: 1}
+    fullPath: Assets/Scripts/Job/New Prototpe
+    icon: {fileID: 0}
+    applyToAllFolders: 1
+    applyColorToSubfolders: 1
+    applyIconToSubfolders: 0
+    materialColor: 0
   - folderName: Scripts
     folderColor: {r: 0.7607844, g: 0.25490198, b: 0.04705883, a: 1}
     fullPath: 

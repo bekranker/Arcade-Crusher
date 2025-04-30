@@ -48,7 +48,7 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
     }
     private void WrongInput()
     {
-        float decreaseAmount = _scoreHandler.DecreaseScore(_scoreHandler.ScoreCounter);
+        //float decreaseAmount = _scoreHandler.DecreaseScore(_scoreHandler.ScoreCounter);
 
         if (LoseEverythingOnWorngInput)
         {
@@ -68,7 +68,7 @@ public class SimonsSaid_ButtonEffect : MonoBehaviour
     private void SpawnTextGreen()
     {
         TMP_Text spawned = SpawnedScoreText();
-        spawned.text = "+" + GeneralScoreHandler.FormatScore(100 * _scoreHandler.TrueScoreCounter);
+        spawned.text = "+" + GeneralScoreHandler.FormatScore(100);
         spawned.color = _greenScoreColor;
     }
     /// <summary>

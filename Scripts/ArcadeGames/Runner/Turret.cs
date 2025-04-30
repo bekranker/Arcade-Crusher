@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Turret : Collectables, IPoolObject, IMaterial
@@ -6,6 +7,9 @@ public class Turret : Collectables, IPoolObject, IMaterial
     [SerializeField] private float _delay;
 
     private Player _player;
+
+    public override event Action OnCollect;
+
     public string PoolKey { get => "Turret"; set => value = default; }
 
     void Start()
@@ -21,8 +25,9 @@ public class Turret : Collectables, IPoolObject, IMaterial
         Bullet bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
         bullet.Player = _player;
     }
-    public override void CollectMe()
+    public override void CollectMe(MonoBehaviour mono)
     {
         _player.Die();
+        OnCollect?.Invoke();
     }
 }

@@ -8,6 +8,7 @@ namespace ArcadeGames.CrossRoad
     {
         [Header("-----Props")]
         [SerializeField] private float _jumpSpeed;
+        [SerializeField] private Vector2 _moveClamp;
         [SerializeField] private float _jumpAmount;
 
         private Player_Actions _inputActions;
@@ -37,7 +38,8 @@ namespace ArcadeGames.CrossRoad
 
         void Move(Vector2 direction)
         {
-            transform.DOMoveY(transform.position.y + direction.y * _jumpAmount, _jumpSpeed);
+            if (transform.position.y > _moveClamp.y || transform.position.y < _moveClamp.x)
+                transform.DOMoveY(transform.position.y + direction.y * _jumpAmount, _jumpSpeed);
         }
     }
 }

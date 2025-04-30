@@ -1,12 +1,12 @@
 using UnityEngine;
 public class PlayerDedection : MonoBehaviour
 {
+    [SerializeField] private Player _player;
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.gameObject.name);
-        if (collision.attachedRigidbody.TryGetComponent(out Collectables collectable))
+        if (collision.attachedRigidbody.TryGetComponent(out ICollectable<Player> collectable))
         {
-            collectable.CollectMe();
+            collectable.CollectMe(_player);
         }
     }
 }

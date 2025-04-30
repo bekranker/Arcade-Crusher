@@ -1,15 +1,20 @@
+using System.Collections.Generic;
+using ArcadeGames.CrossRoad;
+using ArcadeGames.Runner;
 using UnityEngine;
-using UnityEngine.InputSystem;
-
+using UnityEngine.UI;
 namespace ArcadeCrusher.Player
 {
     public class PlayerShoot : MonoBehaviour
     {
         [Header("-----Props")]
-        [SerializeField] private int _bulletCount;
+        [SerializeField] private int _maxBulletCount;
 
         [Header("-----Components")]
-        [SerializeField] private Bullet _bulletPrefab;
+        [SerializeField] private BulletParent<CrossRoad_Enemy> _bulletPrefab;
+
+        [Header("-----UI & Canvas")]
+        [SerializeField] private List<Image> _bulletCountImages;
 
         private Player_Actions _inputActions;
         private Vector2 previousInput = Vector2.zero;
@@ -18,7 +23,7 @@ namespace ArcadeCrusher.Player
         void Awake()
         {
             _inputActions = new();
-            _bulletCounter = _bulletCount;
+            _bulletCounter = _maxBulletCount;
         }
 
         void OnEnable()
@@ -45,9 +50,37 @@ namespace ArcadeCrusher.Player
         {
             if (_bulletCounter <= 0) return;
 
-            Bullet spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+            BulletParent<CrossRoad_Enemy> spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
             spawnedBullet.DirectionToGo.x = direction.x;
+            DecreaseBulletCount();
+        }
+        public void DecreaseBulletCount()
+        {
+            if (_bulletCounter <= 0)
+            {
+                Debug.LogWarning("No bullets left to decrease.");
+                return;
+            }
             _bulletCounter--;
+            UpdateBulletCountUI();
+        }
+        public void IncreaseBulletCount(int count)
+        {
+            if (_bulletCounter + _maxBulletCount > _maxBulletCount)
+            {
+                _bulletCounter = _maxBulletCount;
+                UpdateBulletCountUI();
+                return;
+            }
+            _bulletCounter += count;
+            UpdateBulletCountUI();
+        }
+        private void UpdateBulletCountUI()
+        {
+            for (int i = 0; i < _bulletCountImages.Count; i++)
+            {
+                _bulletCountImages[i].enabled = i < _bulletCounter;
+            }
         }
     }
 }

@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 5087272897248059517}
   - component: {fileID: 739804527979556582}
   - component: {fileID: 3263723964786667395}
-  m_Layer: 0
+  - component: {fileID: -5298004756120867707}
+  m_Layer: 13
   m_Name: Coin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,6 +74,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0dd1666d708490cb273b0f6c0030d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5298004756120867707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822645331565168144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0495f0121634c4833ba88339ddd072e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collectableComponent: {fileID: 3263723964786667395}
+  _collectSound: {fileID: 8300000, guid: 616bf498d8c104a89a1a0998a08698da, type: 3}
 --- !u!1 &5540625984491646167
 GameObject:
   m_ObjectHideFlags: 0
@@ -84,7 +99,7 @@ GameObject:
   - component: {fileID: 3944914175783940980}
   - component: {fileID: 6594501030708976332}
   - component: {fileID: 5409728724494368374}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -487,6 +487,10 @@ MonoBehaviour:
   - Speed: 3
     Layer: {fileID: 317029010}
     Direction: -1
+  - Speed: 0
+    Layer: {fileID: 0}
+    Direction: 0
+  ParentDirection: 1
 --- !u!1 &192488487
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +580,6 @@ GameObject:
   - component: {fileID: 212707212}
   - component: {fileID: 212707210}
   - component: {fileID: 212707213}
-  - component: {fileID: 212707214}
   - component: {fileID: 212707215}
   - component: {fileID: 212707216}
   - component: {fileID: 212707217}
@@ -712,38 +715,6 @@ MonoBehaviour:
   _jumpPivot: {fileID: 2055945115}
   _rayLength: 0.1
   _coyoteTime: 0.1
---- !u!114 &212707214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 212707207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48ed85d990a44409fbb4ca67c338f09a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rb: {fileID: 212707211}
-  _playerGrounded: {fileID: 212707213}
-  _procuderalGenerator: {fileID: 1617047512}
-  _loseScreen: {fileID: 354053901}
-  _cinemachine: {fileID: 2106395692}
-  _runnerManager: {fileID: 890957986}
-  _length: 1.05
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 512
-  CurrentJumpValue: 0.64
-  _speedMultipilier: 9
-  _jumpValue: 5
-  JumpDecreaseSpeed: 1.95
-  _jumpMultiplier: 0.92
-  _speedIncreaseMultiplier: 0.05
-  _maxSpeed: 18
-  _slider: {fileID: 32044598}
-  _loseJustOnes: 0
-  _winJustOnes: 0
 --- !u!114 &212707215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,6 +727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 531c37fed08fa4c3fad274461ffe463e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _player: {fileID: 212707210}
 --- !u!114 &212707216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,7 +740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e872ac948ced4a4493bdd169f2860a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _runnerMovement: {fileID: 212707214}
+  _runnerMovement: {fileID: 0}
   _jetPackSound: {fileID: 2084344598}
   _myGorunded: {fileID: 212707213}
   _jetpackSlider: {fileID: 431726643}
@@ -2079,7 +2051,7 @@ MonoBehaviour:
   Levels:
   - rid: 1706636204029771851
   - rid: 1706636204029771852
-  _runnerMovement: {fileID: 212707214}
+  _runnerMovement: {fileID: 0}
   _procuderalGenerator: {fileID: 1617047512}
   _player: {fileID: 212707210}
   _levelTMP: {fileID: 366304461}
@@ -2123,7 +2095,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!199 &900408734
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -7248,7 +7220,7 @@ MonoBehaviour:
   poolConfigs:
   - PoolKey: Ground
     Prefab: {fileID: 7612480264973492523, guid: 94be00cec44c2465f9c9125e65c1e115, type: 3}
-    InitialSize: 3000
+    InitialSize: 100
   - PoolKey: Coin
     Prefab: {fileID: 1822645331565168144, guid: bbe0362526ed54e569ba7902394ff8ff, type: 3}
     InitialSize: 500
@@ -9271,7 +9243,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2106395690}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
   m_Name: 

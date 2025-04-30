@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b44a4f7016abd472e90c072c5d41179c, type: 3}
+  m_Name: Wave 2
+  m_EditorClassIdentifier: 
+  CrossRoad_EnemyTypes:
+  - {fileID: 11400000, guid: 3216e5ce391d2418ab2bfc2da204d562, type: 2}
+  - {fileID: 11400000, guid: 187abc39cbfe14a2ea7ae4816c3cbaed, type: 2}
+  SpawnInterval: 1.25
+  TotalTime: 10

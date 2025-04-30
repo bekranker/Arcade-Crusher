@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 2324924899583867175}
   - component: {fileID: 327942419906090405}
   - component: {fileID: 3829713060096095549}
+  - component: {fileID: 2981745757048356638}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -157,3 +158,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2981745757048356638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6611783571614172404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0495f0121634c4833ba88339ddd072e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collectableComponent: {fileID: 327942419906090405}
+  _collectSound: {fileID: 8300000, guid: aac91bccf31494c6fa45b8bf4fcb8dea, type: 3}

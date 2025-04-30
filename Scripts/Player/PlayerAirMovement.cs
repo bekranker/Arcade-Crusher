@@ -12,11 +12,6 @@ public class PlayerAirMovement : BaseMovement
             Instance = this;
             return;
         }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
     }
     void Update()
     {

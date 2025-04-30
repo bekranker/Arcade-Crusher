@@ -21,6 +21,7 @@ public class ProcuderalGenerator : MonoBehaviour
     [Tooltip("Maps parent")]
     [SerializeField] private Transform _map;
     [SerializeField] private MiniGameController _miniGameController;
+    [SerializeField] private List<GameObject> _grounds;
     private float _randomSeed;
     private float _previousHeight;
     private int _nextSpawnX;
@@ -41,33 +42,43 @@ public class ProcuderalGenerator : MonoBehaviour
     }
     private void GenerateGround()
     {
-        _randomSeed = Random.Range(0, _randomOffsetRange);
-        int groundCount = _runnerGameManager.CurrentLevel.Length;
-        print(groundCount);
-        float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
-        float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
-        _playerT.position = new Vector2(0, height * 2f);
-
-        for (int i = 0; i < groundCount; i++)
+        float noiseInput = 0;
+        for (int i = 0; i < 45; i++)
         {
-            float heightDifference = Mathf.Abs(height - _previousHeight);
-            if (heightDifference <= _maxHeightDifference)
-            {
-                height = _previousHeight;
-            }
-            Vector3 spawnPosition = new Vector3(_nextSpawnX, height, 0);
-            GameObject tempGround = _poolManager.Get("Ground");
-            Transform spawnedGrid = tempGround.transform;
-            _spawnedGrounds.Add(tempGround);
-            SpawnProp(height, new Vector3(_nextSpawnX, spawnPosition.y, 0));
-            spawnedGrid.SetParent(_map);
-            spawnedGrid.position = spawnPosition;
-            _nextSpawnX += 1;
-            _previousHeight = height;
+            GameObject groundObject = _grounds[i];
 
+            _randomSeed = Random.Range(0, _randomOffsetRange);
             noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
-            height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
+            float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
+            Vector3 spawnPosition = new Vector3(_nextSpawnX, height, 0);
+            groundObject.transform.position = spawnPosition;
         }
+        // _randomSeed = Random.Range(0, _randomOffsetRange);
+        // int groundCount = _runnerGameManager.CurrentLevel.Length;
+        // float noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
+        // float height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
+        // _playerT.position = new Vector2(0, height * 2f);
+
+        // for (int i = 0; i < groundCount; i++)
+        // {
+        //     float heightDifference = Mathf.Abs(height - _previousHeight);
+        //     if (heightDifference <= _maxHeightDifference)
+        //     {
+        //         height = _previousHeight;
+        //     }
+        //     Vector3 spawnPosition = new Vector3(_nextSpawnX, height, 0);
+        //     GameObject tempGround = _poolManager.Get("Ground");
+        //     Transform spawnedGrid = tempGround.transform;
+        //     _spawnedGrounds.Add(tempGround);
+        //     SpawnProp(height, new Vector3(_nextSpawnX, spawnPosition.y, 0));
+        //     spawnedGrid.SetParent(_map);
+        //     spawnedGrid.position = spawnPosition;
+        //     _nextSpawnX += 1;
+        //     _previousHeight = height;
+
+        //     noiseInput = (_nextSpawnX * _runnerGameManager.CurrentFrequency) + _randomSeed;
+        //     height = Mathf.PerlinNoise(noiseInput, 0) * _heightMultiplier;
+        // }
     }
     private void SpawnProp(float currentHeight, Vector3 blockPosition)
     {

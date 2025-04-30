@@ -1,4 +1,4 @@
-public interface ICollectable
+public interface ICollectable<T>
 {
-    void CollectMe();
+    void CollectMe(T collectable);
 }
