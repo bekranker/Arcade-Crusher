@@ -14,7 +14,6 @@ public class Player : MonoBehaviour, IDamage
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // Ensure only one instance exists
             return;
         }
         Instance = this;

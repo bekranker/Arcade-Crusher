@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 public class ParallaxEffect : MonoBehaviour
 {
     [SerializeField] private List<ParallaxLayer> _parallaxLayers = new();
     public Vector3 ParentDirection;
     [SerializeField] private bool _initialStart;
+
     void Update()
     {
         if (_initialStart)
@@ -18,7 +20,8 @@ public class ParallaxEffect : MonoBehaviour
     {
         _parallaxLayers?.ForEach((layer) =>
         {
-            layer.ChangePosition(ParentDirection * SpeedMultiplier);
+            if (layer != null)
+                layer.ChangePosition(ParentDirection * SpeedMultiplier);
         });
     }
 }
@@ -34,19 +37,13 @@ public class ParallaxLayer
     {
         if (Layer != null)
         {
+
             // Layer'ın mevcut pozisyonunu al
             Vector3 currentPosition = Layer.transform.position;
 
             // Layer'ın yeni pozisyonunu hesapla
+
             Vector3 newPosition = currentPosition + Vector3.Scale(Direction, parentDirection) * Speed * Time.deltaTime;
-
-            // // Eğer layer ekranın sol sınırını geçerse, sağ taraftan tekrar girmesini sağla
-            // if (newPosition.x <= ScreenBounds.LeftCorner().x * -1.5f)
-            // {
-            //     newPosition.x = ScreenBounds.RightCorner().x * 1.5f;
-            // }
-
-            // Layer'ın pozisyonunu güncelle
             Layer.transform.position = newPosition;
         }
     }

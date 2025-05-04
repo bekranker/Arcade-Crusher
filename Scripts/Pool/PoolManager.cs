@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 
 public class PoolManager : MonoBehaviour
@@ -27,7 +26,11 @@ public class PoolManager : MonoBehaviour
             }
             var pool = new Pool(config.Prefab, _poolContainer);
             _pools.Add(config.PoolKey, pool);
-            pool.Prewarm(config.InitialSize);
+            if (config.Prefab.TryGetComponent<IPoolObject>(out var pooledObject))
+            {
+                pooledObject.OnInit();
+            }
+            pool.Prewarm(config.InitialSize, config.Active);
         }
     }
 
@@ -57,7 +60,7 @@ public class PoolManager : MonoBehaviour
             Destroy(obj);
             return;
         }
-
+        pooledObject.OnReturn();
         pool.Return(obj);
     }
 
@@ -67,6 +70,7 @@ public class PoolManager : MonoBehaviour
         public string PoolKey;
         public GameObject Prefab;
         public int InitialSize = 10;
+        public bool Active;
     }
 
     private class Pool
@@ -74,7 +78,6 @@ public class PoolManager : MonoBehaviour
         private readonly GameObject _prefab;
         private readonly Transform _container;
         private readonly Queue<GameObject> _objects = new Queue<GameObject>();
-        private readonly List<GameObject> _activeObjects = new List<GameObject>();
 
         public Pool(GameObject prefab, Transform container)
         {
@@ -82,11 +85,11 @@ public class PoolManager : MonoBehaviour
             _container = container;
         }
 
-        public void Prewarm(int count)
+        public void Prewarm(int count, bool active)
         {
             for (int i = 0; i < count; i++)
             {
-                _objects.Enqueue(CreateNewObject());
+                _objects.Enqueue(CreateNewObject(active));
             }
         }
 
@@ -99,7 +102,6 @@ public class PoolManager : MonoBehaviour
             }
 
             var obj = _objects.Dequeue();
-            _activeObjects.Add(obj);
             obj.SetActive(true);
             return obj;
         }
@@ -107,9 +109,8 @@ public class PoolManager : MonoBehaviour
         public void Return(GameObject obj)
         {
             obj.transform.SetParent(_container);
-            _activeObjects.Remove(obj);
-            _objects.Enqueue(obj);
             obj.SetActive(false);
+            _objects.Enqueue(obj);
         }
 
         private GameObject CreateNewObject(bool activate = false)
@@ -125,4 +126,6 @@ public class PoolManager : MonoBehaviour
             return obj;
         }
     }
+
+
 }

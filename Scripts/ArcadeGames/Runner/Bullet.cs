@@ -3,7 +3,7 @@ using UnityEngine;
 using DG.Tweening;
 using ArcadeGames.CrossRoad;
 using System;
-public class Bullet : Collectables, IPoolObject
+public class Bullet : Collectables
 {
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private float _speed;
@@ -12,14 +12,14 @@ public class Bullet : Collectables, IPoolObject
     public override event Action OnCollect;
 
     public Player Player { get; set; }
-    public string PoolKey { get => "Bullet"; set => value = default; }
-
+    public override string PoolKey { get => "Bullet"; set => value = default; }
+    private PoolManager _poolManager;
 
     IEnumerator Start()
     {
         transform.right = DirectionToGo;
         yield return new WaitForSeconds(3);
-        Destroy(gameObject);
+        _poolManager.Return(gameObject);
     }
     void Update()
     {
@@ -33,5 +33,18 @@ public class Bullet : Collectables, IPoolObject
     {
         Player.Die();
         OnCollect?.Invoke();
+    }
+
+    public override void OnInit()
+    {
+        transform.right = DirectionToGo;
+    }
+
+    public override void OnReturn()
+    {
+    }
+
+    public override void OnGet()
+    {
     }
 }

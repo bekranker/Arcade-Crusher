@@ -38,6 +38,7 @@ public abstract class BaseMovement : MonoBehaviour
     {
         _playerActions.Player.Move.performed -= Move;
         _playerActions.Player.Move.canceled -= Move;
+        MovementInput = Vector2.zero;
         _playerActions.Player.Disable();
 
     }

@@ -4,6 +4,7 @@ public class PlayerAirMovement : BaseMovement
 {
     float _elapsedTime = 0;
     public static PlayerAirMovement Instance;
+    [SerializeField] private Vector2 _screenBoundSize; //x minimum y maximum deger
     void Awake()
     {
         CanWalk = true;
@@ -15,14 +16,17 @@ public class PlayerAirMovement : BaseMovement
     }
     void Update()
     {
+        // if (transform.position.x + MovementInput.x < _screenBoundSize.x || transform.position.x + MovementInput.x > _screenBoundSize.y)
+        // {
+        //     _rb.linearVelocityX = 0;
+        //     return;
+        // }
         Run();
     }
     public override void Run()
     {
         if (!CanWalk) return;
         if (_grounded.IsGrounded()) return;
-        print("Air Movement");
-        // Input yoksa yavaşlat
         if (MovementInput.x == 0)
         {
             _elapsedTime = 0;
@@ -34,6 +38,7 @@ public class PlayerAirMovement : BaseMovement
             }
             return;
         }
+
 
         _elapsedTime += Time.deltaTime;
 
@@ -48,5 +53,7 @@ public class PlayerAirMovement : BaseMovement
 
         // Yüzünü hareket yönüne çevir
         transform.localScale = new Vector3(_direction, transform.localScale.y, transform.localScale.z);
+
+
     }
 }

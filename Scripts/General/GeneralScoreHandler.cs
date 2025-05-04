@@ -24,7 +24,6 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
     void Start()
     {
