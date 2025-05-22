@@ -14,10 +14,6 @@ public class MiniGameController : MonoBehaviour, ISingleton<MiniGameController>
         {
             Instance = this;
         }
-        else
-        {
-            Destroy(gameObject);
-        }
         if (Paused)
         {
             PauseTheGame();

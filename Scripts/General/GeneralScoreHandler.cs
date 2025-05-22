@@ -4,29 +4,26 @@ using DG.Tweening;
 using Unity.Cinemachine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler>
 {
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private float _punchScale;
+    [SerializeField] private PoolManager _poolManager;
     public float ScoreCounter { get; set; }
     public CinemachineImpulseSource ImpulseSource;
     public static GeneralScoreHandler Instance { get; set; }
     public static event Action OnIncrease, OnDecrease;
-
+    public event Action OnIncreaseStart, OnDecreaseStart;
+    private Vector3 _startScale;
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
     }
     void Start()
     {
+        _startScale = _scoreText.transform.localScale;
         ChangeText();
     }
 
@@ -36,10 +33,13 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     /// <param name="score">amount of increasing</param>
     public void IncreaseScore(float score)
     {
+        //_poolManager.Get("SplashScore");
+        OnIncreaseStart?.Invoke();
         StartCoroutine(IncreaseScoreIE(score));
     }
     public void DecreaseScore(float score)
     {
+        OnDecreaseStart?.Invoke();
         StartCoroutine(DecreaseScoreIE(score));
     }
     public IEnumerator IncreaseScoreIE(float score)
@@ -80,9 +80,9 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     {
         ImpulseSource.GenerateImpulse();
         DOTween.Kill(_scoreText.transform);
-        _scoreText.transform.localScale = Vector3.one;
+        _scoreText.transform.localScale = _startScale;
         _scoreText.text = "Score: " + FormatScore(ScoreCounter);
-        _scoreText.transform.DOPunchScale(Vector3.one * _punchScale, .2f).OnComplete(() => { _scoreText.transform.localScale = Vector3.one; });
+        _scoreText.transform.DOPunchScale(Vector3.one * _punchScale, .2f).OnComplete(() => { _scoreText.transform.localScale = _startScale; });
     }
 
     /// <summary>

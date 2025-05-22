@@ -5,6 +5,9 @@ using UnityEngine;
 public class Spike : TTMEnvironment
 {
     public override event Action OnCollect;
+    public override event Action OnReturnAction;
+    public override event Action OnGetAction;
+
     private bool _canCollect = true;
 
     Vector3 _initalStartPosition;
@@ -21,8 +24,7 @@ public class Spike : TTMEnvironment
     public override void CollectMe(MonoBehaviour mono)
     {
         if (!_canCollect) return;
-        print("Spike Touched");
-        _loseScreen.LoseGame();
+        GeneralHearthManager.Instance.DecreaseHealth();
         OnCollect?.Invoke();
         StartCoroutine(WaitForCollect());
         _canCollect = false;
@@ -43,13 +45,15 @@ public class Spike : TTMEnvironment
     {
         _initalStartPosition = transform.position;
         _canCollect = true;
+        OnGetAction?.Invoke();
     }
 
-    public override void OnInit()
+    public override void OnInit(PoolManager poolManager)
     {
     }
 
     public override void OnReturn()
     {
+        OnReturnAction?.Invoke();
     }
 }

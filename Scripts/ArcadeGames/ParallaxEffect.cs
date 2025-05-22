@@ -35,6 +35,7 @@ public class ParallaxLayer
 
     public void ChangePosition(Vector3 parentDirection)
     {
+        if (!Layer.activeSelf) return;
         if (Layer != null)
         {
 

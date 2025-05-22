@@ -7,7 +7,8 @@ public class Coin : Collectables, IMaterial
     Player _player;
     PoolManager _poolManager;
     public override event Action OnCollect;
-
+    public override event Action OnReturnAction;
+    public override event Action OnGetAction;
 
     public override void CollectMe(MonoBehaviour mono)
     {
@@ -19,12 +20,12 @@ public class Coin : Collectables, IMaterial
     public void Init(Player player)
     {
         _player = player;
-        _poolManager = FindAnyObjectByType<PoolManager>();
     }
 
-    public override void OnInit()
+    public override void OnInit(PoolManager poolManager)
     {
         _generalScoreHandler = FindAnyObjectByType<GeneralScoreHandler>();
+        _poolManager = poolManager;
     }
 
     public override void OnReturn()

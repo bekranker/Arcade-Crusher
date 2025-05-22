@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Ground Level 0
   m_EditorClassIdentifier: 
   MaxHeight: 50
-  Environments: []
+  Environments:
+  - Environments:
+    - scorebooster
+    Parent: Layer Props
+    Possibility: 5
   ParallaxObjects:
   - Environments:
     - square1

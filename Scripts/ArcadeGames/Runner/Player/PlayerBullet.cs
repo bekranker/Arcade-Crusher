@@ -9,4 +9,9 @@ public class PlayerBullet : BulletParent<CrossRoad_Enemy>
         collectable.TakeDamage(999);
         Destroy(gameObject);
     }
+
+    public override void OnBulletInit()
+    {
+        throw new System.NotImplementedException();
+    }
 }

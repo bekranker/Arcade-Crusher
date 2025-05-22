@@ -37,8 +37,8 @@ public class PlayerJump : MonoBehaviour
     private void CalculateDirection(InputAction.CallbackContext context)
     {
         Direction = context.ReadValue<Vector2>();
-        MovementInput.y = ArcadeCrusherMath.Sign(-Direction.y);
-        MovementInput.x = ArcadeCrusherMath.Sign(-Direction.x);
+        MovementInput.y = ArcadeCrusherCustom.ArcadeCrusherMath.Sign(-Direction.y);
+        MovementInput.x = ArcadeCrusherCustom.ArcadeCrusherMath.Sign(-Direction.x);
     }
     public void JumpMe(InputAction.CallbackContext context)
     {

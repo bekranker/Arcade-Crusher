@@ -7,11 +7,13 @@ public abstract class Collectables : MonoBehaviour, ICollectable<MonoBehaviour>,
 
     public abstract void CollectMe(MonoBehaviour collectable);
 
-    public abstract void OnInit();
+    public abstract void OnInit(PoolManager poolManager);
 
     public abstract void OnReturn();
 
     public abstract void OnGet();
 
     public abstract event Action OnCollect;
+    public abstract event Action OnReturnAction;
+    public abstract event Action OnGetAction;
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.Utilities;
 using UnityEngine;
 
 
@@ -28,7 +29,7 @@ public class PoolManager : MonoBehaviour
             _pools.Add(config.PoolKey, pool);
             if (config.Prefab.TryGetComponent<IPoolObject>(out var pooledObject))
             {
-                pooledObject.OnInit();
+                pooledObject.OnInit(this);
             }
             pool.Prewarm(config.InitialSize, config.Active);
         }
@@ -41,26 +42,47 @@ public class PoolManager : MonoBehaviour
             Debug.LogError($"Pool not found: {poolKey}");
             return null;
         }
-
         return pool.Get();
     }
+    public List<GameObject> GetAll(string poolKey)
+    {
+        if (!_pools.TryGetValue(poolKey, out Pool pool))
+        {
+            Debug.LogError($"Pool not found: {poolKey}");
+            return null;
+        }
 
+        return pool.AllPoolObjects();
+    }
     public void Return(GameObject obj)
     {
-        if (!obj.TryGetComponent<IPoolObject>(out var pooledObject))
+        string poolName = "";
+        if (obj.TryGetComponent<IPoolObject>(out var pooledObject))
         {
-            Debug.LogError("Object is not a pooled object: " + obj.name);
-            Destroy(obj);
+            Debug.Log("Object is not a pooled object: " + obj.name);
+            poolName = pooledObject.PoolKey;
+        }
+        else
+        {
+            poolConfigs.ForEach((pooledObject) =>
+            {
+                if (pooledObject.Prefab == obj)
+                {
+                    poolName = pooledObject.PoolKey;
+                    print("Pool name found: " + poolName);
+                }
+            });
+        }
+        if (string.IsNullOrEmpty(poolName))
+        {
+            Debug.Log($"Pool name not found for object: {obj.name}");
             return;
         }
-
-        if (!_pools.TryGetValue(pooledObject.PoolKey, out Pool pool))
+        if (!_pools.TryGetValue(poolName, out Pool pool))
         {
-            Debug.LogError($"Pool not found for object: {obj.name}");
-            Destroy(obj);
+            Debug.Log($"Pool not found for object: {obj.name}");
             return;
         }
-        pooledObject.OnReturn();
         pool.Return(obj);
     }
 
@@ -84,7 +106,8 @@ public class PoolManager : MonoBehaviour
             _prefab = prefab;
             _container = container;
         }
-
+        public int PoolSize() => _objects.Count;
+        public List<GameObject> AllPoolObjects() => new List<GameObject>(_objects);
         public void Prewarm(int count, bool active)
         {
             for (int i = 0; i < count; i++)
@@ -102,6 +125,10 @@ public class PoolManager : MonoBehaviour
             }
 
             var obj = _objects.Dequeue();
+            if (obj.TryGetComponent<IPoolObject>(out var pooledObject))
+            {
+                pooledObject.OnGet();
+            }
             obj.SetActive(true);
             return obj;
         }

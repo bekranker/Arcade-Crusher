@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using ArcadeGames.CrossRoad;
-using ArcadeGames.Runner;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 namespace ArcadeCrusher.Player
 {
@@ -11,13 +11,16 @@ namespace ArcadeCrusher.Player
         [SerializeField] private int _maxBulletCount;
 
         [Header("-----Components")]
-        [SerializeField] private BulletParent<CrossRoad_Enemy> _bulletPrefab;
+        [SerializeField] private Bullet _bulletPrefab;
+        [SerializeField] private PoolManager _poolManager;
+        [SerializeField] private Transform _bulletSpawnPoint;
 
         [Header("-----UI & Canvas")]
         [SerializeField] private List<Image> _bulletCountImages;
 
         private Player_Actions _inputActions;
         private Vector2 previousInput = Vector2.zero;
+        public event Action OnShoot;
         private int _bulletCounter;
 
         void Awake()
@@ -29,38 +32,28 @@ namespace ArcadeCrusher.Player
         void OnEnable()
         {
             _inputActions.Enable();
+            _inputActions.Player.InteractValue.performed += Shoot;
         }
         void OnDisable()
         {
+            _inputActions.Player.InteractValue.performed -= Shoot;
             _inputActions.Disable();
         }
 
-        void Update()
-        {
-            Vector2 currentInput = _inputActions.Player.ShootZX.ReadValue<Vector2>();
-            // One-shot detection: went from no input to some input
-            if (previousInput == Vector2.zero && currentInput != Vector2.zero)
-            {
-                Shoot(currentInput);
-            }
-            previousInput = currentInput;
-        }
-
-        void Shoot(Vector2 direction)
+        void Shoot(InputAction.CallbackContext context)
         {
             if (_bulletCounter <= 0) return;
-
-            BulletParent<CrossRoad_Enemy> spawnedBullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-            spawnedBullet.DirectionToGo.x = direction.x;
+            OnShoot?.Invoke();
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 direction = transform.up;
+            Bullet spawnedBullet = _poolManager.Get("Bullet").GetComponent<Bullet>();
+            spawnedBullet._speed = 30;
+            spawnedBullet.DirectionToGo = direction;
+            spawnedBullet.InitBullet(_bulletSpawnPoint, _poolManager);
             DecreaseBulletCount();
         }
         public void DecreaseBulletCount()
         {
-            if (_bulletCounter <= 0)
-            {
-                Debug.LogWarning("No bullets left to decrease.");
-                return;
-            }
             _bulletCounter--;
             UpdateBulletCountUI();
         }

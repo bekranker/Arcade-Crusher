@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System.Collections;
 using TMPro;
+using Unity.Cinemachine;
 
 /// <summary>
 /// 
@@ -23,11 +24,13 @@ using TMPro;
 ///         -- yanarsa ölme animasyonu oynar ve lose screen gelir ✓
 /// 
 /// ------------------------------------------ 5 Mayıs 2025 ------------------------------------------
-/// * tahterevalliye (nasıl yazılıyor bilmiyom üşendim bakmaya) değince diğer oyuncuya geçecek
-/// * eğer geçiş yaparsa diğer oyuncunun zıplama animasyonu başlatılacak (Choosed & UnChooosed fonksiyonlarında yap ya da Animator de _currentHeight'ın değerine göre ayarlat)
-/// * shkock wave'i bir kez daha dene yarım günden fazla alırsa genel polish zamanına bırak
+/// * tahterevalliye (nasıl yazılıyor bilmiyom üşendim bakmaya) değince diğer oyuncuya geçecek ✓
+/// * eğer geçiş yaparsa diğer oyuncunun zıplama animasyonu başlatılacak (Choosed & UnChooosed fonksiyonlarında yap ya da Animator de _currentHeight'ın değerine göre ayarlat) ✓
+/// * shock wave'i bir kez daha dene yarım günden fazla alırsa genel polish zamanına bırak ✓
+/// * prop spawna olasılık ekle ✓
 /// 
 /// ------------------------------------------ 12 Mayıs 2025 ------------------------------------------
+/// * Ground Levellar bitince sonsuza gidecek şekilde randomize propları çağır. ✓
 /// 
 /// </summary>
 public class TwinsToTheMoonHandler : MonoBehaviour
@@ -36,11 +39,11 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     [SerializeField] private TMP_Text _currentHeightTMP;
 
     [Header("Effects")]
+    [SerializeField] private CinemachineImpulseSource _impulseSource;
     [SerializeField] private ParticleSystem _fallParticle;
     [SerializeField] private GameObject _fallBG;
     [Header("Shake Effect")]
     [SerializeField] private Transform _shakeTransform;
-    [SerializeField] private Vector3 _frequency;
     [SerializeField] private float _amount;
     [Header("Props")]
     [SerializeField] private float _screenBounds;
@@ -67,12 +70,14 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     private HashSet<int> _parallaxSpawnedIndexes = new HashSet<int>();
     private List<Vector2> _spawnedPositions = new List<Vector2>();
     private Player_Actions _playerActions;
-    private float _currentHeight;
+    public float _currentHeight;
     private bool _initalJump;
     private bool _falling;
     private Transform _currentParallaxParent;
-    private float _bestHeight;
+    public Vector2 _bestHeight;
     private bool _swithchPlayer;
+    private bool jumping;
+    public event Action OnJump;
     void Awake()
     {
         _playerActions = new();
@@ -91,50 +96,65 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     {
         ChangeHeightTMP();
         if (!_initalJump) return;
-        HandleSpawning();
-        HandleParallaxSpawn();
-        //SwitchPlayer();
+        if (!jumping)
+        {
+            HandleSpawning();
+            HandleParallaxSpawn();
+        }
+        SwitchPlayer();
         if (!Jump)
         {
-            if (_currentHeight > _maximumFallSpeed)
+            if (_currentHeight >= _maximumFallSpeed)
             {
-                if (_falling)
+                if (_startPoint.position.y <= -_bestHeight.y)
                 {
-                    _fallParticle.Stop();
-                    _fallBG.SetActive(false);
-                    _swithchPlayer = true;
-                    _falling = false;
+                    jumping = false;
                 }
-                _currentHeight -= Time.deltaTime * _fallSpeed;
-
             }
             else
             {
                 FallingPhase();
             }
+            _currentHeight -= Time.deltaTime * _fallSpeed;
             _parallaxEffect.SlideLayers(_currentHeight);
         }
     }
-    // private void SwitchPlayer()
-    // {
-    //     if (!_swithchPlayer) return;
-    //     if (SelectedPlayer.Prefab.transform.position.x > _screenBounds || SelectedPlayer.Prefab.transform.position.x < -_screenBounds) return;
-    //     if (_startPoint.position.y < 1f && _startPoint.position.y > -1f)
-    //     {
-    //         MiniGameController.Instance.PauseTheGame();
-    //         _currentHeight = 0;
-    //         SelectedPlayer.Prefab.transform.position = Vector2.up * -5;
-    //         DOTween.Kill(_shakeTransform);
-    //         _shakeTransform.rotation = Quaternion.Euler(0, 0, 0);
-    //         _fallParticle.Stop();
-    //         _fallBG.SetActive(false);
-    //         SelectedPlayer.SetUnChoosed();
-    //         SelectedPlayer = (SelectedPlayer == _playerOne) ? _playerTwo : _playerOne;
-    //         SelectedPlayer.Choose();
-    //         PushForce(_bestHeight + _jumpForce);
-    //         _swithchPlayer = false;
-    //     }
-    // }
+    private void SwitchPlayer()
+    {
+        if (_startPoint.position.y >= 0)
+        {
+            jumping = true;
+            if (_swithchPlayer)
+            {
+                SelectedPlayer.SetUnChoosed();
+                DOTween.Kill(_shakeTransform);
+                SelectedPlayer = SelectedPlayer == _playerOne ? _playerTwo : _playerOne;
+                SelectedPlayer.Choose();
+                Jump = true;
+                StartCoroutine(JumpToTheBest());
+                _swithchPlayer = false;
+                _falling = false;
+                _fallBG.SetActive(false);
+                _fallParticle.Stop();
+            }
+        }
+    }
+    private IEnumerator JumpToTheBest()
+    {
+        Jump = true;
+        Vector3 targetHeight = _bestHeight;
+        _currentHeight = _jumpForce;
+        while (-_startPoint.position.y < targetHeight.y)
+        {
+            _currentHeight++;
+            _parallaxEffect.SlideLayers(_currentHeight);
+            yield return new WaitForEndOfFrame();
+        }
+        yield return new WaitForEndOfFrame();
+        Jump = false;
+        _swithchPlayer = true;
+        PushForce(_jumpForce);
+    }
     void ChangeHeightTMP()
     {
         _currentHeightTMP.text = (-_startPoint.position.y).ToString("F2");
@@ -142,7 +162,7 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     private void JumpButton(InputAction.CallbackContext context)
     {
         if (_initalJump) return;
-
+        _swithchPlayer = true;
         _initalJump = true;
         // Choose a random player
         int randomPlayer = Random.Range(0, 2);
@@ -160,33 +180,35 @@ public class TwinsToTheMoonHandler : MonoBehaviour
 
         // Perform jump actions for the selected player
         SelectedPlayer.Choose();
+        jumping = false;
         PushForce(_jumpForce);
     }
     public void PushForce(float targetForce)
     {
-        MiniGameController.Instance.ContunieToPlay();
+        OnJump?.Invoke();
         StartCoroutine(PushForceIE(targetForce));
     }
     public IEnumerator PushForceIE(float targetForce = 0)
     {
         Jump = true;
         _currentHeight = 0;
+        _impulseSource.GenerateImpulse();
         while (_currentHeight < targetForce)
         {
             _currentHeight++;
             _parallaxEffect.SlideLayers(_currentHeight);
             yield return new WaitForEndOfFrame();
         }
-        if (_bestHeight < -_startPoint.position.y)
-            _bestHeight = -_startPoint.position.y;
         yield return new WaitForEndOfFrame();
+        _bestHeight = -_startPoint.position;
         Jump = false;
+        jumping = false;
     }
     private void FallingPhase()
     {
         if (_falling) return;
         SelectedPlayer.Prefab.transform.DOMoveY(-2, 1f).SetEase(Ease.Linear);
-        _shakeTransform.DOPunchRotation(Vector3.forward * _amount, .1f).SetLoops(-1).SetEase(Ease.Linear);
+        _shakeTransform.DOShakeRotation(.2f, _amount).SetLoops(-1);
         _fallBG.SetActive(true);
         _fallParticle.Play();
         _currentHeight = _maximumFallSpeed;
@@ -218,7 +240,6 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         {
             _spawnedIndexes.Add(currentInterval);
             float spawnY = currentInterval * _spawnInterval;
-            //SpawnObjectAtHeight(spawnY, _boosterPrefab);
             SpawnObjectAtHeight(spawnY + 5, SpawnBooster());
             TTMEnvironment tTMEnvironment = SpawnRandomObject();
             if (tTMEnvironment == null) return;
@@ -259,9 +280,12 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         if (currentLevel == null) return null;
         if (currentLevel.Environments.Count == 0) return null;
 
-
         TTMEnvironmentLogic currentLevelLogic = currentLevel.Environments[Random.Range(0, currentLevel.Environments.Count)];
-        return _objectPool.Get(currentLevelLogic.Environments[Random.Range(0, currentLevel.Environments.Count)]).GetComponent<TTMEnvironment>();
+        if (currentLevelLogic.Possibility < Random.Range(0, 100))
+        {
+            return null;
+        }
+        return _objectPool.Get(currentLevelLogic.Environments[Random.Range(0, currentLevel.Environments.Count - 1)]).GetComponent<TTMEnvironment>();
     }
     private TTMEnvironment SpawnBooster() => _objectPool.Get("booster").GetComponent<TTMEnvironment>();
 
@@ -329,12 +353,12 @@ public class Twins
     public void SetUnChoosed()
     {
         DOTween.Kill(Prefab.transform);
+        Prefab.transform.SetParent(_parent);
+        Prefab.transform.localPosition = _startPos.localPosition;
         Rb.linearVelocity = Vector2.zero;
         Rb.angularVelocity = 0;
         Rb.bodyType = RigidbodyType2D.Kinematic;
         Choosed = false;
-        Prefab.transform.SetParent(_parent);
-        Prefab.transform.localPosition = _startPos.localPosition;
         Prefab.enabled = false;
     }
 }

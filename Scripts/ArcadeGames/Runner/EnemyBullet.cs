@@ -8,4 +8,8 @@ public class EnemyBullet : BulletParent<Player>
     {
         collectable.TakeDamage(999);
     }
+
+    public override void OnBulletInit()
+    {
+    }
 }

@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using UnityEngine;
-
+using DG.Tweening;
 public class Booster : TTMEnvironment
 {
     public override event Action OnCollect;
+    public override event Action OnReturnAction;
+    public override event Action OnGetAction;
+    [SerializeField] private ParticleSystem _jumpParticle;
     [SerializeField] private Animator _trampolineAnimator;
+    [SerializeField] private SpriteRenderer _sp;
     private bool _canCollect = true;
 
     public override string PoolKey { get => "booster"; set => PoolKey = value; }
@@ -17,11 +21,15 @@ public class Booster : TTMEnvironment
     public override void CollectMe(MonoBehaviour collectable)
     {
         if (!_canCollect) return;
+        DOTween.Kill(_sp.transform);
+        _sp.transform.DOPunchScale(Vector3.one, 0.2f);
+        _jumpParticle.Play();
         _trampolineAnimator.SetTrigger("Jump");
+        _poolManager.Get("TextEffect").GetComponent<TMPEffect>().InitText("25", transform);
         _twinsToTheMoonHandler.Jump = true;
         _twinsToTheMoonHandler.PushForce(_twinsToTheMoonHandler.JumpForce);
         _canCollect = false;
-        GeneralScoreHandler.Instance.IncreaseScore(25);
+        ComboManager.Instance.Hit(25);
         StartCoroutine(WaitForAnimation());
     }
     private IEnumerator WaitForAnimation()
@@ -35,9 +43,9 @@ public class Booster : TTMEnvironment
         _poolManager.Return(gameObject);
     }
 
-    public override void OnInit()
+    public override void OnInit(PoolManager poolManager)
     {
-
+        _poolManager = poolManager;
     }
 
     public override void OnReturn()

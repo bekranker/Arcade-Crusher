@@ -9,6 +9,9 @@ public class Turret : Collectables, IMaterial
     private Player _player;
 
     public override event Action OnCollect;
+    public override event Action OnReturnAction;
+    public override event Action OnGetAction;
+
     private PoolManager _poolManager;
     public override string PoolKey { get => "Turret"; set => value = default; }
 
@@ -19,7 +22,6 @@ public class Turret : Collectables, IMaterial
     public void Init(Player player)
     {
         _player = player;
-        _poolManager = FindAnyObjectByType<PoolManager>();
     }
     public void LaunchProjectile()
     {
@@ -32,8 +34,9 @@ public class Turret : Collectables, IMaterial
         OnCollect?.Invoke();
     }
 
-    public override void OnInit()
+    public override void OnInit(PoolManager poolManager)
     {
+        _poolManager = poolManager;
     }
 
     public override void OnReturn()
