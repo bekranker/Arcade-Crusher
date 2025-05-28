@@ -1,6 +1,5 @@
 using DG.Tweening;
 using Sirenix.OdinInspector;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +10,6 @@ public class ComboManager : MonoBehaviour
     [SerializeField] private float _maximumCombo;
     [SerializeField] private Slider _comboBar;
     public static ComboManager Instance { get; private set; }
-    [SerializeField] private ParticleSystem _fireworkParticle;
     void Awake()
     {
         Instance = this;
@@ -62,8 +60,6 @@ public class ComboManager : MonoBehaviour
         if (comboCount > _maximumCombo)
         {
             _isComboActive = true;
-            if (comboCount <= 8)
-                SetParticleSystem(comboCount * 10);
         }
         _comboBar.value = comboCount;
         _comboBar.transform.DOPunchScale(Vector3.one * .15f, .2f).SetUpdate(true);
@@ -76,18 +72,5 @@ public class ComboManager : MonoBehaviour
         {
             GeneralScoreHandler.Instance.IncreaseScore(score);
         }
-    }
-    [Button("Set Particle System")]
-    private void SetParticleSystem(float rateOverTimeValue)
-    {
-        _fireworkParticle.Play();
-        ParticleSystem.EmissionModule emission = _fireworkParticle.emission;
-        emission.rateOverTime = rateOverTimeValue;
-    }
-    private void SetParticleSystemOff()
-    {
-        ParticleSystem.EmissionModule emission = _fireworkParticle.emission;
-        emission.rateOverTime = 0;
-        _fireworkParticle.Stop();
     }
 }

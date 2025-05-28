@@ -8,31 +8,7 @@ using System.Collections;
 using TMPro;
 using Unity.Cinemachine;
 
-/// <summary>
-/// 
-/// ------------------------------------------ 28 Nisan 2025 ------------------------------------------
-/// * ilk jumpi başlatabilir ✓
-/// * anlık yüksekliği tutabilir ✓
-/// * yavaşlatma ve hızlandırma efektlerini tutabilir ✓
-/// * yavaşlatma ve hızlandırma efektlerini uygulayabilir ✓
-/// * eğer sıçrayacağı yer ekranın boyutunu geçiyorsa efekt uygulanabilir ✓
-/// * parallax efektinin hızını değiştirerek jump efektini buradan verebiliriz. ✓
-/// 
-/// * zıplama inputunu ilk aldığımızda oyunculardan birini random seçer ve onu parallaxın child objesi olmasından çıkarır ✓
-///     - ayrıca zıplama animasyonunuda başlatır. ✓
-///     - geri yere düştüğünde tekrar chil objesi olur ve oturma animasyonu oynar (eğer ki yanmadıysa) ✓
-///         -- yanarsa ölme animasyonu oynar ve lose screen gelir ✓
-/// 
-/// ------------------------------------------ 5 Mayıs 2025 ------------------------------------------
-/// * tahterevalliye (nasıl yazılıyor bilmiyom üşendim bakmaya) değince diğer oyuncuya geçecek ✓
-/// * eğer geçiş yaparsa diğer oyuncunun zıplama animasyonu başlatılacak (Choosed & UnChooosed fonksiyonlarında yap ya da Animator de _currentHeight'ın değerine göre ayarlat) ✓
-/// * shock wave'i bir kez daha dene yarım günden fazla alırsa genel polish zamanına bırak ✓
-/// * prop spawna olasılık ekle ✓
-/// 
-/// ------------------------------------------ 12 Mayıs 2025 ------------------------------------------
-/// * Ground Levellar bitince sonsuza gidecek şekilde randomize propları çağır. ✓
-/// 
-/// </summary>
+
 public class TwinsToTheMoonHandler : MonoBehaviour
 {
     [Header("UI")]
@@ -40,6 +16,7 @@ public class TwinsToTheMoonHandler : MonoBehaviour
 
     [Header("Effects")]
     [SerializeField] private CinemachineImpulseSource _impulseSource;
+    [SerializeField] private Transform _cameraT;
     [SerializeField] private ParticleSystem _fallParticle;
     [SerializeField] private GameObject _fallBG;
     [Header("Shake Effect")]
@@ -62,13 +39,10 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     [SerializeField] private PoolManager _poolManager;
     [SerializeField] private Transform _startPoint;
     [SerializeField] private LoseScreen _loseScreen;
-
+    [SerializeField] private GeneralHearthManager _generalHearthManager;
     public float JumpForce { get => _jumpForce; set => _jumpForce = value; }
     public Twins SelectedPlayer { get; set; }
     public bool Jump { get; set; }
-    private HashSet<int> _spawnedIndexes = new HashSet<int>();
-    private HashSet<int> _parallaxSpawnedIndexes = new HashSet<int>();
-    private List<Vector2> _spawnedPositions = new List<Vector2>();
     private Player_Actions _playerActions;
     public float _currentHeight;
     private bool _initalJump;
@@ -76,7 +50,6 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     private Transform _currentParallaxParent;
     public Vector2 _bestHeight;
     private bool _swithchPlayer;
-    private bool jumping;
     public event Action OnJump;
     void Awake()
     {
@@ -86,32 +59,22 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     {
         _playerActions.Enable();
         _playerActions.Player.Jump.performed += JumpButton;
+        _generalHearthManager.OnHit += DamageEffect;
     }
     void OnDisable()
     {
         _playerActions.Player.Jump.performed -= JumpButton;
+        _generalHearthManager.OnHit -= DamageEffect;
         _playerActions.Disable();
     }
     void Update()
     {
         ChangeHeightTMP();
         if (!_initalJump) return;
-        if (!jumping)
-        {
-            HandleSpawning();
-            HandleParallaxSpawn();
-        }
         SwitchPlayer();
         if (!Jump)
         {
-            if (_currentHeight >= _maximumFallSpeed)
-            {
-                if (_startPoint.position.y <= -_bestHeight.y)
-                {
-                    jumping = false;
-                }
-            }
-            else
+            if (_currentHeight < _maximumFallSpeed)
             {
                 FallingPhase();
             }
@@ -123,9 +86,27 @@ public class TwinsToTheMoonHandler : MonoBehaviour
     {
         if (_startPoint.position.y >= 0)
         {
-            jumping = true;
+            float targetDirection = SelectedPlayer.CorretPosDirection;
+            if (targetDirection < 0)
+            {
+                if (SelectedPlayer.Prefab.transform.position.x > 0)
+                {
+                    _loseScreen.LoseGame();
+                    return;
+                }
+            }
+            else
+            {
+                if (SelectedPlayer.Prefab.transform.position.x < 0)
+                {
+                    _loseScreen.LoseGame();
+                    return;
+                }
+            }
+
             if (_swithchPlayer)
             {
+                _cameraT.rotation = Quaternion.Euler(0, 0, 0);
                 SelectedPlayer.SetUnChoosed();
                 DOTween.Kill(_shakeTransform);
                 SelectedPlayer = SelectedPlayer == _playerOne ? _playerTwo : _playerOne;
@@ -180,13 +161,14 @@ public class TwinsToTheMoonHandler : MonoBehaviour
 
         // Perform jump actions for the selected player
         SelectedPlayer.Choose();
-        jumping = false;
         PushForce(_jumpForce);
     }
     public void PushForce(float targetForce)
     {
         OnJump?.Invoke();
         StartCoroutine(PushForceIE(targetForce));
+        HandleParallaxSpawn();
+        HandleSpawning();
     }
     public IEnumerator PushForceIE(float targetForce = 0)
     {
@@ -202,7 +184,6 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         yield return new WaitForEndOfFrame();
         _bestHeight = -_startPoint.position;
         Jump = false;
-        jumping = false;
     }
     private void FallingPhase()
     {
@@ -214,37 +195,21 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         _currentHeight = _maximumFallSpeed;
         _falling = true;
     }
-    public void JumpingPhase()
+    public void HandleParallaxSpawn()
     {
-
-        _fallBG.SetActive(false);
-        _fallParticle.Stop();
-        _falling = false;
+        int possibility = Random.Range(0, 100);
+        if (possibility <= 50) return;
+        GameObject spawnedParallax = SpawnParallaxObject();
+        if (spawnedParallax == null) return;
+        SpawnParallaxObjectAtHeight(5, spawnedParallax);
     }
-    private void HandleParallaxSpawn()
+    private Vector3 _previousSpawnPosition;
+    public void HandleSpawning()
     {
-        int currentInterval = Mathf.FloorToInt(-_startPoint.position.y / _parallaxSpawnInterval);
-        if (!_parallaxSpawnedIndexes.Contains(currentInterval))
-        {
-            _parallaxSpawnedIndexes.Add(currentInterval);
-            float spawnY = currentInterval * _spawnInterval;
-            GameObject spawnedParallax = SpawnParallaxObject();
-            if (spawnedParallax == null) return;
-            SpawnParallaxObjectAtHeight(spawnY + 5, spawnedParallax);
-        }
-    }
-    private void HandleSpawning()
-    {
-        int currentInterval = Mathf.FloorToInt(-_startPoint.position.y / _spawnInterval);
-        if (!_spawnedIndexes.Contains(currentInterval))
-        {
-            _spawnedIndexes.Add(currentInterval);
-            float spawnY = currentInterval * _spawnInterval;
-            SpawnObjectAtHeight(spawnY + 5, SpawnBooster());
-            TTMEnvironment tTMEnvironment = SpawnRandomObject();
-            if (tTMEnvironment == null) return;
-            SpawnObjectAtHeight(spawnY + 5, tTMEnvironment);
-        }
+        _previousSpawnPosition = SpawnObjectAtHeight(4, SpawnBooster());
+        TTMEnvironment tTMEnvironment = SpawnRandomObject();
+        if (tTMEnvironment == null) return;
+        SpawnObjectAtHeight(5, tTMEnvironment);
     }
     private HighGroundSCB CurrentLevel()
     {
@@ -261,6 +226,7 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         }
         return null;
     }
+    private Vector2 _randomPos;
     private GameObject SpawnParallaxObject()
     {
         HighGroundSCB currentLevel = CurrentLevel();
@@ -268,7 +234,8 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         if (currentLevel.ParallaxObjects.Count == 0) return null;
 
         TTMEnvironmentParallaxLogic environmentParallaxLogic = currentLevel.ParallaxObjects[Random.Range(0, currentLevel.ParallaxObjects.Count)];
-
+        if (environmentParallaxLogic.SpawnPoses.Count != 0)
+            _randomPos = environmentParallaxLogic.SpawnPoses[Random.Range(0, environmentParallaxLogic.SpawnPoses.Count)];
         string currentLevelParallax = environmentParallaxLogic.Environments[Random.Range(0, environmentParallaxLogic.Environments.Count)];
         GameObject parallaxObject = _objectPool.Get(currentLevelParallax);
         _currentParallaxParent = GameObject.Find(environmentParallaxLogic.Parent).transform;
@@ -288,45 +255,33 @@ public class TwinsToTheMoonHandler : MonoBehaviour
         return _objectPool.Get(currentLevelLogic.Environments[Random.Range(0, currentLevel.Environments.Count - 1)]).GetComponent<TTMEnvironment>();
     }
     private TTMEnvironment SpawnBooster() => _objectPool.Get("booster").GetComponent<TTMEnvironment>();
-
+    private void DamageEffect()
+    {
+        StartCoroutine(SelectedPlayer.DamageEffectIE());
+    }
     private void SpawnParallaxObjectAtHeight(float height, GameObject objectToSpawn)
     {
+        float xPosition = Random.Range(-_screenBounds, _screenBounds);
+        Vector3 spawnPosition = new Vector3(xPosition, height, 0f);
+        if (_randomPos.x != 0) spawnPosition.x = _randomPos.x;
+        objectToSpawn.transform.position = spawnPosition;
+        objectToSpawn.transform.SetParent(_currentParallaxParent);
+    }
+    private Vector3 SpawnObjectAtHeight(float height, TTMEnvironment poolObject)
+    {
+        poolObject.Initialize(this, _loseScreen, _poolManager);
         float xPosition = Random.Range(-_screenBounds, _screenBounds); // sahne genişliğine göre ayarla
         Vector3 spawnPosition = new Vector3(xPosition, height, 0f);
-        objectToSpawn.transform.SetParent(_currentParallaxParent);
-        objectToSpawn.transform.localPosition = spawnPosition;
-    }
-    private void SpawnObjectAtHeight(float height, TTMEnvironment poolObject)
-    {
-        Vector3 spawnPosition;
-        int attempts = 0;
-        const int maxAttempts = 20;
-        do
+        if (Mathf.Abs(spawnPosition.x - _previousSpawnPosition.x) <= _minDistanceBetweenObjects)
         {
-            float xPosition = Random.Range(-_screenBounds, _screenBounds);
-            spawnPosition = new Vector3(xPosition, height, 0f);
-            attempts++;
+            if (spawnPosition.x + _minDistanceBetweenObjects < _screenBounds)
+                spawnPosition.x += _minDistanceBetweenObjects;
+            else if (spawnPosition.x - _minDistanceBetweenObjects > -_screenBounds)
+                spawnPosition.x -= _minDistanceBetweenObjects;
         }
-        while (!IsPositionValid(spawnPosition) && attempts < maxAttempts);
-
-        if (attempts >= maxAttempts)
-        {
-            Debug.LogWarning("Uygun pozisyon bulunamadı, spawn iptal edildi.");
-        }
-
-        poolObject.Initialize(this, _loseScreen, _poolManager);
+        poolObject.transform.position = spawnPosition;
         poolObject.transform.SetParent(_propsParent);
-        poolObject.transform.localPosition = spawnPosition;
-        _spawnedPositions.Add(spawnPosition);
-    }
-    private bool IsPositionValid(Vector3 newPosition)
-    {
-        foreach (var pos in _spawnedPositions)
-        {
-            if (Vector2.Distance(newPosition, pos) < _minDistanceBetweenObjects)
-                return false;
-        }
-        return true;
+        return spawnPosition;
     }
 }
 
@@ -336,11 +291,15 @@ public class Twins
     public bool Choosed;
     public BaseMovement Prefab;
     public Rigidbody2D Rb;
+    public float CorretPosDirection;
     [SerializeField] private Transform _parent;
     [SerializeField] private float _jumpForce;
     [SerializeField] private float _moveDelay;
     [SerializeField] private Transform _startPos;
     [SerializeField, Range(-10, 0)] private float _initalHeight;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private Sprite _damagedSprite;
+    [SerializeField] private Sprite _normalSprite;
     public void Choose()
     {
         DOTween.Kill(Prefab.transform);
@@ -360,5 +319,11 @@ public class Twins
         Rb.bodyType = RigidbodyType2D.Kinematic;
         Choosed = false;
         Prefab.enabled = false;
+    }
+    public IEnumerator DamageEffectIE()
+    {
+        _spriteRenderer.sprite = _damagedSprite;
+        yield return new WaitForSecondsRealtime(1f);
+        _spriteRenderer.sprite = _normalSprite;
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using ZilyanusLib.Audio;
 
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour, IDamage
 
     public void TakeDamage(float amount)
     {
+        Time.timeScale = 1;
         if (_healthCounter - amount <= 0)
         {
             Die();
@@ -41,4 +44,5 @@ public class Player : MonoBehaviour, IDamage
         _healthCounter -= amount;
         //add screen shake here
     }
+
 }

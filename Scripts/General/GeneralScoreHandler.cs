@@ -78,7 +78,6 @@ public class GeneralScoreHandler : MonoBehaviour, ISingleton<GeneralScoreHandler
     /// </summary>
     private void ChangeText()
     {
-        ImpulseSource.GenerateImpulse();
         DOTween.Kill(_scoreText.transform);
         _scoreText.transform.localScale = _startScale;
         _scoreText.text = "Score: " + FormatScore(ScoreCounter);

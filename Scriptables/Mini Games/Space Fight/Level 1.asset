@@ -17,6 +17,6 @@ MonoBehaviour:
   - Environments:
     - EnemyThree
     Parent: EnemyOne
-    Possibility: 82.1
+    Possibility: 100
     MaxSpawnCount: 1
   ParallaxObjects: []

@@ -9,18 +9,35 @@ public class MovePlatform : TTMEnvironment
     [SerializeField] private Transform _startPosition;
     [SerializeField] private Transform _endPosition;
     [SerializeField] private Transform _platform;
+    [SerializeField] private Transform _obstacleSpriteParent;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
     public override event System.Action OnCollect;
     public override event System.Action OnReturnAction;
     public override event System.Action OnGetAction;
 
     public override string PoolKey { get => "movespike"; set => PoolKey = value; }
 
+    public override void Initialize(TwinsToTheMoonHandler twinsToTheMoonHandler, LoseScreen loseScreen, PoolManager poolManager)
+    {
+        base.Initialize(twinsToTheMoonHandler, loseScreen, poolManager);
+        _spriteRenderer.color = new Color(1, 1, 1, 1);
+        DOTween.Kill(_spriteRenderer);
+        DOTween.Kill(_platform);
+        int random = Random.Range(0, 2);
+        _platform.localPosition = random == 0 ? _startPosition.localPosition : _endPosition.localPosition;
+        _obstacleSpriteParent.localScale = random == 0 ? new Vector2(-1, 1) : new Vector2(1, 1);
+        _canCollect = true;
+        _initalStartPosition = transform.position;
+        MoveThePlatform();
+    }
     private void MoveThePlatform()
     {
+        _obstacleSpriteParent.localScale = _obstacleSpriteParent.localScale.x < 0 ? new Vector2(1, 1) : new Vector2(-1, 1);
         _platform.DOLocalMove(_endPosition.localPosition, _speed).OnComplete(() =>
         {
             DOVirtual.DelayedCall(_delay, () =>
             {
+                _obstacleSpriteParent.localScale = _obstacleSpriteParent.localScale.x < 0 ? new Vector2(1, 1) : new Vector2(-1, 1);
                 _platform.DOLocalMove(_startPosition.localPosition, _speed).OnComplete(() =>
                 {
                     DOVirtual.DelayedCall(_delay, () => MoveThePlatform());
@@ -31,7 +48,7 @@ public class MovePlatform : TTMEnvironment
     Vector3 _initalStartPosition;
     void Update()
     {
-        if (transform.position.y < _initalStartPosition.y - 9)
+        if (transform.position.y < _initalStartPosition.y - 15)
         {
             OnDie();
         }
@@ -45,10 +62,17 @@ public class MovePlatform : TTMEnvironment
     public override void CollectMe(MonoBehaviour collectable)
     {
         if (!_canCollect) return;
+        DOTween.Kill(_platform);
         GeneralHearthManager.Instance.DecreaseHealth();
         OnCollect?.Invoke();
-        StartCoroutine(WaitForCollect());
         _canCollect = false;
+        _platform.DOLocalMoveY(-3, .5f).SetEase(Ease.InBack);
+        _platform.DORotate(new Vector3(0, 0, 360), 0.5f, RotateMode.FastBeyond360).OnComplete(() =>
+        {
+            _platform.localRotation = Quaternion.Euler(0, 0, 0);
+            _spriteRenderer.DOFade(0, 0.5f);
+            StartCoroutine(WaitForCollect());
+        });
     }
     private IEnumerator WaitForCollect()
     {
@@ -62,7 +86,6 @@ public class MovePlatform : TTMEnvironment
 
         _canCollect = true;
         _initalStartPosition = transform.position;
-        MoveThePlatform();
     }
     public override void OnReturn()
     {
@@ -70,10 +93,6 @@ public class MovePlatform : TTMEnvironment
     }
     public override void OnGet()
     {
-        _platform.localPosition = Random.Range(0, 2) == 0 ? _startPosition.localPosition : _endPosition.localPosition;
 
-        _canCollect = true;
-        _initalStartPosition = transform.position;
-        MoveThePlatform();
     }
 }

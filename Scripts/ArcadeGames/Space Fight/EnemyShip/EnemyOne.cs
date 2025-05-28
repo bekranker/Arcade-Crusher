@@ -104,7 +104,6 @@ public class EnemyOne : SFEnemyShip
         transform.DOLocalMove(_targetSeat, _movementSpeed).SetEase(Ease.Linear).OnComplete(() =>
             {
                 _enemyShipManager.CheckAndStartAttack();
-
             });
     }
     public override void StartShake()

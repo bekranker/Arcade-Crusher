@@ -3,11 +3,14 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics.CodeAnalysis;
+using Unity.VisualScripting;
 public class EnemyThree : SFEnemyShip
 {
     [Header("---Components---")]
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Transform _shootPoint;
+    [SerializeField] private Lazer _lazerPrefab;
     [Header("---Props---")]
     [SerializeField] private Vector3 _directionOfBullet;
     [SerializeField] float _maximumHealth;
@@ -28,7 +31,10 @@ public class EnemyThree : SFEnemyShip
     private List<Vector3> _path = new();
     private Vector3 _targetSeat;
     private PoolManager _poolManager;
-
+    void Start()
+    {
+        _lazerPrefab.DeActivateLazer();
+    }
     public override void ApplyDamage(float amount)
     {
         if (IsDead || amount <= 0) return;
@@ -54,6 +60,7 @@ public class EnemyThree : SFEnemyShip
 
     public override void Init(Player player, PoolManager poolManager, List<Vector3> poses, Vector3 position = default, float speed = 0)
     {
+        transform.rotation = Quaternion.Euler(0, 0, 0);
         _movementSpeed = speed;
         _healthCounter = _maximumHealth;
         _spriteRenderer.enabled = true;
@@ -68,8 +75,7 @@ public class EnemyThree : SFEnemyShip
     public bool Attacking;
     public override void Move()
     {
-        Vector3 targetPos = _path[_pathIndex];
-        transform.DOMove(targetPos, _movementSpeed).SetEase(Ease.Linear).OnComplete(() =>
+        transform.DOLocalMove(_targetSeat, _movementSpeed).SetEase(Ease.Linear).OnComplete(() =>
         {
             _enemyShipManager.CheckAndStartAttack();
         });
@@ -78,20 +84,21 @@ public class EnemyThree : SFEnemyShip
     {
         if (Attacking)
         {
-            _enemyShipManager.CheckAndStartAttack();
             return;
         }
         Attacking = true;
-        transform.DOLocalMove(_targetSeat, _movementSpeed).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                //start Shooting or other actions
-                ShootLazer();
-            });
+        ShootLazer();
+        StartCoroutine(ShootDelay());
     }
 
     private void ShootLazer()
     {
-        print("Shooting");
+        _lazerPrefab.InitSpaceFightEnvironment(_poolManager, transform, _enemyShipManager._player);
+    }
+    private IEnumerator ShootDelay()
+    {
+        yield return new WaitForSeconds(_shootDelay);
+        Attacking = false;
     }
     #region Unused
     public override void OnGet()

@@ -5,7 +5,6 @@ public class PlayerDedection : MonoBehaviour
     {
         if (collision.attachedRigidbody.TryGetComponent(out ICollectable<MonoBehaviour> collectable))
         {
-            print("Collectable" + collision.name);
             collectable.CollectMe(this);
         }
     }

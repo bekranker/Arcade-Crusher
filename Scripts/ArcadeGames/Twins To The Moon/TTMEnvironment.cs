@@ -6,7 +6,7 @@ public abstract class TTMEnvironment : Collectables
     protected PoolManager _poolManager;
 
 
-    public void Initialize(TwinsToTheMoonHandler twinsToTheMoonHandler, LoseScreen loseScreen, PoolManager poolManager)
+    public virtual void Initialize(TwinsToTheMoonHandler twinsToTheMoonHandler, LoseScreen loseScreen, PoolManager poolManager)
     {
         _poolManager = poolManager;
         _twinsToTheMoonHandler = twinsToTheMoonHandler;

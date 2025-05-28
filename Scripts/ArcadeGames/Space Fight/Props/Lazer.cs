@@ -4,8 +4,9 @@ using UnityEngine;
 public class Lazer : SpaceFightEnvironment
 {
     [SerializeField] private float lifetime = 5f;
-
-    public override string PoolKey { get => "ShipLazer"; set => throw new NotImplementedException(); }
+    [SerializeField] private LineRenderer _lineRenderer;
+    [SerializeField] private ParticleSystem _sparks;
+    public override string PoolKey { get => "Lazer"; set => throw new NotImplementedException(); }
 
     public override event Action OnCollect;
     public override event Action OnReturnAction;
@@ -20,10 +21,15 @@ public class Lazer : SpaceFightEnvironment
     {
         _player = player;
         _poolManager = poolManager;
+        _lineRenderer.enabled = true;
+        _sparks.Play();
+        Invoke(nameof(DeActivateLazer), lifetime);
     }
-    private void DeActivateLazer()
+    public void DeActivateLazer()
     {
-        _poolManager.Return(gameObject);
+        _sparks.Stop();
+        _lineRenderer.enabled = false;
+        //_poolManager.Return(gameObject);
     }
     public override void OnGet()
     {

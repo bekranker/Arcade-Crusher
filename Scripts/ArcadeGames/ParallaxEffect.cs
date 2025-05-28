@@ -7,9 +7,15 @@ public class ParallaxEffect : MonoBehaviour
     [SerializeField] private List<ParallaxLayer> _parallaxLayers = new();
     public Vector3 ParentDirection;
     [SerializeField] private bool _initialStart;
-
+    [SerializeField] private bool _playerDirection;
+    [SerializeField] private Player _player;
     void Update()
     {
+        if (_playerDirection)
+        {
+            Vector2 direction = _player.GetComponent<Rigidbody2D>().linearVelocity.normalized;
+            ParentDirection = -direction;
+        }
         if (_initialStart)
         {
             SlideLayers(1);

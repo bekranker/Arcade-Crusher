@@ -15588,14 +15588,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _parallaxLayers:
-  - Speed: 0.1
+  - Speed: 1
     Layer: {fileID: 1396188336}
     Direction: {x: 1, y: 1, z: 0}
-  - Speed: 0.2
+  - Speed: 0.22
     Layer: {fileID: 2102514605}
     Direction: {x: 1, y: 1, z: 0}
   ParentDirection: {x: 1, y: 1, z: 1}
   _initialStart: 1
+  _playerDirection: 0
+  _player: {fileID: 7415596931015986558}
 --- !u!1 &814746993
 GameObject:
   m_ObjectHideFlags: 0
@@ -15751,6 +15753,14 @@ MonoBehaviour:
   - PoolKey: EnemyThree
     Prefab: {fileID: 8341142465327041616, guid: e6395f86007e34ec4936b24f404e53d9, type: 3}
     InitialSize: 3
+    Active: 0
+  - PoolKey: EnemyFour
+    Prefab: {fileID: 8656325882718416736, guid: 60ac48ee1cbfd4349b55a802ac1ae579, type: 3}
+    InitialSize: 20
+    Active: 0
+  - PoolKey: EnemyFive
+    Prefab: {fileID: 892443308680081177, guid: 4253a83c48bf74d4b8417f0ea66caf29, type: 3}
+    InitialSize: 10
     Active: 0
 --- !u!1 &1061653650
 GameObject:
@@ -16282,7 +16292,7 @@ Camera:
   far clip plane: 100
   field of view: 60
   orthographic: 1
-  orthographic size: 9
+  orthographic size: 11.19
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -21271,7 +21281,6 @@ MonoBehaviour:
   comboDuration: 2
   _maximumCombo: 5
   _comboBar: {fileID: 229761825}
-  _fireworkParticle: {fileID: 0}
 --- !u!1 &1540604644
 GameObject:
   m_ObjectHideFlags: 0
@@ -26217,7 +26226,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 9
+    OrthographicSize: 11.19
     NearClipPlane: 0.01
     FarClipPlane: 100
     Dutch: 0
@@ -31520,7 +31529,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 2.6666667, y: 3}
     newSize: {x: 0.73, y: 0.73}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -31635,7 +31644,7 @@ SpriteRenderer:
   m_SortingLayerID: -173652539
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4077830071597405951, guid: 12ba18f17ba434132a6a117d8ab9396e, type: 3}
+  m_Sprite: {fileID: -6880077232281017949, guid: af2c6060a23314394bf86eb004dc38db, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

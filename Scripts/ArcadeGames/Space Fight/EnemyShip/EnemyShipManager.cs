@@ -44,7 +44,7 @@ public class EnemyShipManager : SpaceFightEnvironment, IPoolObject
             }
         }
     }
-    private int _attackReadyCount;
+    private int _attackReadyCount = 0;
     private bool _canStartShake = true;
     public void CheckAndStartAttack()
     {

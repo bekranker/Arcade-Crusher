@@ -18,17 +18,35 @@ MonoBehaviour:
     - scorebooster
     Parent: Layer Props
     Possibility: 35
+    MaxSpawnCount: 1
   - Environments:
     - movespike
     Parent: Layer Props
     Possibility: 20
+    MaxSpawnCount: 1
   ParallaxObjects:
   - Environments:
-    - square1
+    - Cloud Parallax 1
     Parent: Layer Three
+    SpawnPoses:
+    - {x: 0, y: 0, z: 0}
   - Environments:
-    - square2
+    - Cloud Parallax 2
     Parent: Layer Two
+    SpawnPoses:
+    - {x: 0, y: 0, z: 0}
   - Environments:
-    - square3
+    - Cloud Parallax 3
     Parent: Layer One
+    SpawnPoses:
+    - {x: 0, y: 0, z: 0}
+  - Environments:
+    - Cloud Parallax 4
+    Parent: Layer Three
+    SpawnPoses:
+    - {x: 0, y: 0, z: 0}
+  - Environments:
+    - Cloud Parallax 5
+    Parent: Layer Two
+    SpawnPoses:
+    - {x: 0, y: 0, z: 0}

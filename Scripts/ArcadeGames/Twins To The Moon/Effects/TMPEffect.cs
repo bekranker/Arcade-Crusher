@@ -17,11 +17,11 @@ public class TMPEffect : MonoBehaviour, IPoolObject
     {
         _text.color = new Color(Random.Range(0.5f, 1), Random.Range(0.4f, 1), Random.Range(0.6f, 1), 1);
         _text.DOColor(Color.black, 0);
-        transform.position = parent.position + Vector3.up * 1.2f;
+        transform.position = parent.position + Vector3.up;
         transform.SetParent(parent);
         _text.text = "+" + value;
         _text.color = Color.white;
-        _text.transform.DOLocalMoveY(_text.transform.localPosition.y + 1, .3f);
+        _text.transform.DOLocalMoveY(_text.transform.localPosition.y + .5f, .3f);
         _text.DOFade(0, 0.3f).OnComplete(() =>
         {
             _poolManager.Return(gameObject);

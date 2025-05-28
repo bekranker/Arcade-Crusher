@@ -20,11 +20,7 @@ public class PoolManager : MonoBehaviour
     {
         foreach (var config in poolConfigs)
         {
-            if (_pools.ContainsKey(config.PoolKey))
-            {
-                Debug.LogError($"Duplicate pool key: {config.PoolKey}");
-                continue;
-            }
+
             var pool = new Pool(config.Prefab, _poolContainer);
             _pools.Add(config.PoolKey, pool);
             if (config.Prefab.TryGetComponent<IPoolObject>(out var pooledObject))
@@ -39,7 +35,6 @@ public class PoolManager : MonoBehaviour
     {
         if (!_pools.TryGetValue(poolKey, out Pool pool))
         {
-            Debug.LogError($"Pool not found: {poolKey}");
             return null;
         }
         return pool.Get();
@@ -48,7 +43,6 @@ public class PoolManager : MonoBehaviour
     {
         if (!_pools.TryGetValue(poolKey, out Pool pool))
         {
-            Debug.LogError($"Pool not found: {poolKey}");
             return null;
         }
 
@@ -59,7 +53,6 @@ public class PoolManager : MonoBehaviour
         string poolName = "";
         if (obj.TryGetComponent<IPoolObject>(out var pooledObject))
         {
-            Debug.Log("Object is not a pooled object: " + obj.name);
             poolName = pooledObject.PoolKey;
         }
         else
@@ -69,18 +62,15 @@ public class PoolManager : MonoBehaviour
                 if (pooledObject.Prefab == obj)
                 {
                     poolName = pooledObject.PoolKey;
-                    print("Pool name found: " + poolName);
                 }
             });
         }
         if (string.IsNullOrEmpty(poolName))
         {
-            Debug.Log($"Pool name not found for object: {obj.name}");
             return;
         }
         if (!_pools.TryGetValue(poolName, out Pool pool))
         {
-            Debug.Log($"Pool not found for object: {obj.name}");
             return;
         }
         pool.Return(obj);
@@ -120,7 +110,6 @@ public class PoolManager : MonoBehaviour
         {
             if (_objects.Count == 0)
             {
-                Debug.LogWarning($"Pool empty, creating new object: {_prefab.name}");
                 return CreateNewObject(true);
             }
 
@@ -128,8 +117,11 @@ public class PoolManager : MonoBehaviour
             if (obj.TryGetComponent<IPoolObject>(out var pooledObject))
             {
                 pooledObject.OnGet();
+                obj.SetActive(true);
+                return obj;
             }
             obj.SetActive(true);
+            _objects.Enqueue(obj);
             return obj;
         }
 

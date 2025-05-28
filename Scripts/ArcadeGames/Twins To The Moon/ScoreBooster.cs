@@ -6,29 +6,31 @@ using UnityEngine;
 public class ScoreBooster : TTMEnvironment
 {
     public override string PoolKey { get => "scorebooster"; set => throw new NotImplementedException(); }
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    [SerializeField] private GameObject _parentSprite;
     public override event Action OnCollect;
     public override event Action OnReturnAction;
     public override event Action OnGetAction;
-
+    public override void Initialize(TwinsToTheMoonHandler twinsToTheMoonHandler, LoseScreen loseScreen, PoolManager poolManager)
+    {
+        base.Initialize(twinsToTheMoonHandler, loseScreen, poolManager);
+        _parentSprite.SetActive(true);
+    }
     public override void CollectMe(MonoBehaviour collectable)
     {
         GeneralScoreHandler.Instance.IncreaseScore(100);
         SplashScore SplashScore = _poolManager.Get("SplashScore").GetComponent<SplashScore>();
         SplashScore.InitTMP("100", transform);
-        _spriteRenderer.enabled = false;
+        _parentSprite.SetActive(false);
         StartCoroutine(DelayedReturn());
     }
     private IEnumerator DelayedReturn()
     {
         yield return new WaitForSeconds(0.5f);
-        _spriteRenderer.enabled = true;
+        _parentSprite.SetActive(false);
         _poolManager.Return(gameObject);
     }
     public override void OnDie()
     {
-        _spriteRenderer.enabled = true;
-        _poolManager.Return(gameObject);
     }
 
     public override void OnGet()

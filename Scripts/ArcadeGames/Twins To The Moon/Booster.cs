@@ -14,33 +14,40 @@ public class Booster : TTMEnvironment
 
     public override string PoolKey { get => "booster"; set => PoolKey = value; }
 
+    public override void Initialize(TwinsToTheMoonHandler twinsToTheMoonHandler, LoseScreen loseScreen, PoolManager poolManager)
+    {
+        base.Initialize(twinsToTheMoonHandler, loseScreen, poolManager);
+        DOTween.Kill(_sp.transform);
+        _canCollect = true;
+        if (_collectCoroutine != null)
+            StopCoroutine(_collectCoroutine);
+    }
     public void Init(TwinsToTheMoonHandler twinsToTheMoonHandler)
     {
         _twinsToTheMoonHandler = twinsToTheMoonHandler;
     }
+    private Coroutine _collectCoroutine;
     public override void CollectMe(MonoBehaviour collectable)
     {
         if (!_canCollect) return;
-        DOTween.Kill(_sp.transform);
         _sp.transform.DOPunchScale(Vector3.one, 0.2f);
         _jumpParticle.Play();
-        _trampolineAnimator.SetTrigger("Jump");
+        if (_trampolineAnimator != null)
+            _trampolineAnimator.SetTrigger("Jump");
         _poolManager.Get("TextEffect").GetComponent<TMPEffect>().InitText("25", transform);
         _twinsToTheMoonHandler.Jump = true;
         _twinsToTheMoonHandler.PushForce(_twinsToTheMoonHandler.JumpForce);
         _canCollect = false;
         ComboManager.Instance.Hit(25);
-        StartCoroutine(WaitForAnimation());
+        _collectCoroutine = StartCoroutine(WaitForAnimation());
     }
     private IEnumerator WaitForAnimation()
     {
         yield return new WaitForSeconds(0.5f);
-        OnDie();
+        _poolManager.Return(gameObject);
     }
     public override void OnDie()
     {
-        _canCollect = true;
-        _poolManager.Return(gameObject);
     }
 
     public override void OnInit(PoolManager poolManager)

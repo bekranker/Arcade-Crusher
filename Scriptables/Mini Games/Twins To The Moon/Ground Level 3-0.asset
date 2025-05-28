@@ -18,21 +18,45 @@ MonoBehaviour:
     - spike
     Parent: Layer Props
     Possibility: 30
+    MaxSpawnCount: 1
   - Environments:
     - movespike
     Parent: Layer Props
     Possibility: 20
+    MaxSpawnCount: 1
   - Environments:
     - forcebooster
     Parent: Layer Props
     Possibility: 20
+    MaxSpawnCount: 1
   ParallaxObjects:
   - Environments:
-    - square1
+    - Left Bird
     Parent: Layer Three
+    SpawnPoses:
+    - {x: -2.7, y: 0, z: 0}
   - Environments:
-    - square2
+    - Right Bird
     Parent: Layer Two
+    SpawnPoses:
+    - {x: 2.7, y: 0, z: 0}
   - Environments:
-    - square3
+    - Left Branch
     Parent: Layer One
+    SpawnPoses:
+    - {x: -3, y: 0, z: 0}
+  - Environments:
+    - Right Branch
+    Parent: Layer Three
+    SpawnPoses:
+    - {x: 3, y: 0, z: 0}
+  - Environments:
+    - Light Right Branch
+    Parent: Layer Two
+    SpawnPoses:
+    - {x: 3, y: 0, z: 0}
+  - Environments:
+    - Light Left Branch
+    Parent: Layer One
+    SpawnPoses:
+    - {x: -3, y: 0, z: 0}
